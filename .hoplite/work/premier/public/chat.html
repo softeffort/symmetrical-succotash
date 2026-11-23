@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){try{var r=new URLSearchParams(location.search).get('ref');if(r&&/^[a-zA-Z0-9_-]{8,64}$/.test(r)){localStorage.setItem('premier:ref',r);var u=new URL(location.href);u.search='';history.replaceState(null,'',u.pathname);}}catch(e){}})();</script>
+<title>Premier</title>
+<link rel="icon" type="image/svg+xml" href="/icon-p-amber.svg"><link rel="icon" type="image/png" href="/icon-p-2.png">
+<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Premier">
+<meta name="theme-color" content="#F7F4EE" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#12110F" media="(prefers-color-scheme: dark)">
+<link rel="preload" href="/fonts/onest-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/tokens.css?v=3">
+<link rel="stylesheet" href="/css/chat-main.css?v=5">
+<link rel="stylesheet" href="/language.css?v=1">
+<script src="/language.js?v=1"></script>
+<script src="/announce.js?v=1" defer></script>
+<style>.mark{background:transparent}</style>
+<link rel="stylesheet" href="/theme/language.gen.css?v=4"><link rel="stylesheet" href="/theme/chat.gen.css?v=6"><link rel="stylesheet" href="/theme/app.css?v=7"><link rel="stylesheet" href="/growth.css?v=7"><link rel="stylesheet" href="/limits.css?v=1"><link rel="stylesheet" href="/chat-ui.css?v=1"><link rel="stylesheet" href="/ultra.css?v=5">
+<link rel="stylesheet" href="/anim.css?v=1">
+<link rel="stylesheet" href="/chat-visual.css?v=1">
+</head>
+<body>
+<svg style="display:none"><defs>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+<symbol id="i-side" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></symbol>
+<symbol id="i-new" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-term" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol><symbol id="i-game" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="6"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/></symbol><symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></symbol>
+<symbol id="i-redo" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7L20 8"/><path d="M20 3v5h-5"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H4"/></symbol>
+<symbol id="i-tg" viewBox="0 0 24 24"><path d="M21 4 3 11l6 2.2M21 4l-3 16-6.5-5M21 4 9 13.2m0 0V19l2.5-4"/></symbol>
+<symbol id="i-zip" viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M12 10v1M12 13v1M12 16v1"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+<symbol id="i-speak" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
+<symbol id="i-pick" viewBox="0 0 24 24"><path d="M4 4l6 16 2.5-6.5L19 11Z"/><path d="m13 13 6 6"/></symbol>
+<symbol id="i-brain" viewBox="0 0 24 24"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V5a2 2 0 0 0-3-1ZM15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1"/></symbol>
+<symbol id="i-pulse" viewBox="0 0 24 24"><polyline points="3 12 8 12 11 5 15 19 18 12 21 12"/></symbol>
+<symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></symbol>
+<symbol id="i-video" viewBox="0 0 24 24"><rect x="2.5" y="5" width="14" height="14" rx="2.5"/><path d="m16.5 10 5-3v10l-5-3"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.8"/><path d="m21 15-4.5-4.5L6 21"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+<symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M4 19V5"/></symbol>
+<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 2 20h20Z"/><path d="M12 10v4M12 17h.01"/></symbol>
+<symbol id="i-clip" viewBox="0 0 24 24"><path d="m21 11-8.5 8.5a5 5 0 0 1-7-7L14 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L15 7"/></symbol>
+</defs></svg>
+
+<aside class="side" id="side">
+  <div class="shead">
+    <a href="/" class="brand" style="color:inherit;text-decoration:none" title="На главную"><div class="mark"><img src="/icon-p-amber.svg" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>Premier</a>
+    <button class="ib" id="closeSide" aria-label="Скрыть панель"><svg><use href="#i-side"/></svg></button>
+  </div>
+  <button class="new" id="newChat"><svg><use href="#i-new"/></svg>Новый чат</button>
+  <label class="search"><svg><use href="#i-search"/></svg><input id="find" placeholder="Поиск по чатам"></label>
+  <div class="scroll">
+    <div class="sec">Проекты<button class="ib" id="newProj" aria-label="Новый проект"><svg><use href="#i-plus"/></svg></button></div>
+    <div id="projects"></div>
+    <div class="sec" id="chatsHead">Недавние</div>
+    <div class="clist"><div class="hl noanim" id="hl"></div><div id="chats"></div></div>
+  </div>
+  <div class="plancard" id="planCard" hidden><div class="pc-top"><span class="pc-name" id="pcName"></span><span class="pc-bts"><button class="pc-rst" id="pcRst" title="Возвращает до 1000 сообщений и обнуляет счётчики Python, сайтов и картинок за 200 ₽" hidden>Сбросить лимит</button><button class="pc-up" id="pcUp">Тарифы</button></span></div><div class="pc-bar" id="pcBarW"><i id="pcBar"></i></div><small id="pcText"></small></div>
+  <div class="tgcard" id="tgCard" hidden><a href="https://t.me/eidevip" target="_blank" rel="noopener" class="tgin"><span class="tgic"><svg><use href="#i-tg"/></svg></span><span><b>Наш Telegram</b><small>Подписаться →</small></span></a><a href="https://t.me/eidevip" target="_blank" rel="noopener" class="tgsub">Подписаться</a><button class="tgx" id="tgClose" aria-label="Скрыть" title="Скрыть"><svg><use href="#i-x"/></svg></button></div>
+  <div class="me"><button class="mebtn" id="meBtn" title="Настройки аккаунта"><div class="av" id="meAv">?</div><span id="meName"></span></button><button class="ib" id="logoutBtn" aria-label="Выйти" title="Выйти"><svg><use href="#i-out"/></svg></button></div>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="main">
+  <header class="top">
+    <button class="ib" id="openSide" aria-label="Показать панель" hidden><svg><use href="#i-side"/></svg></button>
+    <div class="sp"></div>
+    <div class="crumb" id="crumb"></div>
+    <button class="gw-share" id="shareBtn" type="button" hidden aria-label="Поделиться чатом" title="Поделиться чатом"><svg><use href="#i-share"/></svg><span>Поделиться</span></button>
+    <nav class="language-switch" aria-label="Язык интерфейса"><a href="?lang=ru" data-language="ru" aria-label="Русский">RU</a><a href="?lang=en" data-language="en" aria-label="English">EN</a></nav>
+  </header>
+  <div class="chat" id="chat"><div class="col" id="col"></div></div>
+  <div class="dock">
+    <div class="gw-bar" id="gwBar" hidden></div>
+    <form class="box" id="form">
+      <div class="pickchip" id="pickChip" hidden></div>
+      <div class="atts" id="atts" hidden></div>
+      <textarea id="q" rows="1" placeholder="Спросите что угодно" aria-label="Сообщение"></textarea>
+      <div class="brow">
+        <button type="button" class="ib" id="attachBtn" aria-label="Прикрепить файл или картинку" title="Прикрепить файл или картинку"><svg><use href="#i-clip"/></svg></button><input type="file" id="fileIn" multiple hidden>
+        <button type="button" class="webbtn" id="webBtn" hidden aria-pressed="false" title="Разрешить модели искать в интернете"><svg><use href="#i-globe"/></svg><span>Интернет</span></button>
+        <button type="button" class="webbtn" id="imgBtn" hidden aria-pressed="false" title="Режим картинок: просьбы про изображение выполняются рисованием"><svg><use href="#i-image"/></svg><span>Картинка</span></button>
+        <button type="button" class="webbtn" id="fsBtn" hidden aria-pressed="false"><svg><use href="#i-folder"/></svg><span id="fsName">Папка</span></button>
+        <button type="button" class="webbtn" id="agBtn" aria-pressed="false"><svg><use href="#i-term"/></svg><span>Компьютер</span></button>
+        <div class="model">
+          <button type="button" class="mbtn" id="mbtn" aria-haspopup="true"><span id="mname"></span><svg><use href="#i-down"/></svg></button>
+          <div class="menu" id="menu" role="menu"></div>
+        </div>
+        <button type="button" class="ib" id="micBtn" hidden aria-label="Голосовой ввод" title="Голосовой ввод"><svg><use href="#i-mic"/></svg></button>
+        <span class="tag" id="ptag"></span>
+        <div class="sp"></div>
+        <button class="send" id="send" aria-label="Отправить" disabled><svg class="s-up"><use href="#i-up"/></svg><svg class="s-stop"><use href="#i-stop"/></svg></button>
+      </div>
+    </form>
+    <div id="mirror"></div><div class="note">Premier может ошибаться. Проверяйте важное.</div>
+  </div>
+  <div id="sugg"></div>
+</div>
+
+<aside class="pane" id="pane" aria-label="Превью сайта">
+  <div class="pane-in">
+    <div class="phead">
+      <div class="ptitle" id="ptitle">Сайт</div>
+      <div class="tabs" role="tablist"><button data-tab="preview" class="on">Превью</button><button data-tab="code">Код</button><button data-tab="versions">Версии</button></div>
+      <button class="ib" id="pPick" title="Выбрать элемент и попросить его изменить" aria-label="Выбрать элемент"><svg><use href="#i-pick"/></svg></button>
+      <button class="ib" id="pReload" title="Перезапустить" aria-label="Перезапустить"><svg><use href="#i-redo"/></svg></button>
+      <button class="ib" id="pOpen" title="Открыть в новой вкладке" aria-label="Открыть в новой вкладке"><svg><use href="#i-ext"/></svg></button>
+      <button class="ib" id="pPub" title="Опубликовать по ссылке" aria-label="Опубликовать по ссылке"><svg><use href="#i-share"/></svg></button>
+      <button class="ib" id="pDl" title="Скачать HTML" aria-label="Скачать HTML"><svg><use href="#i-dl"/></svg></button>
+      <button class="ib" id="pCopy" title="Копировать код" aria-label="Копировать код"><svg><use href="#i-copy"/></svg></button>
+      <button class="ib" id="pClose" title="Закрыть" aria-label="Закрыть"><svg><use href="#i-x"/></svg></button>
+    </div>
+    <div class="pubbar" id="pubbar" hidden></div>
+    <div class="pubbar animbar" id="animbar" hidden></div>
+    <div class="pbody">
+      <iframe id="pFrame" title="Превью сайта" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-pointer-lock"></iframe>
+      <pre id="pCode" class="hide"></pre>
+      <div id="pVersions" class="hide version-panel"></div>
+      <div class="pwait hide" id="pWait">Сайт ещё пишется — превью появится, когда код будет готов</div>
+    </div>
+  </div>
+</aside>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="dtitle">
+  <div class="dlg">
+    <div class="dhead"><h2 id="dtitle"></h2><button class="ib" id="dclose" aria-label="Закрыть"><svg><use href="#i-x"/></svg></button></div>
+    <div class="dbody" id="dbody"></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<!--ME-->
+<script src="/folder.js?v=3"></script>
+<script src="/agent.js?v=10"></script>
+<script src="/cloud.js?v=5"></script>
+<!-- клиент разбит на модули: общие переменные в 01-core.js, порядок подключения важен -->
+<script src="/js/00-artifact-state.js?v=29"></script>
+<script src="/js/00-model-assets.js?v=1"></script>
+<script src="/js/00-artifact-versions.js?v=1"></script>
+<script src="/js/01-core.js?v=32"></script>
+<script src="/js/02a-rich.js?v=4"></script>
+<script src="/js/02-markdown.js?v=27"></script>
+<script src="/js/03-archives.js?v=29"></script>
+<script src="/js/04-render.js?v=51"></script>
+<script src="/js/05-chat.js?v=46"></script>
+<script src="/js/06-pane.js?v=30"></script>
+<script src="/js/07-attachments.js?v=29"></script>
+<script src="/js/08-projects.js?v=27"></script>
+<script src="/js/09-events.js?v=39"></script>
+<script src="/js/10-account.js?v=46"></script>
+<script src="/js/11-voice.js?v=26"></script>
+<script src="/js/12-picker.js?v=25"></script>
+<script src="/js/13-billing.js?v=41"></script>
+<script src="/js/14-start.js?v=32"></script>
+<script src="/js/15-growth.js?v=2"></script>
+<script src="/js/16-pwa.js?v=1"></script>
+<script src="/js/17-team.js?v=1"></script>
+<script src="/js/18-2fa.js?v=1"></script>
+<script src="/js/19-limits.js?v=6"></script>
+<script src="/js/20-chat-ui.js?v=3"></script>
+<script src="/js/21-ultra.js?v=6"></script>
+<script src="/js/22-anim.js?v=3"></script>
+<script>window.addEventListener("DOMContentLoaded", () => { fsInit(); agInit(); });</script>
+</body>
+</html>

@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="ru" class="core">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="dark light">
+<title>Premier · Core — витрина дизайн-системы</title>
+<link rel="icon" href="/icon-p-amber.svg">
+<link rel="preload" href="/fonts/onest-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/core/core-tokens.css">
+<link rel="stylesheet" href="/core/core-base.css">
+<link rel="stylesheet" href="/core/core-components.css">
+<link rel="stylesheet" href="/core/core-scene.css">
+<link rel="stylesheet" href="/core/showcase.css">
+<script>(function(){try{var q=new URLSearchParams(location.search),r=document.documentElement,t=q.get('theme');if(t==='dark'||t==='light')r.setAttribute('data-theme',t);if(q.get('motion')==='reduce')r.setAttribute('data-core-motion','reduce');if(q.get('transparency')==='reduce')r.setAttribute('data-core-transparency','reduce');['is','place','form','model','quality'].forEach(function(k){var v=q.get(k==='is'?'state':k);if(v)r.setAttribute('data-core-'+k,v)})}catch(e){}})();</script>
+<script defer src="/core/core-ui.js"></script>
+<script defer src="/core/core-scene.js"></script>
+<script defer src="/core/showcase.js"></script>
+</head>
+<body>
+<!-- Слой Ядра: 3D-сцену рисует core-scene.js; где 3D нет — тихое свечение из core-scene.css. -->
+<div class="core-scene" aria-hidden="true"></div>
+
+<svg class="core-sr" aria-hidden="true" focusable="false">
+  <symbol id="i-plus" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></symbol>
+  <symbol id="i-close" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 16 16"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5v-1a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></symbol>
+  <symbol id="i-more" viewBox="0 0 16 16"><path d="M3.5 8h.01M8 8h.01M12.5 8h.01" stroke-width="2.2"/></symbol>
+  <symbol id="i-tune" viewBox="0 0 16 16"><path d="M2 5h6.5M12.5 5H14M2 11h1.5M7.5 11H14"/><circle cx="10.5" cy="5" r="2"/><circle cx="5.5" cy="11" r="2"/></symbol>
+  <symbol id="i-file" viewBox="0 0 16 16"><path d="M4 2.5h5l3 3v8H4zM9 2.5v3h3"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 16 16"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 16 16"><path d="M3 13l.6-2.8 7.3-7.3 2.2 2.2-7.3 7.3z"/></symbol>
+  <symbol id="i-share" viewBox="0 0 16 16"><path d="M8 10V2.5M5 5l3-3 3 3M3.5 9v3.5h9V9"/></symbol>
+  <symbol id="i-next" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></symbol>
+  <symbol id="i-send" viewBox="0 0 16 16"><path d="M8 13V3M4 7l4-4 4 4"/></symbol>
+  <symbol id="i-term" viewBox="0 0 16 16"><path d="M3 4.5l3 3-3 3M8 11h5"/></symbol>
+</svg>
+
+<header class="sc-top core-glass core-glass--far" data-core-at="top">
+  <a class="sc-brand" href="#top" aria-label="Premier Core — к началу"><i class="sc-brand__mark" aria-hidden="true"></i><span>Core</span><span class="core-tag">шаг 2</span></a>
+  <span class="sc-top__title core-text-2">Основа дизайн-системы Premier</span>
+  <div class="core-seg sc-theme" role="radiogroup" aria-label="Тема">
+    <label class="core-seg__item"><input type="radio" name="sc-theme" value="auto" checked><span>Авто</span></label>
+    <label class="core-seg__item"><input type="radio" name="sc-theme" value="dark"><span>Тёмная</span></label>
+    <label class="core-seg__item"><input type="radio" name="sc-theme" value="light"><span>Светлая</span></label>
+  </div>
+  <button class="core-btn core-btn--icon core-btn--quiet" type="button" data-core-menu="#sc-settings" data-core-align="end" aria-haspopup="menu" aria-expanded="false" aria-label="Настройки витрины" data-core-tip="Движение и прозрачность"><svg class="sc-i"><use href="#i-tune"/></svg></button>
+</header>
+
+<!-- Меню настроек витрины — рабочий пример меню с группами выбора -->
+<div class="core-menu" id="sc-settings" role="menu" aria-label="Настройки витрины" hidden>
+  <div class="core-menu__label">Как показывать</div>
+  <button class="core-menu__item" type="button" role="menuitemcheckbox" aria-checked="false" data-core-keep data-sc-flag="motion"><span>Уменьшить движение</span></button>
+  <button class="core-menu__item" type="button" role="menuitemcheckbox" aria-checked="false" data-core-keep data-sc-flag="transparency"><span>Уменьшить прозрачность</span></button>
+</div>
+
+<div class="sc-shell" id="top">
+<nav class="sc-nav core-glass core-glass--far" data-core-at="left" aria-label="Разделы витрины">
+  <a class="core-row core-row--action" href="#core"><span class="core-row__body"><span class="core-row__title">Ядро</span></span><span class="core-row__trail">00</span></a>
+  <a class="core-row core-row--action" href="#tokens"><span class="core-row__body"><span class="core-row__title">Токены</span></span><span class="core-row__trail">01</span></a>
+  <a class="core-row core-row--action" href="#glass"><span class="core-row__body"><span class="core-row__title">Стекло</span></span><span class="core-row__trail">02</span></a>
+  <a class="core-row core-row--action" href="#buttons"><span class="core-row__body"><span class="core-row__title">Кнопки</span></span><span class="core-row__trail">03</span></a>
+  <a class="core-row core-row--action" href="#fields"><span class="core-row__body"><span class="core-row__title">Поля</span></span><span class="core-row__trail">04</span></a>
+  <a class="core-row core-row--action" href="#choice"><span class="core-row__body"><span class="core-row__title">Выбор</span></span><span class="core-row__trail">05</span></a>
+  <a class="core-row core-row--action" href="#tabs"><span class="core-row__body"><span class="core-row__title">Сегменты и вкладки</span></span><span class="core-row__trail">06</span></a>
+  <a class="core-row core-row--action" href="#chips"><span class="core-row__body"><span class="core-row__title">Чип, метка, бейдж</span></span><span class="core-row__trail">07</span></a>
+  <a class="core-row core-row--action" href="#cards"><span class="core-row__body"><span class="core-row__title">Карточка и строка</span></span><span class="core-row__trail">08</span></a>
+  <a class="core-row core-row--action" href="#menus"><span class="core-row__body"><span class="core-row__title">Меню и подсказка</span></span><span class="core-row__trail">09</span></a>
+  <a class="core-row core-row--action" href="#toasts"><span class="core-row__body"><span class="core-row__title">Уведомление</span></span><span class="core-row__trail">10</span></a>
+  <a class="core-row core-row--action" href="#dialogs"><span class="core-row__body"><span class="core-row__title">Окно</span></span><span class="core-row__trail">11</span></a>
+  <a class="core-row core-row--action" href="#capsules"><span class="core-row__body"><span class="core-row__title">Капсула</span></span><span class="core-row__trail">12</span></a>
+  <a class="core-row core-row--action" href="#limits"><span class="core-row__body"><span class="core-row__title">Кольцо лимита</span></span><span class="core-row__trail">13</span></a>
+  <a class="core-row core-row--action" href="#loading"><span class="core-row__body"><span class="core-row__title">Загрузка</span></span><span class="core-row__trail">14</span></a>
+  <a class="core-row core-row--action" href="#data"><span class="core-row__body"><span class="core-row__title">Таблица, аватар</span></span><span class="core-row__trail">15</span></a>
+  <a class="core-row core-row--action" href="#code"><span class="core-row__body"><span class="core-row__title">Блок кода</span></span><span class="core-row__trail">16</span></a>
+  <a class="core-row core-row--action" href="#cursor"><span class="core-row__body"><span class="core-row__title">Курсор</span></span><span class="core-row__trail">17</span></a>
+  <a class="core-row core-row--action" href="#details"><span class="core-row__body"><span class="core-row__title">Мелочи</span></span><span class="core-row__trail">18</span></a>
+</nav>
+
+<main class="sc-main">
+
+<!-- ══════════ 00 Ядро ══════════ -->
+<section class="sc-sec" id="core">
+  <div class="sc-core">
+    <div class="sc-corestage" data-sc-stage>
+      <p class="sc-answer core-glass core-glass--far" data-sc-answer-box hidden><span data-sc-answer-text></span><i class="sc-caret" data-sc-caret></i></p>
+      <div class="core-inputbox sc-ask"><input type="text" autocomplete="off" placeholder="Напишите что-нибудь — Ядро слушает" aria-label="Проба ввода для Ядра" data-sc-ask><button class="core-btn core-btn--icon core-btn--main core-btn--sm" type="button" aria-label="Отправить" data-sc-send><svg class="sc-i"><use href="#i-send"/></svg></button></div>
+    </div>
+    <div class="sc-corepanel core-glass core-glass--far" data-core-at="right" data-sc-panel>
+      <div class="sc-group"><span class="sc-no">00</span><h2 class="core-human-4 sc-paneltitle">Ядро</h2><p class="sc-note core-text-2">Переключайте состояние, форму, место, тему и качество: переходы идут из любого положения в любое. Напишите что-нибудь в поле ввода на сцене — Ядро потянется к нему, а после отправки подумает и ответит.</p></div>
+      <div class="sc-readout core-machine-1" role="status" aria-label="Показатели сцены"><span><b data-sc-fps>—</b> кадр/с</span><span><b data-sc-ms>—</b> мс</span><span><b data-sc-points>—</b> точек</span><span><b data-sc-size>—</b></span><span class="core-tag" data-sc-mode>запуск</span></div>
+      <div class="sc-group"><h3 class="sc-h3" id="sc-g-state">Состояние</h3><div class="sc-chips" role="group" aria-labelledby="sc-g-state" data-sc-core="state"></div>
+        <div class="sc-line"><button class="core-btn core-btn--sm" type="button" data-sc-pulse="error">Ошибка</button><button class="core-btn core-btn--sm" type="button" data-sc-pulse="flash">Вспышка</button><button class="core-btn core-btn--sm core-btn--quiet" type="button" data-sc-play>Показать по очереди</button></div></div>
+      <div class="sc-group"><h3 class="sc-h3" id="sc-g-form">Форма</h3><div class="sc-chips" role="group" aria-labelledby="sc-g-form" data-sc-core="form"></div>
+        <label class="core-field"><span class="core-field__label">Форма по имени модели</span><input class="core-input" type="text" autocomplete="off" placeholder="Например, Claude Opus 4.5" data-sc-model><span class="core-field__hint" data-sc-model-out>Новая модель получает форму сама: она выводится из имени.</span></label></div>
+      <div class="sc-group"><h3 class="sc-h3" id="sc-g-place">Место</h3><div class="sc-chips" role="group" aria-labelledby="sc-g-place" data-sc-core="place"></div></div>
+      <div class="sc-group"><h3 class="sc-h3">Тема</h3>
+        <div class="core-seg" role="radiogroup" aria-label="Тема сцены"><label class="core-seg__item"><input type="radio" name="sc-theme2" value="auto" checked><span>Авто</span></label><label class="core-seg__item"><input type="radio" name="sc-theme2" value="dark"><span>Тёмная</span></label><label class="core-seg__item"><input type="radio" name="sc-theme2" value="light"><span>Светлая</span></label></div></div>
+      <div class="sc-group"><h3 class="sc-h3" id="sc-g-q">Качество</h3><div class="sc-chips" role="group" aria-labelledby="sc-g-q" data-sc-core="quality"></div><p class="sc-note core-text-3" data-sc-qnote></p></div>
+      <div class="sc-group"><h3 class="sc-h3">Проверки</h3>
+        <label class="core-switch"><input type="checkbox" role="switch" data-sc-check="motion"><span>Уменьшить движение</span></label>
+        <label class="core-switch"><input type="checkbox" role="switch" data-sc-check="glow"><span>Без 3D: тихое свечение</span></label>
+        <label class="core-switch"><input type="checkbox" role="switch" data-sc-check="solo"><span>Скрыть страницу, оставить Ядро</span></label>
+        <div class="sc-line"><button class="core-btn core-btn--sm" type="button" data-sc-lose>Потерять контекст</button><button class="core-btn core-btn--sm core-btn--quiet" type="button" data-sc-restore>Вернуть</button></div></div>
+    </div>
+  </div>
+  <div class="sc-stage core-glass">
+    <h3 class="sc-h3">Малые ядра</h3>
+    <p class="sc-note core-text-2">Те же формы на обычном холсте — их может быть сколько угодно. Три состояния: горит, мерцает, погасло.</p>
+    <div class="core-seg sc-cond" role="radiogroup" aria-label="Состояние малых ядер"><label class="core-seg__item"><input type="radio" name="sc-cond" value="mix" checked><span>Вперемешку</span></label><label class="core-seg__item"><input type="radio" name="sc-cond" value="steady"><span>Горит</span></label><label class="core-seg__item"><input type="radio" name="sc-cond" value="flicker"><span>Мерцает</span></label><label class="core-seg__item"><input type="radio" name="sc-cond" value="dark"><span>Погасло</span></label></div>
+    <div class="sc-minis" data-sc-minis></div>
+    <div class="sc-grid2">
+      <div class="core-glass sc-inner"><ul class="core-list" data-sc-models aria-label="Модели"></ul></div>
+      <div class="sc-line sc-line--rings" data-sc-sizes></div>
+    </div>
+  </div>
+</section>
+
+<section class="sc-sec" id="intro">
+  <header class="sc-head core-glass core-glass--far">
+    <h1 class="core-human-5">Тёмное стекло над Ядром</h1>
+    <p class="core-human-3 core-text-2">За страницей живёт Ядро — облако из тысяч точек, «мозг» Premier. Оно показывает, что делает ИИ, и оно же единственный источник света: кромка каждого стекла светится с его стороны. Ниже — пульт Ядра, затем всё, на чём стоят следующие шаги: токены, стекло, базовые компоненты и курсор.</p>
+  </header>
+</section>
+
+<!-- ══════════ 01 Токены ══════════ -->
+<section class="sc-sec" id="tokens">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">01</span><h2 class="core-human-4">Токены</h2><p class="core-text-2">Каждое решение оформления — именованное значение с префиксом <code class="core-kbd">--core-</code>. Значения ниже читаются из стилей страницы и меняются вместе с темой.</p></header>
+  <div class="sc-stage core-glass">
+    <h3 class="sc-h3">Цвет</h3>
+    <div class="sc-swatches" data-sc-swatches></div>
+  </div>
+  <div class="sc-stage core-glass">
+    <h3 class="sc-h3">Два голоса, шесть размеров</h3>
+    <p class="sc-note core-text-2">Человеческий голос — Onest: интерфейс и проза. Машинный — JetBrains Mono: терминал, файлы, код, лимиты, статусы, модели, ключи.</p>
+    <div class="sc-type">
+      <div class="sc-type__row"><span class="core-machine-1 core-text-3">6 · 40/44</span><span class="core-human-6">Сайт готов</span><span class="core-machine-6">36/44</span></div>
+      <div class="sc-type__row"><span class="core-machine-1 core-text-3">5 · 28/36</span><span class="core-human-5">Что построим сегодня?</span><span class="core-machine-5">1 284 / 5 000</span></div>
+      <div class="sc-type__row"><span class="core-machine-1 core-text-3">4 · 20/28</span><span class="core-human-4">Лимиты и покупки</span><span class="core-machine-4">gpt · gemini · kimi</span></div>
+      <div class="sc-type__row"><span class="core-machine-1 core-text-3">3 · 16/24</span><span class="core-human-3">Модель пишет код, запускает его и показывает результат рядом с чатом.</span><span class="core-machine-3">npm run build</span></div>
+      <div class="sc-type__row"><span class="core-machine-1 core-text-3">2 · 14/20</span><span class="core-human-2">Основной размер интерфейса: кнопки, поля, меню, строки списков.</span><span class="core-machine-2">src/pages/index.html</span></div>
+      <div class="sc-type__row"><span class="core-machine-1 core-text-3">1 · 12/16</span><span class="core-human-1">Подписи, пояснения, вторичные сведения.</span><span class="core-machine-1">sk-prm-7f3a…c21e · 200 OK</span></div>
+    </div>
+  </div>
+  <div class="sc-grid2">
+    <div class="sc-stage core-glass">
+      <h3 class="sc-h3">Радиусы</h3>
+      <div class="sc-radii">
+        <figure><i style="border-radius:var(--core-r-sm)"></i><figcaption class="core-machine-1 core-text-3">sm · 8<br>кнопка, поле, пункт</figcaption></figure>
+        <figure><i style="border-radius:var(--core-r-md)"></i><figcaption class="core-machine-1 core-text-3">md · 14<br>карточка, меню</figcaption></figure>
+        <figure><i style="border-radius:var(--core-r-lg)"></i><figcaption class="core-machine-1 core-text-3">lg · 22<br>окно, капсула</figcaption></figure>
+      </div>
+    </div>
+    <div class="sc-stage core-glass">
+      <h3 class="sc-h3">Отступы · сетка 4 px</h3>
+      <div class="sc-space" data-sc-space></div>
+    </div>
+  </div>
+  <div class="sc-stage core-glass">
+    <h3 class="sc-h3">Движение</h3>
+    <p class="sc-note core-text-2">Быстро и спокойно: без отскоков и не дольше трети секунды. Нажмите, чтобы сравнить длительности и кривые.</p>
+    <div class="sc-motion" data-sc-motion>
+      <div class="sc-motion__row"><span class="core-machine-1 core-text-3">dur-1 · 80 мс · наведение</span><i style="--d:var(--core-dur-1);--e:var(--core-ease-out)"></i></div>
+      <div class="sc-motion__row"><span class="core-machine-1 core-text-3">dur-2 · 140 мс · меню, переключатели</span><i style="--d:var(--core-dur-2);--e:var(--core-ease-out)"></i></div>
+      <div class="sc-motion__row"><span class="core-machine-1 core-text-3">dur-3 · 220 мс · рождение окна</span><i style="--d:var(--core-dur-3);--e:var(--core-ease-out)"></i></div>
+      <div class="sc-motion__row"><span class="core-machine-1 core-text-3">dur-4 · 320 мс · полёт уведомления</span><i style="--d:var(--core-dur-4);--e:var(--core-ease-out)"></i></div>
+      <div class="sc-motion__row"><span class="core-machine-1 core-text-3">ease-in · уход в искру</span><i style="--d:var(--core-dur-4);--e:var(--core-ease-in)"></i></div>
+      <div class="sc-motion__row"><span class="core-machine-1 core-text-3">ease-move · на месте</span><i style="--d:var(--core-dur-4);--e:var(--core-ease-move)"></i></div>
+    </div>
+    <button class="core-btn" type="button" data-sc-run>Запустить</button>
+  </div>
+</section>
+
+<!-- ══════════ 02 Стекло ══════════ -->
+<section class="sc-sec" id="glass">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">02</span><h2 class="core-human-4">Стекло</h2><p class="core-text-2">Три глубины отличаются только размытием, яркостью и тенью. Тонкая кромка светится со стороны Ядра: подвиньте его в меню настроек — свет перейдёт на другую грань.</p></header>
+  <div class="sc-depths">
+    <div class="core-glass core-glass--far sc-pane"><span class="core-tag">far</span><h3 class="core-human-3 sc-pane__t">Дальнее</h3><p class="core-text-2">Панели: боковая колонка, шапка, подвал страницы.</p><p class="core-text-3 core-human-1">Третий уровень текста</p><span class="core-machine-1 core-text-3">blur 36 · тень едва заметна</span></div>
+    <div class="core-glass core-glass--mid sc-pane"><span class="core-tag">mid</span><h3 class="core-human-3 sc-pane__t">Среднее</h3><p class="core-text-2">Окна: диалоги, карточки, поле ввода.</p><p class="core-text-3 core-human-1">Третий уровень текста</p><span class="core-machine-1 core-text-3">blur 24 · мягкая глубокая тень</span></div>
+    <div class="core-glass core-glass--near sc-pane"><span class="core-tag">near</span><h3 class="core-human-3 sc-pane__t">Ближнее</h3><p class="core-text-2">Меню, подсказки, уведомления, капсула.</p><p class="core-text-3 core-human-1">Третий уровень текста</p><span class="core-machine-1 core-text-3">blur 14 · резкая тень</span></div>
+    <div class="core-glass core-glass--dense sc-pane"><span class="core-tag">dense</span><h3 class="core-human-3 sc-pane__t">Плотное</h3><p class="core-text-2">Почти непрозрачное: код и длинный текст для чтения.</p><p class="core-text-3 core-human-1">Третий уровень текста</p><span class="core-machine-1 core-text-3">не глубина, а читаемость</span></div>
+  </div>
+  <div class="sc-stage core-glass">
+    <h3 class="sc-h3">Стекло в стекле</h3>
+    <p class="sc-note core-text-2">Внутренняя поверхность не размывает фон второй раз — это просто более светлый слой с той же кромкой.</p>
+    <div class="sc-grid3">
+      <div class="core-glass sc-inner"><b>Вложенная поверхность</b><span class="core-text-2">Без второго размытия</span></div>
+      <div class="core-glass sc-inner"><b>Ещё одна</b><span class="core-text-2">Кромка общая для всех</span></div>
+      <div class="core-glass core-glass--dense sc-inner"><b>Плотная внутри</b><span class="core-text-2">Остаётся самой тёмной</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 03 Кнопки ══════════ -->
+<section class="sc-sec" id="buttons">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">03</span><h2 class="core-human-4">Кнопки</h2><p class="core-text-2">Раскалённая главная — одна на экран (здесь их несколько только ради состояний). Остальные — стекло и нейтральный текст.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-row"><span class="sc-row__name">Главная</span><div class="sc-states" data-states="rest hover active focus disabled busy"><button class="core-btn core-btn--main" type="button">Отправить</button></div></div>
+    <div class="sc-row"><span class="sc-row__name">Стеклянная</span><div class="sc-states" data-states="rest hover active focus disabled busy"><button class="core-btn" type="button">Открыть</button></div></div>
+    <div class="sc-row"><span class="sc-row__name">Тихая</span><div class="sc-states" data-states="rest hover active focus disabled busy"><button class="core-btn core-btn--quiet" type="button">Отмена</button></div></div>
+    <div class="sc-row"><span class="sc-row__name">Опасная</span><div class="sc-states" data-states="rest hover active focus disabled busy"><button class="core-btn core-btn--danger" type="button">Удалить чат</button></div></div>
+    <div class="sc-row"><span class="sc-row__name">Значок</span><div class="sc-states" data-states="rest hover active focus disabled busy"><button class="core-btn core-btn--icon core-btn--quiet" type="button" aria-label="Скопировать"><svg class="sc-i"><use href="#i-copy"/></svg></button></div></div>
+    <div class="sc-row"><span class="sc-row__name">На стекле</span><div class="sc-states" data-states="rest hover active focus disabled busy"><button class="core-btn core-btn--icon" type="button" aria-label="Добавить"><svg class="sc-i"><use href="#i-plus"/></svg></button></div></div>
+  </div>
+  <div class="sc-stage core-glass">
+    <h3 class="sc-h3">Размеры и значки</h3>
+    <div class="sc-line">
+      <button class="core-btn core-btn--sm" type="button">Малая · 28</button>
+      <button class="core-btn" type="button">Обычная · 36</button>
+      <button class="core-btn core-btn--lg" type="button">Крупная · 44</button>
+      <button class="core-btn" type="button"><svg class="sc-i"><use href="#i-share"/></svg>Поделиться</button>
+      <button class="core-btn core-btn--main" type="button">Отправить<svg class="sc-i"><use href="#i-send"/></svg></button>
+      <button class="core-btn core-btn--icon core-btn--main" type="button" aria-label="Отправить"><svg class="sc-i"><use href="#i-send"/></svg></button>
+    </div>
+  </div>
+  <div class="sc-onscene">
+    <span class="core-machine-1 core-text-3">прямо над Ядром, без панели</span>
+    <button class="core-btn core-btn--main core-btn--lg" type="button">Начать</button>
+    <button class="core-btn core-btn--lg" type="button">Посмотреть тарифы</button>
+    <button class="core-chip" type="button">Сайт</button>
+    <button class="core-chip" type="button" aria-pressed="true">Код</button>
+  </div>
+</section>
+
+<!-- ══════════ 04 Поля ══════════ -->
+<section class="sc-sec" id="fields">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">04</span><h2 class="core-human-4">Поля</h2><p class="core-text-2">Поле — углубление в стекле. В фокусе грань становится светом, каретка — янтарная.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-row"><span class="sc-row__name">Строка</span><div class="sc-states sc-states--wide" data-states="rest hover focus filled disabled invalid"><input class="core-input" type="text" placeholder="name@example.com" aria-label="Почта"></div></div>
+    <div class="sc-row"><span class="sc-row__name">Со значком</span><div class="sc-states sc-states--wide" data-states="rest hover focus busy disabled invalid"><div class="core-inputbox"><svg class="sc-i"><use href="#i-search"/></svg><input type="search" placeholder="Поиск по чатам" aria-label="Поиск"></div></div></div>
+    <div class="sc-row"><span class="sc-row__name">Многострочное</span><div class="sc-states sc-states--wide" data-states="rest focus disabled invalid"><textarea class="core-input" rows="3" placeholder="Опишите, что нужно сделать" aria-label="Задача"></textarea></div></div>
+    <div class="sc-row"><span class="sc-row__name">Список</span><div class="sc-states sc-states--wide" data-states="rest hover focus disabled invalid"><select class="core-input" aria-label="Модель"><option>GPT</option><option>Gemini</option><option>DeepSeek</option><option>Kimi</option><option>Qwen</option></select></div></div>
+  </div>
+  <div class="sc-stage core-glass">
+    <h3 class="sc-h3">Поле с подписью, пояснением и ошибкой</h3>
+    <div class="sc-grid3">
+      <label class="core-field"><span class="core-field__label">Название проекта</span><input class="core-input" type="text" value="Лендинг кофейни"><span class="core-field__hint">Видно только вам</span></label>
+      <label class="core-field"><span class="core-field__label">Почта</span><input class="core-input" type="email" value="anna@" aria-invalid="true" aria-describedby="sc-err-mail"><span class="core-field__error" id="sc-err-mail">Проверьте адрес: не хватает домена</span></label>
+      <label class="core-field"><span class="core-field__label">Модель по умолчанию</span>
+        <select class="core-input"><optgroup label="Быстрые"><option>Gemini Flash</option><option>DeepSeek</option></optgroup><optgroup label="Сильные"><option selected>GPT</option><option>Kimi</option><option disabled>Qwen · недоступна</option></optgroup></select>
+        <span class="core-field__hint">На компьютере открывается стеклянный список, на телефоне — системный</span></label>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 05 Выбор ══════════ -->
+<section class="sc-sec" id="choice">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">05</span><h2 class="core-human-4">Флажок, радио, переключатель</h2><p class="core-text-2">«Включено» показывается светом, а не янтарём. Ручка переключателя — искра: выключенная — тусклая и меньше, включённая — яркая; по пути она делает четверть оборота.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-row"><span class="sc-row__name">Флажок</span><div class="sc-states" data-states="rest hover focus checked mixed active disabled disabled-checked invalid"><label class="core-check"><input type="checkbox"><span>Запомнить</span></label></div></div>
+    <div class="sc-row"><span class="sc-row__name">Радио</span><div class="sc-states" data-states="rest hover focus checked active disabled disabled-checked"><label class="core-radio"><input type="radio" name="sc-r"><span>Каждый день</span></label></div></div>
+    <div class="sc-row"><span class="sc-row__name">Переключатель</span><div class="sc-states" data-states="rest hover focus checked active disabled disabled-checked busy"><label class="core-switch"><input type="checkbox" role="switch"><span>Память</span></label></div></div>
+  </div>
+</section>
+
+<!-- ══════════ 06 Сегменты и вкладки ══════════ -->
+<section class="sc-sec" id="tabs">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">06</span><h2 class="core-human-4">Сегменты и вкладки</h2><p class="core-text-2">Сегменты переключают режим одного экрана, вкладки — разделы. Работают с клавиатуры: стрелки, Home, End.</p></header>
+  <div class="sc-stage core-glass">
+    <h3 class="sc-h3">Сегменты</h3>
+    <div class="sc-line">
+      <div class="core-seg" role="radiogroup" aria-label="Период">
+        <label class="core-seg__item"><input type="radio" name="sc-seg1" checked><span>Месяц</span></label>
+        <label class="core-seg__item"><input type="radio" name="sc-seg1"><span>Год</span></label>
+      </div>
+      <div class="core-seg" role="radiogroup" aria-label="Вид результата">
+        <label class="core-seg__item"><input type="radio" name="sc-seg2"><span>Превью</span></label>
+        <label class="core-seg__item"><input type="radio" name="sc-seg2" checked><span>Код</span></label>
+        <label class="core-seg__item"><input type="radio" name="sc-seg2"><span>Терминал</span></label>
+        <label class="core-seg__item"><input type="radio" name="sc-seg2" disabled><span>Файлы</span></label>
+      </div>
+    </div>
+    <div class="sc-row"><span class="sc-row__name">Пункт</span><div class="sc-states" data-states="rest hover focus checked disabled"><div class="core-seg"><label class="core-seg__item"><input type="radio" name="sc-seg3"><span>Код</span></label></div></div></div>
+    <h3 class="sc-h3">Вкладки</h3>
+    <div class="core-tabs" role="tablist" aria-label="Аккаунт">
+      <button class="core-tab" type="button" role="tab" id="sc-t1" aria-controls="sc-p1" aria-selected="true">Профиль</button>
+      <button class="core-tab" type="button" role="tab" id="sc-t2" aria-controls="sc-p2" aria-selected="false" tabindex="-1">Тариф</button>
+      <button class="core-tab" type="button" role="tab" id="sc-t3" aria-controls="sc-p3" aria-selected="false" tabindex="-1">Безопасность</button>
+      <button class="core-tab" type="button" role="tab" id="sc-t4" aria-selected="false" tabindex="-1" disabled>Команда</button>
+    </div>
+    <div class="core-tabpanel" role="tabpanel" id="sc-p1" aria-labelledby="sc-t1"><p class="core-text-2">Имя, почта и язык интерфейса.</p></div>
+    <div class="core-tabpanel" role="tabpanel" id="sc-p2" aria-labelledby="sc-t2" hidden><p class="core-text-2">Текущий тариф, лимиты и история платежей.</p></div>
+    <div class="core-tabpanel" role="tabpanel" id="sc-p3" aria-labelledby="sc-t3" hidden><p class="core-text-2">Пароль и двухфакторная защита.</p></div>
+    <div class="sc-row"><span class="sc-row__name">Вкладка</span><div class="sc-states" data-states="rest hover focus selected active disabled"><button class="core-tab" type="button" role="tab" aria-selected="false">Тариф</button></div></div>
+  </div>
+</section>
+
+<!-- ══════════ 07 Чип, метка, бейдж ══════════ -->
+<section class="sc-sec" id="chips">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">07</span><h2 class="core-human-4">Чип, метка, бейдж</h2><p class="core-text-2">Чип нажимается и выбирается. Метка только сообщает — машинным голосом. Бейдж считает. Цвета статуса — только у статуса.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-row"><span class="sc-row__name">Чип</span><div class="sc-states" data-states="rest hover active focus pressed disabled"><button class="core-chip" type="button">Картинка</button></div></div>
+    <div class="sc-row"><span class="sc-row__name">Метка</span><div class="sc-line"><span class="core-tag">gpt</span><span class="core-tag">видит фото</span><span class="core-tag">×3</span><span class="core-tag core-tag--ok">работает</span><span class="core-tag core-tag--warn">медленно</span><span class="core-tag core-tag--bad">сбой</span><span class="core-tag core-tag--heat">думает</span></div></div>
+    <div class="sc-row"><span class="sc-row__name">Бейдж</span><div class="sc-line"><span class="core-badge">3</span><span class="core-badge">12</span><span class="core-badge core-badge--quiet">99+</span><span class="core-badge core-badge--ok">1</span><span class="core-badge core-badge--warn">2</span><span class="core-badge core-badge--bad">5</span><span class="core-badge core-badge--dot" aria-label="есть новое"></span><span class="core-badge core-badge--dot core-badge--ok" aria-label="в сети"></span><span class="core-kbd">Ctrl K</span></div></div>
+  </div>
+</section>
+
+<!-- ══════════ 08 Карточка и строка ══════════ -->
+<section class="sc-sec" id="cards">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">08</span><h2 class="core-human-4">Карточка и строка списка</h2><p class="core-text-2">Карточка — стекло средней глубины. Строка — тихий элемент списка внутри панели или окна.</p></header>
+  <div class="sc-cards">
+    <div class="core-card"><h3 class="core-card__title">Лендинг кофейни</h3><p class="core-card__text">Одностраничный сайт с меню и формой заказа.</p><span class="core-card__meta">обновлён 12 мин назад</span></div>
+    <button class="core-card core-card--action" type="button"><h3 class="core-card__title">Нажимаемая карточка</h3><p class="core-card__text">Наведение — слой света, нажатие — слой плотнее.</p><span class="core-card__meta">покой</span></button>
+    <button class="core-card core-card--action sc-hover" type="button"><h3 class="core-card__title">Нажимаемая карточка</h3><p class="core-card__text">Наведение — слой света, нажатие — слой плотнее.</p><span class="core-card__meta">наведение</span></button>
+    <button class="core-card core-card--action" type="button" aria-pressed="true"><h3 class="core-card__title">Выбранная</h3><p class="core-card__text">Кромка ярче, слой плотнее.</p><span class="core-card__meta">выбрано</span></button>
+    <button class="core-card core-card--action sc-focus-visible" type="button"><h3 class="core-card__title">В фокусе</h3><p class="core-card__text">Рамка с клавиатуры видна всегда.</p><span class="core-card__meta">фокус</span></button>
+    <button class="core-card core-card--action" type="button" disabled><h3 class="core-card__title">Недоступная</h3><p class="core-card__text">Гаснет целиком.</p><span class="core-card__meta">выключено</span></button>
+  </div>
+  <div class="sc-grid2">
+    <div class="sc-stage core-glass">
+      <h3 class="sc-h3">Строки списка</h3>
+      <div class="core-list">
+        <a class="core-row core-row--action" href="#cards"><svg class="sc-i"><use href="#i-file"/></svg><span class="core-row__body"><span class="core-row__title">Змейка на canvas</span><span class="core-row__sub">Игра, 3 файла</span></span><span class="core-row__trail">14:02</span></a>
+        <a class="core-row core-row--action sc-hover" href="#cards"><svg class="sc-i"><use href="#i-file"/></svg><span class="core-row__body"><span class="core-row__title">Парсер CSV на Python</span><span class="core-row__sub">наведение</span></span><span class="core-row__trail">вчера</span></a>
+        <a class="core-row core-row--action" href="#cards" aria-current="true"><svg class="sc-i"><use href="#i-file"/></svg><span class="core-row__body"><span class="core-row__title">Лендинг кофейни</span><span class="core-row__sub">текущая строка</span></span><span class="core-row__trail"><span class="core-badge">2</span></span></a>
+        <a class="core-row core-row--action sc-focus-visible" href="#cards"><svg class="sc-i"><use href="#i-file"/></svg><span class="core-row__body"><span class="core-row__title">Отчёт по продажам</span><span class="core-row__sub">фокус</span></span><span class="core-row__trail">пн</span></a>
+        <a class="core-row core-row--action" aria-disabled="true"><svg class="sc-i"><use href="#i-file"/></svg><span class="core-row__body"><span class="core-row__title">Архивный чат</span><span class="core-row__sub">выключено</span></span><span class="core-row__trail">2025</span></a>
+      </div>
+    </div>
+    <div class="sc-stage core-glass">
+      <h3 class="sc-h3">Строка с управлением</h3>
+      <div class="core-list">
+        <div class="core-row"><span class="core-avatar">АК</span><span class="core-row__body"><span class="core-row__title">Анна Ковалёва</span><span class="core-row__sub">anna@example.com</span></span><span class="core-row__trail"><span class="core-tag">владелец</span></span></div>
+        <div class="core-row"><span class="core-row__body"><span class="core-row__title">Память о вас</span><span class="core-row__sub">Модель помнит важное между чатами</span></span><label class="core-switch"><input type="checkbox" role="switch" checked aria-label="Память о вас"></label></div>
+        <div class="core-row"><span class="core-row__body"><span class="core-row__title">Остаток на сегодня</span><span class="core-row__sub">Обновится в 00:00</span></span><span class="core-limit"><span class="core-ring core-ring--sm" role="meter" aria-label="Остаток лимита" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" style="--core-ring-v:.62"></span><span><b>62</b>/100</span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 09 Меню и подсказка ══════════ -->
+<section class="sc-sec" id="menus">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">09</span><h2 class="core-human-4">Меню и подсказка</h2><p class="core-text-2">Ближнее стекло: самое яркое и резкое. Меню растёт из своей кнопки, с клавиатуры — стрелки, первая буква, Esc.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-line">
+      <button class="core-btn" type="button" data-core-menu="#sc-menu" aria-haspopup="menu" aria-expanded="false">Действия<svg class="sc-i"><use href="#i-next" transform="rotate(90 8 8)"/></svg></button>
+      <button class="core-btn core-btn--icon core-btn--quiet" type="button" data-core-menu="#sc-menu" aria-haspopup="menu" aria-expanded="false" aria-label="Ещё" data-core-tip="Ещё действия"><svg class="sc-i"><use href="#i-more"/></svg></button>
+      <button class="core-btn core-btn--quiet" type="button" data-core-tip="Подсказка появляется над элементом">Наведите на меня</button>
+      <button class="core-btn core-btn--quiet" type="button" data-core-tip="Новый чат" data-core-tip-key="Ctrl K">Подсказка с клавишей</button>
+      <button class="core-btn core-btn--quiet" type="button" title="Обычный title подхватывается сам">Старый title</button>
+    </div>
+    <div class="sc-specimens">
+      <figure><div class="core-menu sc-static" role="presentation">
+        <div class="core-menu__label">Чат</div>
+        <button class="core-menu__item" type="button" tabindex="-1"><svg class="sc-i"><use href="#i-edit"/></svg><span>Переименовать</span><span class="core-menu__hint">F2</span></button>
+        <button class="core-menu__item sc-hover" type="button" tabindex="-1"><svg class="sc-i"><use href="#i-share"/></svg><span>Поделиться</span><span class="core-menu__hint">наведение</span></button>
+        <button class="core-menu__item sc-focus-visible" type="button" tabindex="-1"><svg class="sc-i"><use href="#i-file"/></svg><span>В проект</span><span class="core-menu__hint">фокус</span></button>
+        <button class="core-menu__item" type="button" tabindex="-1" aria-checked="true"><svg class="sc-i"><use href="#i-term"/></svg><span>Закреплён</span></button>
+        <button class="core-menu__item" type="button" tabindex="-1" disabled><svg class="sc-i"><use href="#i-copy"/></svg><span>Дублировать</span></button>
+        <hr class="core-menu__sep">
+        <button class="core-menu__item core-menu__item--danger" type="button" tabindex="-1"><svg class="sc-i"><use href="#i-trash"/></svg><span>Удалить</span></button>
+      </div><figcaption class="core-machine-1 core-text-3">меню · все состояния пункта</figcaption></figure>
+      <figure><div class="core-tip sc-static">Подсказка: коротко и по делу</div><div class="core-tip sc-static">Новый чат<kbd class="core-kbd">Ctrl K</kbd></div><figcaption class="core-machine-1 core-text-3">подсказка</figcaption></figure>
+    </div>
+  </div>
+</section>
+<div class="core-menu" id="sc-menu" role="menu" aria-label="Действия с чатом" hidden>
+  <button class="core-menu__item" type="button" role="menuitem" data-value="rename"><svg class="sc-i"><use href="#i-edit"/></svg><span>Переименовать</span><span class="core-menu__hint">F2</span></button>
+  <button class="core-menu__item" type="button" role="menuitem" data-value="share"><svg class="sc-i"><use href="#i-share"/></svg><span>Поделиться</span></button>
+  <button class="core-menu__item" type="button" role="menuitemcheckbox" aria-checked="false" data-value="pin"><svg class="sc-i"><use href="#i-term"/></svg><span>Закрепить</span></button>
+  <button class="core-menu__item" type="button" role="menuitem" data-value="copy" disabled><svg class="sc-i"><use href="#i-copy"/></svg><span>Дублировать</span></button>
+  <hr class="core-menu__sep">
+  <button class="core-menu__item core-menu__item--danger" type="button" role="menuitem" data-value="delete"><svg class="sc-i"><use href="#i-trash"/></svg><span>Удалить</span></button>
+</div>
+
+<!-- ══════════ 10 Уведомление ══════════ -->
+<section class="sc-sec" id="toasts">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">10</span><h2 class="core-human-4">Уведомление</h2><p class="core-text-2">Капсула вылетает из Ядра и возвращается в него. Наведение останавливает отсчёт, нажатие закрывает.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-line">
+      <button class="core-btn" type="button" data-sc-toast="">Обычное</button>
+      <button class="core-btn" type="button" data-sc-toast="ok">Успех</button>
+      <button class="core-btn" type="button" data-sc-toast="warn">Предупреждение</button>
+      <button class="core-btn" type="button" data-sc-toast="bad">Ошибка</button>
+      <button class="core-btn" type="button" data-sc-toast="action">С действием</button>
+    </div>
+    <div class="sc-specimens sc-specimens--col">
+      <div class="core-toast sc-static"><i class="core-toast__mark"></i><span class="core-toast__text">Ссылка скопирована</span></div>
+      <div class="core-toast sc-static" data-tone="ok"><i class="core-toast__mark"></i><span class="core-toast__text">Сайт опубликован</span></div>
+      <div class="core-toast sc-static" data-tone="warn"><i class="core-toast__mark"></i><span class="core-toast__text">Осталось 5 сообщений на сегодня</span></div>
+      <div class="core-toast sc-static" data-tone="bad"><i class="core-toast__mark"></i><span class="core-toast__text">Не удалось сохранить файл</span></div>
+      <div class="core-toast sc-static"><i class="core-toast__mark"></i><span class="core-toast__text">Чат удалён</span><button class="core-btn core-btn--quiet core-btn--sm" type="button">Вернуть</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 11 Окно ══════════ -->
+<section class="sc-sec" id="dialogs">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">11</span><h2 class="core-human-4">Окно</h2><p class="core-text-2">Рождается из точки нажатия с лёгким поворотом, сворачивается обратно в искру. Пока оно открыто, Ядро отступает и тускнеет, а всё под окном размывается.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-line sc-line--spread">
+      <button class="core-btn" type="button" data-core-open="#sc-dialog">Открыть отсюда</button>
+      <button class="core-btn" type="button" data-core-open="#sc-dialog-sm">Малое окно</button>
+      <button class="core-btn" type="button" data-core-open="#sc-dialog-long">Длинное содержимое</button>
+      <button class="core-btn" type="button" data-core-open="#sc-dialog">И отсюда</button>
+    </div>
+    <p class="sc-note core-text-2">Закрывается кнопкой, клавишей Esc и нажатием мимо окна. Фокус остаётся внутри и возвращается на кнопку, с которой окно открыли.</p>
+  </div>
+</section>
+
+<!-- ══════════ 12 Капсула подтверждения ══════════ -->
+<section class="sc-sec" id="capsules">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">12</span><h2 class="core-human-4">Капсула подтверждения</h2><p class="core-text-2">Маленькая стеклянная капсула рядом с курсором — вместо системных окон confirm, prompt и alert. Enter подтверждает, Esc и нажатие мимо отменяют.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-line sc-line--spread">
+      <button class="core-btn" type="button" data-sc-ask="confirm">Подтверждение</button>
+      <button class="core-btn core-btn--danger" type="button" data-sc-ask="danger">Удалить чат</button>
+      <button class="core-btn" type="button" data-sc-ask="prompt">Ввод значения</button>
+      <button class="core-btn" type="button" data-sc-ask="alert">Сообщение</button>
+      <button class="core-btn" type="button" data-sc-ask="long">Длинный вопрос</button>
+    </div>
+    <p class="sc-note core-text-2">Ответ: <span class="core-machine-2" data-sc-answer>—</span></p>
+    <div class="sc-specimens sc-specimens--col">
+      <div class="core-capsule sc-static"><p class="core-capsule__text">Удалить этот чат?</p><div class="core-capsule__acts"><button class="core-btn core-btn--quiet" type="button" tabindex="-1">Отмена</button><button class="core-btn core-btn--danger" type="button" tabindex="-1">Удалить</button></div></div>
+      <div class="core-capsule sc-static"><p class="core-capsule__text">Снять сайт с публикации? Ссылка перестанет работать.</p><div class="core-capsule__acts"><button class="core-btn core-btn--quiet" type="button" tabindex="-1">Отмена</button><button class="core-btn" type="button" tabindex="-1">ОК</button></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 13 Кольцо лимита ══════════ -->
+<section class="sc-sec" id="limits">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">13</span><h2 class="core-human-4">Кольцо лимита</h2><p class="core-text-2">Малое ядро в кольце. Пока лимит тратится, кольцо укорачивается, а ядро остывает — от яркого накала до уголька.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-line sc-line--rings">
+      <figure><span class="core-ring core-ring--lg" role="meter" aria-label="Остаток 100 из 100" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" style="--core-ring-v:1"></span><figcaption class="core-machine-1 core-text-3">100</figcaption></figure>
+      <figure><span class="core-ring core-ring--lg" role="meter" aria-label="Остаток 72 из 100" aria-valuemin="0" aria-valuemax="100" aria-valuenow="72" style="--core-ring-v:.72"></span><figcaption class="core-machine-1 core-text-3">72</figcaption></figure>
+      <figure><span class="core-ring core-ring--lg" role="meter" aria-label="Остаток 40 из 100" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" style="--core-ring-v:.4"></span><figcaption class="core-machine-1 core-text-3">40</figcaption></figure>
+      <figure><span class="core-ring core-ring--lg" role="meter" aria-label="Остаток 12 из 100" aria-valuemin="0" aria-valuemax="100" aria-valuenow="12" style="--core-ring-v:.12"></span><figcaption class="core-machine-1 core-text-3">12</figcaption></figure>
+      <figure><span class="core-ring core-ring--lg" role="meter" aria-label="Остаток 0 из 100" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="--core-ring-v:0"></span><figcaption class="core-machine-1 core-text-3">0</figcaption></figure>
+      <span class="core-divider core-divider--v"></span>
+      <span class="core-limit"><span class="core-ring" role="meter" aria-label="Остаток лимита" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" style="--core-ring-v:.62" data-sc-ring></span><span><b data-sc-ring-n>62</b>/100</span></span>
+      <span class="core-limit"><span class="core-ring core-ring--sm" role="meter" aria-label="Остаток лимита" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" style="--core-ring-v:.62" data-sc-ring></span><span><b data-sc-ring-n>62</b>/100</span></span>
+      <button class="core-btn core-btn--sm" type="button" data-sc-spend>Потратить 10</button>
+      <button class="core-btn core-btn--sm core-btn--quiet" type="button" data-sc-refill>Восполнить</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 14 Загрузка ══════════ -->
+<section class="sc-sec" id="loading">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">14</span><h2 class="core-human-4">Загрузка</h2><p class="core-text-2">Вместо крутилок и серых полос — точки Ядра собираются в форму будущего содержимого и тихо дышат, пока оно не пришло.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-grid3" data-sc-gather>
+      <div class="core-gather" role="status" aria-busy="true" aria-label="Загружается текст"><span class="core-gather__line"></span><span class="core-gather__line" style="--w:86%"></span><span class="core-gather__line" style="--w:58%"></span></div>
+      <div class="core-gather" role="status" aria-busy="true" aria-label="Загружается карточка"><span class="core-gather__block" style="--h:88px"></span><span class="core-gather__line" style="--w:70%"></span></div>
+      <div class="core-gather sc-gather-row" role="status" aria-busy="true" aria-label="Загружается строка списка"><span class="core-gather__dot"></span><span class="core-gather"><span class="core-gather__line" style="--w:64%"></span><span class="core-gather__line" style="--w:40%"></span></span></div>
+    </div>
+    <button class="core-btn" type="button" data-sc-regather>Собрать заново</button>
+  </div>
+</section>
+
+<!-- ══════════ 15 Таблица, разделитель, аватар ══════════ -->
+<section class="sc-sec" id="data">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">15</span><h2 class="core-human-4">Таблица, разделитель, аватар</h2><p class="core-text-2">Числа, ключи и статусы — машинным голосом и в ровных столбцах.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="core-table-wrap">
+      <table class="core-table">
+        <thead><tr><th>Ключ</th><th>Модель</th><th>Статус</th><th class="core-num">Запросов</th><th class="core-num">Расход</th></tr></thead>
+        <tbody>
+          <tr><td><span class="core-machine-2">sk-prm-7f3a…c21e</span></td><td class="core-machine-2">gpt</td><td><span class="core-tag core-tag--ok">активен</span></td><td class="core-num">12 480</td><td class="core-num">1 284,50 ₽</td></tr>
+          <tr aria-selected="true"><td><span class="core-machine-2">sk-prm-02bd…9a10</span></td><td class="core-machine-2">gemini</td><td><span class="core-tag core-tag--warn">лимит близко</span></td><td class="core-num">4 902</td><td class="core-num">310,00 ₽</td></tr>
+          <tr><td><span class="core-machine-2">sk-prm-e811…04f7</span></td><td class="core-machine-2">deepseek</td><td><span class="core-tag core-tag--bad">отозван</span></td><td class="core-num">0</td><td class="core-num">0,00 ₽</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="core-divider core-divider--label">или</div>
+    <div class="sc-line">
+      <span class="core-avatar core-avatar--sm">АК</span><span class="core-avatar">АК</span><span class="core-avatar core-avatar--lg">АК</span>
+      <span class="core-avatar"><img src="/icon-p-amber.svg" alt="Premier"></span>
+      <span class="core-divider core-divider--v"></span>
+      <span class="core-text-2">Разделитель бывает горизонтальным, вертикальным и с подписью.</span>
+    </div>
+    <hr class="core-divider">
+    <p class="sc-note core-text-3">Строка таблицы подсвечивается при наведении; вторая строка — выбранная.</p>
+  </div>
+</section>
+
+<!-- ══════════ 16 Блок кода ══════════ -->
+<section class="sc-sec" id="code">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">16</span><h2 class="core-human-4">Блок кода</h2><p class="core-text-2">Самое тёмное, плотное стекло и машинный голос. Классы подсветки highlight.js уже сопоставлены с токенами.</p></header>
+  <div class="core-code">
+    <div class="core-code__head"><span class="core-code__name">server.js</span><span>javascript · 9 строк</span><button class="core-btn core-btn--icon core-btn--quiet core-btn--sm" type="button" aria-label="Скопировать код" data-core-tip="Скопировать"><svg class="sc-i"><use href="#i-copy"/></svg></button></div>
+    <pre><code><span class="hljs-comment">// Раздаём собранный сайт и отвечаем на проверку</span>
+<span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'node:http'</span>);
+<span class="hljs-keyword">const</span> PORT = <span class="hljs-number">3000</span>;
+
+http.<span class="hljs-title">createServer</span>((req, res) =&gt; {
+  <span class="hljs-keyword">if</span> (req.url === <span class="hljs-string">'/healthz'</span>) <span class="hljs-keyword">return</span> res.<span class="hljs-title">end</span>(<span class="hljs-string">'ok'</span>);
+  res.<span class="hljs-title">writeHead</span>(<span class="hljs-number">200</span>, { <span class="hljs-attr">'Content-Type'</span>: <span class="hljs-string">'text/html; charset=utf-8'</span> });
+  res.<span class="hljs-title">end</span>(<span class="hljs-string">'&lt;h1&gt;Привет из облачного компьютера&lt;/h1&gt;'</span>);
+}).<span class="hljs-title">listen</span>(PORT, () =&gt; <span class="hljs-built_in">console</span>.<span class="hljs-title">log</span>(<span class="hljs-string">`готово: порт ${PORT} — сервер запущен и ждёт запросов, можно открывать превью`</span>));</code></pre>
+  </div>
+  <div class="sc-stage core-glass">
+    <h3 class="sc-h3">Код внутри окна или карточки</h3>
+    <div class="core-code"><pre><code><span class="hljs-meta">$</span> npm run build
+<span class="hljs-comment"># dist/index.html  4.2 kB</span></code></pre></div>
+    <div class="core-prose sc-prose"><p>В тексте ответа код тоже машинный: вызовите <code>npm test</code>, затем откройте <a href="#code">живое превью</a>. Клавиши — <kbd class="core-kbd">Ctrl</kbd> <kbd class="core-kbd">Enter</kbd>.</p></div>
+  </div>
+</section>
+
+<!-- ══════════ 17 Курсор ══════════ -->
+<section class="sc-sec" id="cursor">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">17</span><h2 class="core-human-4">Курсор</h2><p class="core-text-2">Четырёхлучевая искра — частица, отделившаяся от Ядра. Один цвет, без шлейфа и свечения; рисуется штатным курсором браузера, поэтому не отстаёт от мыши. На сенсорных устройствах курсора нет.</p></header>
+  <div class="sc-stage core-glass">
+    <div class="sc-cursors">
+      <figure><div class="sc-cur sc-cur--dark"><img src="/core/cursor/spark-glow.svg" alt="" width="128" height="128"></div><figcaption><b>Искра</b><span class="core-text-2">по умолчанию</span></figcaption></figure>
+      <figure><div class="sc-cur sc-cur--dark"><img src="/core/cursor/spark-turn-glow.svg" alt="" width="128" height="128"></div><figcaption><b>Искра под 45°</b><span class="core-text-2">над нажимаемым</span></figcaption></figure>
+      <figure><div class="sc-cur sc-cur--dark"><img src="/core/cursor/bar-glow.svg" alt="" width="128" height="128"></div><figcaption><b>Черта</b><span class="core-text-2">над текстом</span></figcaption></figure>
+      <figure><div class="sc-cur sc-cur--light"><img src="/core/cursor/spark-ink.svg" alt="" width="128" height="128"></div><figcaption><b>Искра</b><span class="core-text-2">светлая тема</span></figcaption></figure>
+      <figure><div class="sc-cur sc-cur--light"><img src="/core/cursor/spark-turn-ink.svg" alt="" width="128" height="128"></div><figcaption><b>Искра под 45°</b><span class="core-text-2">светлая тема</span></figcaption></figure>
+      <figure><div class="sc-cur sc-cur--light"><img src="/core/cursor/bar-ink.svg" alt="" width="128" height="128"></div><figcaption><b>Черта</b><span class="core-text-2">светлая тема</span></figcaption></figure>
+    </div>
+    <p class="sc-note core-text-2">Увеличено в 4 раза; перекрестие — активная точка 16 · 16, ровно центр фигуры. Настоящий размер — около 16 px.</p>
+    <h3 class="sc-h3">Проверьте мышью</h3>
+    <div class="sc-zones">
+      <div class="sc-zone">Обычная зона — искра</div>
+      <button class="sc-zone core-click" type="button">Нажимаемое — искра под 45°</button>
+      <p class="sc-zone">Текст, который можно выделить, — тонкая черта</p>
+      <button class="core-btn core-btn--main" type="button">На раскалённой кнопке искра — тушью</button>
+      <input class="core-input sc-zone-input" type="text" value="Поле ввода — тоже черта" aria-label="Поле для проверки курсора">
+    </div>
+    <h3 class="sc-h3">Системные курсоры остаются</h3>
+    <div class="sc-zones">
+      <div class="sc-zone" style="cursor:grab">перетаскивание</div>
+      <div class="sc-zone" style="cursor:col-resize">изменение размера</div>
+      <button class="sc-zone" type="button" disabled>нельзя</button>
+      <div class="sc-zone" aria-busy="true">ожидание</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 18 Мелочи ══════════ -->
+<section class="sc-sec" id="details">
+  <header class="sc-head core-glass core-glass--far"><span class="sc-no">18</span><h2 class="core-human-4">Мелочи</h2><p class="core-text-2">Полоса прокрутки, выделение, рамка фокуса, текст-подсказка, ссылки и каретка.</p></header>
+  <div class="sc-grid2">
+    <div class="sc-stage core-glass">
+      <h3 class="sc-h3">Полоса прокрутки</h3>
+      <div class="sc-scroll core-prose" tabindex="0" aria-label="Пример прокрутки">
+        <p>Тонкая светлая нить без дорожки. Становится ярче под курсором.</p>
+        <p>На телефоне полосы остаются системными: там они и так появляются только во время прокрутки.</p>
+        <p>Премьер пишет код, запускает его на облачном компьютере и показывает результат рядом с чатом.</p>
+        <p>Сайт можно опубликовать по ссылке, игру — открыть на весь экран, файл — скачать.</p>
+        <p>Прокрутите этот блок до конца, чтобы оценить ход и толщину нити.</p>
+      </div>
+    </div>
+    <div class="sc-stage core-glass">
+      <h3 class="sc-h3">Выделение, ссылки, фокус</h3>
+      <div class="core-prose">
+        <p data-sc-select>Выделение текста — нейтральный свет, без янтаря.</p>
+        <p>Ссылка <a href="#details">в покое</a>, <a class="sc-hover" href="#details">под курсором</a>, <a class="sc-focus-visible" href="#details">в фокусе</a>.</p>
+      </div>
+      <div class="sc-line">
+        <button class="core-btn core-btn--sm" type="button" data-sc-doselect>Выделить строку</button>
+        <button class="core-btn sc-focus-visible" type="button">Рамка фокуса</button>
+        <button class="core-btn core-btn--main sc-focus-visible" type="button">И на главной</button>
+      </div>
+      <label class="core-field sc-gap"><span class="core-field__label">Текст-подсказка и каретка</span><input class="core-input" type="text" placeholder="Подсказка — третий уровень текста; поставьте сюда курсор"></label>
+    </div>
+  </div>
+</section>
+
+<footer class="sc-foot core-text-3 core-machine-1">Premier · Core · шаг 2 из 8 · /core/showcase.html · описание системы — CORE-DESIGN-SYSTEM.md в корне проекта</footer>
+</main>
+</div>
+
+<!-- Окна -->
+<div class="core-dialog" id="sc-dialog" hidden>
+  <div class="core-dialog__pane" role="dialog" aria-modal="true" aria-labelledby="sc-d-title">
+    <div class="core-dialog__head"><h2 class="core-dialog__title" id="sc-d-title">Опубликовать сайт</h2><button class="core-btn core-btn--icon core-btn--quiet" type="button" data-core-close aria-label="Закрыть"><svg class="sc-i"><use href="#i-close"/></svg></button></div>
+    <div class="core-dialog__body">
+      <p>Сайт будет доступен по постоянной ссылке. Изменения в чате попадут на него после новой публикации.</p>
+      <label class="core-field sc-gap"><span class="core-field__label">Адрес</span><div class="core-inputbox"><span class="core-machine-2 core-text-3">/s/</span><input type="text" value="coffee-morning" aria-label="Адрес сайта"></div><span class="core-field__hint">Латинские буквы, цифры и дефис</span></label>
+      <label class="core-field sc-gap"><span class="core-field__label">Кто видит</span><select class="core-input"><option>Все, у кого есть ссылка</option><option>Только я</option><option>Команда</option></select></label>
+      <label class="core-switch sc-gap"><input type="checkbox" role="switch" checked><span>Открывать на весь экран</span></label>
+      <div class="core-card sc-gap"><h3 class="core-card__title">Карточка внутри окна</h3><p class="core-card__text">Вложенное стекло не размывает фон второй раз.</p></div>
+    </div>
+    <div class="core-dialog__foot"><button class="core-btn core-btn--quiet" type="button" data-core-close>Отмена</button><button class="core-btn core-btn--main" type="button" data-core-close="published">Опубликовать</button></div>
+  </div>
+</div>
+<div class="core-dialog core-dialog--sm" id="sc-dialog-sm" hidden>
+  <div class="core-dialog__pane" role="dialog" aria-modal="true" aria-labelledby="sc-ds-title">
+    <div class="core-dialog__head"><h2 class="core-dialog__title" id="sc-ds-title">Двухфакторная защита</h2><button class="core-btn core-btn--icon core-btn--quiet" type="button" data-core-close aria-label="Закрыть"><svg class="sc-i"><use href="#i-close"/></svg></button></div>
+    <div class="core-dialog__body">
+      <p>Введите код из приложения. Из малого окна можно открыть ещё одно — проверьте вложенность.</p>
+      <input class="core-input core-machine-3 sc-gap" type="text" inputmode="numeric" placeholder="000 000" aria-label="Код" autofocus>
+    </div>
+    <div class="core-dialog__foot"><button class="core-btn core-btn--quiet" type="button" data-core-open="#sc-dialog">Открыть второе окно</button><button class="core-btn" type="button" data-core-close>Готово</button></div>
+  </div>
+</div>
+<div class="core-dialog core-dialog--lg" id="sc-dialog-long" hidden>
+  <div class="core-dialog__pane" role="dialog" aria-modal="true" aria-labelledby="sc-dl-title">
+    <div class="core-dialog__head"><h2 class="core-dialog__title" id="sc-dl-title">Условия использования</h2><button class="core-btn core-btn--icon core-btn--quiet" type="button" data-core-close aria-label="Закрыть"><svg class="sc-i"><use href="#i-close"/></svg></button></div>
+    <div class="core-dialog__body core-prose" data-sc-long></div>
+    <div class="core-dialog__foot"><button class="core-btn" type="button" data-core-close>Понятно</button></div>
+  </div>
+</div>
+</body>
+</html>

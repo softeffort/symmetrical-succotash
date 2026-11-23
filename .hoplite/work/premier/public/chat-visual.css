@@ -1,0 +1,48 @@
+/* Premier — оформление ответов (js/02a-rich.js): подсветка кода, номера строк, формулы, цитаты,
+   кнопка «Вниз», время ответа. Цвета подсветки — свои переменные --cv-* для светлой и тёмной темы,
+   остальное — переменные --p-* из tokens.css. Контраст цветов кода с фоном блока — не ниже 4.5:1. */
+:root{--cv-kw:var(--p-accent-ink);--cv-str:#2B7349;--cv-num:#8F5600;--cv-com:var(--p-dim);--cv-fn:#2B5C99;--cv-type:#7A3A96;--cv-attr:#1D6E6E}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--cv-str:#8BD49C;--cv-num:#E6B450;--cv-com:#8A8176;--cv-fn:#82AAFF;--cv-type:#C792EA;--cv-attr:#5CCFCF}}
+:root[data-theme=dark]{--cv-str:#8BD49C;--cv-num:#E6B450;--cv-com:#8A8176;--cv-fn:#82AAFF;--cv-type:#C792EA;--cv-attr:#5CCFCF}
+
+/* код: подсветка */
+.cv-code .hljs-keyword,.cv-code .hljs-selector-tag,.cv-code .hljs-meta .hljs-keyword,.cv-code .hljs-doctag{color:var(--cv-kw)}
+.cv-code .hljs-string,.cv-code .hljs-regexp,.cv-code .hljs-addition,.cv-code .hljs-meta .hljs-string{color:var(--cv-str)}
+.cv-code .hljs-number,.cv-code .hljs-literal,.cv-code .hljs-symbol,.cv-code .hljs-bullet{color:var(--cv-num)}
+.cv-code .hljs-comment,.cv-code .hljs-quote{color:var(--cv-com);font-style:italic}
+.cv-code .hljs-title,.cv-code .hljs-section,.cv-code .hljs-selector-id,.cv-code .hljs-selector-class{color:var(--cv-fn)}
+.cv-code .hljs-type,.cv-code .hljs-built_in,.cv-code .hljs-title.class_,.cv-code .hljs-class .hljs-title{color:var(--cv-type)}
+.cv-code .hljs-attr,.cv-code .hljs-attribute,.cv-code .hljs-name,.cv-code .hljs-property,.cv-code .hljs-selector-attr,.cv-code .hljs-selector-pseudo,.cv-code .hljs-template-variable,.cv-code .hljs-variable.language_{color:var(--cv-attr)}
+.cv-code .hljs-meta,.cv-code .hljs-tag,.cv-code .hljs-punctuation{color:var(--p-muted)}
+.cv-code .hljs-deletion{color:var(--p-bad)}
+.cv-code .hljs-emphasis{font-style:italic}
+.cv-code .hljs-strong{font-weight:600}
+/* код: номера строк (не копируются — это ::before) */
+.cv-code.cv-ln{counter-reset:cvl}
+.cv-code.cv-ln .cv-l{counter-increment:cvl}
+.cv-code.cv-ln .cv-l::before{content:counter(cvl);display:inline-block;min-width:2.4ch;margin-right:1.6ch;text-align:right;color:var(--p-dim);opacity:.65;-webkit-user-select:none;user-select:none}
+
+/* формулы */
+.md .katex{font-size:1.06em}
+.cv-mathb{overflow-x:auto;overflow-y:hidden;margin:2px 0 14px;padding:4px 0;-webkit-overflow-scrolling:touch}
+.cv-mathb .katex-display{margin:0}
+.cv-math-src{font-family:var(--p-font-mono);font-size:.9em;color:var(--p-muted)}
+.cv-math-src.block{display:block;white-space:pre-wrap;text-align:center}
+
+/* текст: цитата, линия, курсив, зачёркнутый */
+.md blockquote{margin:0 0 14px;padding:2px 0 2px 14px;border-left:3px solid var(--p-accent-line);color:var(--p-muted)}
+.md blockquote>:last-child{margin-bottom:0}
+.md hr{border:0;border-top:1px solid var(--p-line);margin:18px 0}
+.md del{color:var(--p-muted)}
+
+/* кнопка «Вниз» */
+.dock{position:relative}
+.cv-down{position:absolute;left:50%;top:-50px;transform:translateX(-50%);z-index:5;width:36px;height:36px;border-radius:50%;border:1px solid var(--p-line-2);background:var(--p-surface);color:var(--p-text);box-shadow:var(--p-shadow-sm);display:grid;place-items:center;cursor:pointer;padding:0;transition:border-color .15s,background .15s}
+.cv-down[hidden]{display:none}
+.cv-down:hover{border-color:var(--p-accent);background:var(--p-accent-soft)}
+.cv-down svg{width:18px;height:18px}
+
+/* время и длительность ответа — рядом с кнопками под ответом */
+.cv-meta{align-self:center;margin:0 6px;font-size:12px;color:var(--p-dim);white-space:nowrap;font-variant-numeric:tabular-nums;cursor:default}
+@media (max-width:700px){.cv-down{width:40px;height:40px;top:-54px}}
+@media (prefers-reduced-motion:reduce){.cv-down{transition:none}}

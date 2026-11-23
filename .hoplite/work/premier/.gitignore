@@ -1,0 +1,11 @@
+data/
+node_modules/
+tts/vosk/model/
+tts/vosk/venv/
+.env
+*.env
+.cache/
+*.log
+*.db
+*.db-wal
+*.db-shm

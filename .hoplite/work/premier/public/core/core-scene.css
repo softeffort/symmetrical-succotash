@@ -1,0 +1,87 @@
+/* Premier · Core — слой Ядра: холст 3D-сцены, тихое свечение на случай, когда 3D нет, и малые ядра (шаг 2 редизайна).
+   Описание: /CORE-DESIGN-SYSTEM.md, раздел 12. Подключается после core-components.css; сцену рисует core-scene.js.
+   На <html> скрипт держит три признака: data-core-scene = boot | live | glow (как нарисовано Ядро),
+   data-core-is = rest | listening | thinking | answering | receded | still (что оно делает), data-core-place (где оно). */
+
+/* Время сцены — своё: Ядро не элемент управления, оно движется медленно. «Уменьшить движение» выключает и его. */
+:root{--core-scene-in:.9s;--core-scene-move:.9s}
+@media (prefers-reduced-motion:reduce){:root{--core-scene-in:.01ms;--core-scene-move:.01ms}}
+:root[data-core-motion=reduce]{--core-scene-in:.01ms;--core-scene-move:.01ms}
+
+/* Где Ядро — известно ещё до запуска скрипта: кромки стекла светятся с нужной стороны с первого кадра.
+   Скрипт потом уточняет эти числа по настоящему положению Ядра. */
+:root[data-core-place=center]{--core-x:50;--core-y:46}
+:root[data-core-place=horizon]{--core-x:50;--core-y:112}
+:root[data-core-place=full],:root[data-core-place=far]{--core-x:50;--core-y:50}
+
+/* ═══ 1. Холст сцены. Высота — по большому окну (100lvh): адресная строка телефона не заставляет пересоздавать холст. ═══ */
+.core-scene__gl{position:absolute;left:0;top:0;display:block;width:100%;height:100vh;height:100lvh;opacity:0}
+:root[data-core-scene=live] .core-scene__gl{opacity:1;animation:core-scene-in var(--core-scene-in) linear both}
+@keyframes core-scene-in{from{opacity:0}}
+
+/* ═══ 2. Тихое свечение (шаг 1) — запасной вид: 3D недоступно, не справилось или скрипт не загрузился.
+   Без разметки: два слоя на псевдоэлементах. Идёт за --core-x/--core-y и за состоянием, яркость — в том же пределе, что у Ядра. ═══ */
+.core-scene{--core-glow:1;--core-glow-size:1}
+.core-scene::before,.core-scene::after{
+  content:"";position:absolute;left:0;top:0;border-radius:50%;opacity:0;pointer-events:none;
+  translate:calc(var(--core-x) * 1vw) calc(var(--core-y) * 1vh);scale:var(--core-glow-size);
+  transition:opacity var(--core-scene-in) linear,scale var(--core-scene-move) var(--core-ease-move),translate var(--core-scene-move) var(--core-ease-move);
+}
+/* ореол */
+.core-scene::before{
+  width:130vmax;height:130vmax;margin:-65vmax 0 0 -65vmax;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--core-point) 11%,transparent),color-mix(in srgb,var(--core-point) 5%,transparent) 32%,color-mix(in srgb,var(--core-point) 2%,transparent) 60%,transparent);
+  animation:core-glow-a 16s ease-in-out infinite alternate;
+}
+/* середина и редкие точки вокруг неё */
+.core-scene::after{
+  width:110vmin;height:110vmin;margin:-55vmin 0 0 -55vmin;
+  background:
+    radial-gradient(closest-side,color-mix(in srgb,var(--core-point-hot) 13%,transparent),color-mix(in srgb,var(--core-point) 8%,transparent) 42%,transparent) center/46% 46% no-repeat,
+    radial-gradient(circle,color-mix(in srgb,var(--core-point-hot) 60%,transparent) .8px,transparent 1.4px) 0 0/23px 23px,
+    radial-gradient(circle,color-mix(in srgb,var(--core-point) 70%,transparent) 1.1px,transparent 1.8px) 7px 11px/37px 37px;
+  -webkit-mask:radial-gradient(closest-side,#000 16%,rgb(0 0 0 / .45) 50%,transparent);mask:radial-gradient(closest-side,#000 16%,rgb(0 0 0 / .45) 50%,transparent);
+  animation:core-glow-b 90s linear infinite;
+}
+@keyframes core-glow-a{from{transform:translate(-4vmin,-2vmin) scale(.96)}to{transform:translate(4vmin,3vmin) scale(1.05)}}
+@keyframes core-glow-b{to{transform:rotate(360deg)}}
+:root[data-core-scene=glow] .core-scene::before,:root[data-core-scene=glow] .core-scene::after{opacity:var(--core-glow)}
+/* скрипт не запустился вовсе: свечение проявляется само через четыре секунды */
+:root:not([data-core-scene]) .core-scene::before,:root:not([data-core-scene]) .core-scene::after{opacity:var(--core-glow)}
+:root:not([data-core-scene]) .core-scene{animation:core-scene-late var(--core-scene-in) 4s linear both}
+@keyframes core-scene-late{from{opacity:0}}
+/* состояния: думает — плотнее и горячее; окно открыто — дальше и тусклее; замерло — неподвижно */
+:root[data-core-is=thinking] .core-scene{--core-glow:1;--core-glow-size:.74}
+:root[data-core-is=listening] .core-scene,:root[data-core-is=answering] .core-scene{--core-glow-size:.94}
+:root[data-core-is=receded] .core-scene{--core-glow:.45;--core-glow-size:.7}
+:root[data-core-is=still] .core-scene{--core-glow:.55}
+:root[data-core-place=horizon] .core-scene{--core-glow:.8}
+:root[data-core-place=full] .core-scene{--core-glow:.6;--core-glow-size:1.5}
+:root[data-core-place=far] .core-scene{--core-glow:.45;--core-glow-size:.6}
+:root[data-core-is=still] .core-scene::before,:root[data-core-is=still] .core-scene::after,
+:root[data-core-motion=reduce] .core-scene::before,:root[data-core-motion=reduce] .core-scene::after{animation:none}
+@media (prefers-reduced-motion:reduce){.core-scene::before,.core-scene::after{animation:none}}
+/* бумага: Ядро — тушь, ореол прозрачнее */
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]) .core-scene::before{opacity:calc(var(--core-glow) * .7)}}
+:root[data-theme=light] .core-scene::before{opacity:calc(var(--core-glow) * .7)}
+:root[data-core-scene=boot] .core-scene::before,:root[data-core-scene=boot] .core-scene::after,
+:root[data-core-scene=live] .core-scene::before,:root[data-core-scene=live] .core-scene::after{opacity:0}
+:root[data-core-scene=live] .core-scene::before,:root[data-core-scene=live] .core-scene::after{animation:none}
+
+/* ═══ 3. Малые ядра: те же формы на 2D-холсте (рисует core-scene.js). Модель — data-core-model, состояние — data-core-cond.
+   Пустая анимация core-seen — метка: по ней скрипт сам находит новые малые ядра и кольца, где бы они ни появились. ═══ */
+@keyframes core-seen{from{outline-color:transparent}to{outline-color:transparent}}
+.core-mini{--_s:20px;position:relative;display:inline-block;flex:none;width:var(--_s);height:var(--_s);vertical-align:middle;animation:core-seen .001s}
+.core-mini--sm{--_s:16px}
+.core-mini--lg{--_s:28px}
+.core-mini--xl{--_s:48px}
+.core-mini>canvas{position:absolute;left:0;top:0;display:block;width:100%;height:100%}
+/* пока скрипт не нарисовал ядро — тихая точка на его месте */
+.core-mini::before{content:"";position:absolute;inset:32%;border-radius:50%;background:var(--core-point);opacity:.7}
+.core-mini[data-core-cond=flicker]::before{opacity:.4}
+.core-mini[data-core-cond=dark]::before{background:var(--core-text-3);opacity:.4}
+.core-mini[data-core-live]::before{content:none}
+/* кольцо лимита (шаг 1): малое ядро встаёт внутрь, нарисованная точка уступает ему место */
+.core-ring{animation:core-seen .001s}
+.core-ring>.core-mini{position:absolute;inset:calc(var(--_w) + 1px);width:auto;height:auto}
+.core-ring[data-core-live]::after{content:none}

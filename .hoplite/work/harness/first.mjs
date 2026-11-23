@@ -1,0 +1,10 @@
+import { open, sleep } from './lib.mjs';
+const { browser, page, logs } = await open({});
+await sleep(1500);
+console.log(JSON.stringify(await page.evaluate(() => Core.info())));
+await page.screenshot({ path: 'shots/first-dark.png' });
+await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'light'));
+await sleep(1500);
+await page.screenshot({ path: 'shots/first-light.png' });
+console.log(logs.join('\n') || 'console clean');
+await browser.close();

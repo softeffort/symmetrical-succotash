@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pro на день — бесплатно · Premier</title>
+<link rel="icon" type="image/svg+xml" href="/icon-p-amber.svg"><link rel="icon" type="image/png" href="/icon-p-2.png">
+<meta name="description" content="Получите Pro на 24 часа — без карты, без автопродления, один раз на аккаунт. Все возможности Premier: неограниченные сообщения, код, сайты, картинки и облачный компьютер.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pro на день — бесплатно · Premier">
+<meta property="og:description" content="Получите Pro на 24 часа без карты. Все возможности без ограничений.">
+<meta property="og:image" content="/og-protrial.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/og-protrial.png">
+<meta name="theme-color" content="#F7F4EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#12110F" media="(prefers-color-scheme: dark)">
+<link rel="alternate" hreflang="ru" href="/protrial">
+<link rel="alternate" hreflang="en" href="/en/protrial">
+<link rel="alternate" hreflang="x-default" href="/protrial">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" href="/fonts/onest-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/unbounded-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/jetbrains-mono-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/tokens.css?v=3">
+<link rel="stylesheet" href="/protrial.css?v=1">
+</head>
+<body>
+
+<!-- иконки -->
+<svg style="display:none"><defs>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></symbol>
+<symbol id="i-tg" viewBox="0 0 24 24"><path d="M21 4 3 11l6 2.2M21 4l-3 16-6.5-5M21 4 9 13.2m0 0V19l2.5-4"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4Z"/></symbol>
+<symbol id="i-code" viewBox="0 0 24 24"><path d="m7 8-4 4 4 4M17 8l4 4-4 4M14 4l-4 16"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></symbol>
+<symbol id="i-video" viewBox="0 0 24 24"><path d="m15 10 5-3v10l-5-3V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-4"/></symbol>
+<symbol id="i-term" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol>
+</defs></svg>
+
+<!-- навигация -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="/" class="brand">
+      <span class="nav-mark"><img src="/icon-p-amber.svg" alt="" width="26" height="26" style="display:block"></span>
+      Premier
+    </a>
+    <div class="sp"></div>
+    <nav class="lang-sw" aria-label="Язык">
+      <a href="/protrial" aria-current="true" aria-label="Русский">RU</a>
+      <a href="/en/protrial" aria-label="English">EN</a>
+    </nav>
+    <a href="https://t.me/eidevip" class="tgnav" target="_blank" rel="noopener" aria-label="Telegram-канал">
+      <svg><use href="#i-tg"/></svg><span>Telegram</span>
+    </a>
+    <a href="/chat" class="btn pri sm">Открыть Premier</a>
+  </div>
+</header>
+
+<main>
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-kicker rv">
+        <span class="kicker-dot" aria-hidden="true"></span>
+        ПОДАРОК · 24 ЧАСА
+      </div>
+      <h1 class="rv d1">Pro на день — <span>бесплатно</span></h1>
+      <p class="lead rv d2">Попробуйте все возможности Pro — без карты, без автопродления.</p>
+
+      <!-- таймер -->
+      <div class="pt-timer-wrap rv d2">
+        <div class="pt-timer" id="ptTimer">24:00:00</div>
+        <div class="pt-timer-label" id="ptTimerLabel">Остаётся до конца</div>
+      </div>
+
+      <!-- CTA -->
+      <div class="pt-cta rv d3" id="ptCtaWrap">
+        <button class="btn pri" id="ptBtn" onclick="ptClaim()">
+          Забрать Pro на 24 часа<svg aria-hidden="true"><use href="#i-arrow"/></svg>
+        </button>
+        <p class="pt-note">Без карты · без автопродления · один раз на аккаунт</p>
+      </div>
+      <div class="pt-status" id="ptStatus" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- ===== КАРТОЧКИ ===== -->
+  <section id="features">
+    <div class="wrap center">
+      <div class="eyebrow rv">Что входит</div>
+      <h2 class="h2 rv">Все возможности Pro — на 24 часа</h2>
+      <div class="feat-grid" id="featGrid">
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-chat"/></svg></div>
+          <div class="feat-num" id="fn-msgs">300</div>
+          <h3>Сообщений в день</h3>
+          <p>Все модели доступны весь срок триала</p>
+        </div>
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-code"/></svg></div>
+          <div class="feat-num" id="fn-code">50</div>
+          <h3>Запуски кода</h3>
+          <p>Python-запуски в облачном Linux</p>
+        </div>
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-globe"/></svg></div>
+          <div class="feat-num" id="fn-sites">30</div>
+          <h3>Сайты</h3>
+          <p>Создание сайтов с публикацией по ссылке</p>
+        </div>
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-image"/></svg></div>
+          <div class="feat-num" id="fn-images">30</div>
+          <h3>Картинки</h3>
+          <p>Генерация изображений по вашему описанию</p>
+        </div>
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-video"/></svg></div>
+          <h3>Анимации</h3>
+          <p>Анимированные ролики с кнопкой «Скачать MP4»</p>
+        </div>
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-term"/></svg></div>
+          <h3>Облачный компьютер</h3>
+          <p>Свой Linux с терминалом и файлами</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ТАБЛИЦА Free vs Pro ===== -->
+  <section id="compare" style="padding-top:0">
+    <div class="wrap">
+      <div class="eyebrow rv center">Сравнение</div>
+      <h2 class="h2 rv center">Что меняется</h2>
+      <table class="cmp-table rv" aria-label="Free версус Pro">
+        <thead>
+          <tr>
+            <th style="width:50%">Умение</th>
+            <th style="width:25%;text-align:center">Free</th>
+            <th class="pro-col" style="width:25%;text-align:center">🌟 Pro на 24 ч</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="feat-label">Сообщений в день</td>
+            <td style="text-align:center;color:var(--p-muted)" id="cmp-free-msgs">ограничено</td>
+            <td class="pro-col" style="text-align:center"><span class="ck"><svg><use href="#i-check"/></svg>300 в день</span></td>
+          </tr>
+          <tr>
+            <td class="feat-label">Запуск кода Python</td>
+            <td style="text-align:center;color:var(--p-muted)" id="cmp-free-code">ограничено</td>
+            <td class="pro-col" style="text-align:center"><span class="ck"><svg><use href="#i-check"/></svg>50 в день</span></td>
+          </tr>
+          <tr>
+            <td class="feat-label">Создание сайтов</td>
+            <td style="text-align:center;color:var(--p-muted)" id="cmp-free-sites">ограничено</td>
+            <td class="pro-col" style="text-align:center"><span class="ck"><svg><use href="#i-check"/></svg>30 в день</span></td>
+          </tr>
+          <tr>
+            <td class="feat-label">Генерация картинок</td>
+            <td style="text-align:center"><span class="no"><svg><use href="#i-x"/></svg></span></td>
+            <td class="pro-col" style="text-align:center"><span class="ck"><svg><use href="#i-check"/></svg>Да</span></td>
+          </tr>
+          <tr>
+            <td class="feat-label">Облачный компьютер</td>
+            <td style="text-align:center"><span class="no"><svg><use href="#i-x"/></svg></span></td>
+            <td class="pro-col" style="text-align:center"><span class="ck"><svg><use href="#i-check"/></svg>Да</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== КАК ЭТО РАБОТАЕТ ===== -->
+  <section id="how">
+    <div class="wrap center">
+      <div class="eyebrow rv">Три шага</div>
+      <h2 class="h2 rv">Как это работает</h2>
+      <div class="steps">
+        <div class="step rv">
+          <div class="step-num">1</div>
+          <h3>Войдите</h3>
+          <p>Через Google или GitHub. Занимает одну минуту.</p>
+        </div>
+        <div class="step rv">
+          <div class="step-num">2</div>
+          <h3>Нажмите кнопку</h3>
+          <p>Одно нажатие — и Pro включается сразу. Карта не нужна.</p>
+        </div>
+        <div class="step rv">
+          <div class="step-num">3</div>
+          <h3>Пользуйтесь</h3>
+          <p>24 часа Pro без ограничений. Потом — выберите тариф.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="eyebrow rv center">Вопросы</div>
+      <h2 class="h2 rv center">Частые вопросы</h2>
+      <div class="faq rv">
+        <details class="faq-item">
+          <summary class="faq-q">Сколько раз можно получить?<svg><use href="#i-down"/></svg></summary>
+          <div class="faq-a">Один раз на аккаунт. Плюс-метки и точки Gmail, разные аккаунты с одной почты — не помогут.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Нужна ли карта?<svg><use href="#i-down"/></svg></summary>
+          <div class="faq-a">Нет, карта не нужна. Автопродления нет. Через 24 часа тариф вернётся на Free.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Кому доступно?<svg><use href="#i-down"/></svg></summary>
+          <div class="faq-a">Пользователям на Free-тарифе, которые ещё никогда не платили. Если вы уже брали день Pro раньше — дважды не даём.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Что будет после 24 часов?<svg><use href="#i-down"/></svg></summary>
+          <div class="faq-a">Тариф вернётся на Free. Все чаты сохраняются. Если Pro понравится — в чате будет предложение продолжить.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Могу ли я после этого получить скидку?<svg><use href="#i-down"/></svg></summary>
+          <div class="faq-a">Да. Бесплатный день — это первый шаг перед покупкой. Если введёна скидка на первую покупку, она сохраняется.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <div class="final">
+    <div class="wrap">
+      <div class="final-card rv" id="finalCard">
+        <div class="glow" aria-hidden="true"></div>
+        <div class="badge-free"><i></i>Бесплатно</div>
+        <h2 class="h2">Заберите Pro на сегодня</h2>
+        <p class="sub">Без карты · без автопродления · один раз на аккаунт</p>
+        <button class="btn pri" onclick="ptClaim()">Забрать Pro на 24 часа<svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <div class="tgline">
+          <svg><use href="#i-tg"/></svg>
+          <span>Новости — в нашем <a href="https://t.me/eidevip" target="_blank" rel="noopener">Telegram-канале</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="/" class="brand" style="font-size:15px">
+      <span class="nav-mark" style="width:22px;height:22px"><img src="/icon-p-amber.svg" alt="" width="22" height="22" style="display:block"></span>
+      Premier
+    </a>
+    <span>© <span id="yr"></span></span>
+    <div class="sp"></div>
+    <a href="https://t.me/royesee" target="_blank" rel="noopener">Поддержка: @royesee</a>
+    <a href="/privacy">Конфиденциальность</a>
+    <a href="/terms">Условия</a>
+  </div>
+</footer>
+
+<script>
+'use strict';
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// нав-скрол
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+// reveal
+if (document.documentElement.classList.contains('js')) {
+  const obs = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } }), { threshold: 0.12 });
+  document.querySelectorAll('.rv').forEach((el) => { if (!el.closest('.hero')) obs.observe(el); else el.classList.add('in'); });
+}
+
+// --- статус и UI ---
+let PT = null; // данные от /api/protrial/status
+let PT_TIMER = null;
+
+const ptBtn = document.getElementById('ptBtn');
+const ptStatus = document.getElementById('ptStatus');
+const ptTimer = document.getElementById('ptTimer');
+const ptTimerLabel = document.getElementById('ptTimerLabel');
+
+function fmtTime(ms) {
+  if (ms <= 0) return '00:00:00';
+  const s = Math.floor(ms / 1000);
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+
+function startCountdown(until) {
+  if (PT_TIMER) clearInterval(PT_TIMER);
+  ptTimer.classList.add('active');
+  ptTimerLabel.textContent = 'Остаётся до конца Pro';
+  const tick = () => {
+    const left = until - Date.now();
+    ptTimer.textContent = fmtTime(left);
+    if (left <= 0) { clearInterval(PT_TIMER); ptTimer.textContent = '00:00:00'; ptTimerLabel.textContent = 'Pro закончился'; }
+  };
+  tick();
+  PT_TIMER = setInterval(tick, 1000);
+}
+
+function showStatus(type, title, body) {
+  ptStatus.className = 'pt-status ' + type;
+  ptStatus.style.display = '';
+  ptStatus.innerHTML = (title ? '<b>' + title + '</b>' : '') + (body || '');
+}
+
+function applyStatus(d) {
+  const s = d && d.protrial;
+  if (!s) return;
+  if (!s.on) {
+    ptBtn.disabled = true;
+    ptBtn.innerHTML = 'Акция завершена';
+    document.getElementById('finalCard').querySelector('button').disabled = true;
+    document.getElementById('finalCard').querySelector('button').innerHTML = 'Акция завершена — <a href="/chat" style="text-decoration:underline">вернуться к тарифам</a>';
+    return;
+  }
+  if (s.state === 'active' && s.until) {
+    startCountdown(s.until);
+    ptBtn.textContent = 'Открыть чат';
+    ptBtn.onclick = () => location.href = '/chat';
+    document.getElementById('finalCard').querySelector('button').textContent = 'Открыть чат';
+    document.getElementById('finalCard').querySelector('button').onclick = () => location.href = '/chat';
+    showStatus('ok', 'Pro активен', 'Действует до ' + new Date(s.until).toLocaleString('ru-RU', {hour:'2-digit',minute:'2-digit',day:'numeric',month:'long'}));
+    return;
+  }
+  if (s.state === 'used') {
+    ptBtn.innerHTML = 'Уже брали — Про на 3 дня за 99 ₽<svg aria-hidden="true"><use href="#i-arrow"/></svg>';
+    ptBtn.onclick = () => location.href = '/chat?buy=trial';
+    ptBtn.classList.remove('pri'); ptBtn.classList.add('ghost');
+    document.getElementById('finalCard').querySelector('button').innerHTML = 'Про на 3 дня за 99 ₽<svg aria-hidden="true"><use href="#i-arrow"/></svg>';
+    document.getElementById('finalCard').querySelector('button').onclick = () => location.href = '/chat?buy=trial';
+    return;
+  }
+  if (s.state === 'has_plan') {
+    ptBtn.textContent = 'У вас уже Pro — открыть чат';
+    ptBtn.onclick = () => location.href = '/chat';
+    ptBtn.classList.remove('pri'); ptBtn.classList.add('ghost');
+    return;
+  }
+  if (s.state === 'paid' || s.state === 'ineligible') {
+    ptBtn.disabled = true;
+    ptBtn.textContent = 'Акция доступна новым пользователям Free';
+    return;
+  }
+  // eligible — дефолтное состояние, кнопка активна
+}
+
+function applyPlans(d) {
+  if (!d || !d.plans) return;
+  const free = d.plans.find((p) => p.tier === 0);
+  const pro = d.plans.find((p) => p.id === 'pro');
+  if (free) {
+    if (free.msgs != null) {
+      document.getElementById('cmp-free-msgs').textContent = free.msgs + ' в день';
+    }
+    if (free.code != null) document.getElementById('cmp-free-code').textContent = free.code + ' в день';
+    if (free.sites != null) document.getElementById('cmp-free-sites').textContent = free.sites + ' в день';
+  }
+  if (pro) {
+    if (pro.msgs == null) document.getElementById('fn-msgs').innerHTML = '&infin;';
+    else document.getElementById('fn-msgs').textContent = pro.msgs;
+    if (pro.code == null) document.getElementById('fn-code').innerHTML = '&infin;';
+    else document.getElementById('fn-code').textContent = pro.code;
+    if (pro.sites == null) document.getElementById('fn-sites').innerHTML = '&infin;';
+    else document.getElementById('fn-sites').textContent = pro.sites;
+    if (pro.images == null) document.getElementById('fn-images').innerHTML = '&infin;';
+    else document.getElementById('fn-images').textContent = pro.images;
+  }
+}
+
+// загрузить статус
+async function ptLoad() {
+  try {
+    const r = await fetch('/api/protrial/status');
+    if (!r.ok) return;
+    PT = await r.json();
+    applyStatus(PT);
+    applyPlans(PT);
+  } catch {}
+}
+ptLoad();
+
+// клейм
+async function ptClaim() {
+  if (!PT || PT.protrial === undefined) {
+    // не вошёл — сохраняем cookie и в login
+    document.cookie = 'premier_next=' + encodeURIComponent('/protrial') + '; Path=/; Max-Age=3600; SameSite=Lax';
+    location.href = '/login';
+    return;
+  }
+  if (PT.protrial.state !== 'eligible') {
+    // повторно применим applyStatus
+    applyStatus(PT);
+    return;
+  }
+  ptBtn.setAttribute('aria-busy', 'true');
+  ptBtn.textContent = 'Активирую…';
+  try {
+    const r = await fetch('/api/protrial/claim', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+    const j = await r.json();
+    ptBtn.removeAttribute('aria-busy');
+    if (j.ok) {
+      PT = { ...PT, protrial: { on: true, state: 'active', until: j.until } };
+      applyStatus(PT);
+      startCountdown(j.until);
+      showStatus('ok', 'Pro активен!', 'Откройте чат и пользуйтесь.');
+    } else {
+      ptBtn.textContent = 'Забрать Pro на 24 часа';
+      showStatus('err', 'Не удалось', j.error || 'Попробуйте ещё раз');
+    }
+  } catch {
+    ptBtn.removeAttribute('aria-busy');
+    ptBtn.textContent = 'Забрать Pro на 24 часа';
+    showStatus('err', '', 'Ошибка сети, попробуйте ещё раз');
+  }
+}
+
+// возврат после входа (premier_next cookie стерт сервером после редиректа)
+// Если пользователь вернулся сюда с ?claimed=1 — автоклейм (sever redirect sets ?claimed=1)
+if (new URLSearchParams(location.search).has('claimed')) {
+  history.replaceState(null, '', '/protrial');
+  window.addEventListener('load', async () => {
+    await ptLoad();
+    if (PT && PT.protrial && PT.protrial.state === 'eligible') ptClaim();
+  });
+}
+</script>
+</body>
+</html>

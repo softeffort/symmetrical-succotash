@@ -1,0 +1,162 @@
+/* Premier · Core — основа: холст, стекло, мелочи, курсор (шаг 1 редизайна). Описание: /CORE-DESIGN-SYSTEM.md
+   Подключается после core-tokens.css. Ничего не делает, пока на странице нет класса .core:
+   <html class="core"> включает систему для всей страницы, .core на блоке — только для него. */
+
+/* ═══ 1. Холст ═══ */
+.core{
+  color:var(--core-text);font:var(--core-human-2);letter-spacing:0;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
+  caret-color:var(--core-caret);accent-color:var(--core-text);
+  -webkit-tap-highlight-color:transparent;
+}
+/* размер шрифта корня не трогаем: от него считаются все rem */
+html.core{background:var(--core-scene);font-size:100%}
+html.core body{margin:0;background:transparent;color:inherit;font:var(--core-human-2)}
+.core *,.core *::before,.core *::after{box-sizing:border-box}
+
+/* Слой Ядра: под интерфейсом, над фоном страницы. На шаге 2 сюда встанет 3D-сцена. */
+.core-scene{position:fixed;inset:0;z-index:var(--core-z-scene);pointer-events:none;overflow:hidden;contain:strict}
+
+/* Свет двигают только при смене состояния экрана: CoreUI.light.set(…, true) на время перехода вешает этот класс. */
+:root.core-light-move{transition:--core-x var(--core-dur-4) var(--core-ease-move),--core-y var(--core-dur-4) var(--core-ease-move),--core-light var(--core-dur-4) var(--core-ease-move)}
+
+/* ═══ 2. Два голоса и уровни текста ═══ */
+.core-human-1{font:var(--core-human-1)}
+.core-human-2{font:var(--core-human-2)}
+.core-human-3{font:var(--core-human-3)}
+.core-human-4{font:var(--core-human-4);letter-spacing:var(--core-track-4)}
+.core-human-5{font:var(--core-human-5);letter-spacing:var(--core-track-5)}
+.core-human-6{font:var(--core-human-6);letter-spacing:var(--core-track-6)}
+.core-machine-1{font:var(--core-machine-1)}
+.core-machine-2{font:var(--core-machine-2)}
+.core-machine-3{font:var(--core-machine-3)}
+.core-machine-4{font:var(--core-machine-4)}
+.core-machine-5{font:var(--core-machine-5);letter-spacing:var(--core-track-5)}
+.core-machine-6{font:var(--core-machine-6);letter-spacing:var(--core-track-6)}
+.core-text-1{color:var(--core-text)}
+.core-text-2{color:var(--core-text-2)}
+.core-text-3{color:var(--core-text-3)}
+.core-sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+
+/* ═══ 3. Стекло ═══
+   Глубина задаёт только размытие, яркость и тень. Кромку рисует ::after, заливку — фон, размытие — backdrop-filter.
+   Компоненты-стёкла (карточка, меню, подсказка, уведомление, капсула, окно, код) получают материал сами. */
+.core-glass,.core-card,.core-menu,.core-tip,.core-toast,.core-capsule,.core-dialog__pane,.core-code{
+  --_fill:var(--core-glass-mid);--_backdrop:var(--core-backdrop-mid);--_shadow:var(--core-shadow-mid);--_edge:var(--core-edge-mid);
+  --_tint:transparent;
+  position:relative;isolation:isolate;
+  border-radius:var(--core-r-md);
+  background:linear-gradient(var(--_tint),var(--_tint)),var(--_fill);
+  -webkit-backdrop-filter:var(--_backdrop);backdrop-filter:var(--_backdrop);
+  box-shadow:var(--core-glass-hi),var(--_shadow);
+  outline:1px solid transparent;outline-offset:-1px; /* граница для режима высокой контрастности */
+}
+.core-glass--far{--_fill:var(--core-glass-far);--_backdrop:var(--core-backdrop-far);--_shadow:var(--core-shadow-far);--_edge:var(--core-edge-far)}
+.core-glass--mid{--_fill:var(--core-glass-mid);--_backdrop:var(--core-backdrop-mid);--_shadow:var(--core-shadow-mid);--_edge:var(--core-edge-mid)}
+.core-glass--near,.core-menu,.core-tip,.core-toast,.core-capsule{--_fill:var(--core-glass-near);--_backdrop:var(--core-backdrop-near);--_shadow:var(--core-shadow-near);--_edge:var(--core-edge-near)}
+/* плотное стекло — не глубина, а читаемость: код и длинный текст */
+.core-glass--dense,.core-code{--_fill:var(--core-glass-dense);--_backdrop:var(--core-backdrop-dense)}
+
+/* кромка: запасной вид — ровная тонкая линия */
+.core-glass::after,.core-card::after,.core-menu::after,.core-tip::after,.core-toast::after,.core-capsule::after,.core-dialog__pane::after,.core-code::after{
+  content:"";position:absolute;inset:0;z-index:1;border-radius:inherit;padding:1px;pointer-events:none;
+  background:var(--core-line-2);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+}
+/* кромка знает, где Ядро: угол и расстояние считаются из --core-x/--core-y (на <html>) и --core-at-x/--core-at-y (на поверхности) */
+@supports (color:color-mix(in srgb,red,blue)) and (rotate:atan2(1,1)){
+  .core-glass,.core-card,.core-menu,.core-tip,.core-toast,.core-capsule,.core-dialog__pane,.core-code{
+    --_dx:calc(var(--core-x) - var(--core-at-x));--_dy:calc(var(--core-y) - var(--core-at-y));
+    --_phi:atan2(calc(var(--_dy) * 1vh),calc(var(--_dx) * 1vw));
+    --_dir:clamp(0,calc(hypot(var(--_dx),var(--_dy)) / 28),1);
+    --_k:calc(var(--_edge) * var(--core-light));
+    --_lit:min(100%,calc(var(--_k) * (var(--core-edge-even) + (1 - var(--core-edge-even)) * var(--_dir)) * 100%));
+    --_shade:min(100%,calc(var(--_k) * (var(--core-edge-even) - (var(--core-edge-even) - var(--core-edge-shade)) * var(--_dir)) * 100%));
+    background:
+      linear-gradient(var(--_tint),var(--_tint)),
+      radial-gradient(farthest-corner at calc(50% + 50% * cos(var(--_phi))) calc(50% + 50% * sin(var(--_phi))),color-mix(in srgb,var(--core-edge) min(100%,calc(var(--core-sheen) * var(--_dir) * var(--core-light) * 100%)),transparent),transparent 64%),
+      var(--_fill);
+  }
+  .core-glass::after,.core-card::after,.core-menu::after,.core-tip::after,.core-toast::after,.core-capsule::after,.core-dialog__pane::after,.core-code::after{
+    background:linear-gradient(calc(var(--_phi) + 90deg),color-mix(in srgb,var(--core-edge) var(--_shade),transparent) 0%,color-mix(in srgb,var(--core-edge) var(--_shade),transparent) 22%,color-mix(in srgb,var(--core-edge) var(--_lit),transparent) 100%);
+  }
+}
+/* Стекло в стекле не размывает второй раз: внутренняя поверхность — просто более светлый слой. */
+:is(.core-glass,.core-card,.core-menu,.core-tip,.core-toast,.core-capsule,.core-dialog__pane,.core-code) *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+:is(.core-glass,.core-card,.core-menu,.core-toast,.core-capsule,.core-dialog__pane) :is(.core-glass,.core-card):not(.core-glass--dense){--_fill:var(--core-fill-1);--_shadow:0 0 0 0 transparent;box-shadow:none}
+:is(.core-glass,.core-card,.core-menu,.core-toast,.core-capsule,.core-dialog__pane) :is(.core-glass--dense,.core-code){--_shadow:0 0 0 0 transparent;box-shadow:none}
+/* где стоит известная панель — подсказка для кромки без скрипта */
+[data-core-at~=left]{--core-at-x:8}
+[data-core-at~=right]{--core-at-x:92}
+[data-core-at~=top]{--core-at-y:4}
+[data-core-at~=bottom]{--core-at-y:94}
+[data-core-at~=core]{--core-at-x:var(--core-x);--core-at-y:var(--core-y)}
+@media (forced-colors:active){
+  .core-glass,.core-card,.core-menu,.core-tip,.core-toast,.core-capsule,.core-dialog__pane,.core-code{outline-color:CanvasText}
+}
+
+/* ═══ 4. Мелочи ═══ */
+/* выделение текста — светом, без янтаря */
+.core ::selection,.core::selection{background:var(--core-select)}
+/* рамка фокуса с клавиатуры — видна всегда; вторая строка пересиливает старое правило из /tokens.css на переходных страницах */
+.core :focus-visible{outline:2px solid var(--core-focus);outline-offset:2px}
+html.core :is(a,button,summary,[role=button],[role=tab],[role=menuitem],[tabindex]:not([tabindex="-1"])):focus-visible,
+.core :is(a,button,summary,[role=button],[role=tab],[role=menuitem],[tabindex]:not([tabindex="-1"])):focus-visible{outline:2px solid var(--core-focus)!important;outline-offset:2px}
+.core :focus:not(:focus-visible){outline:none}
+/* текст-подсказка в поле */
+.core ::placeholder{color:var(--core-text-3);opacity:1}
+/* полосы прокрутки: тонкая светлая нить, дорожки нет; на телефоне — системные */
+@media (hover:hover) and (pointer:fine){
+  @supports not selector(::-webkit-scrollbar){.core,.core *{scrollbar-width:thin;scrollbar-color:var(--core-scroll) transparent}}
+  .core::-webkit-scrollbar,.core ::-webkit-scrollbar{width:12px;height:12px}
+  .core::-webkit-scrollbar-track,.core ::-webkit-scrollbar-track,.core::-webkit-scrollbar-corner,.core ::-webkit-scrollbar-corner{background:transparent}
+  .core::-webkit-scrollbar-thumb,.core ::-webkit-scrollbar-thumb{background:var(--core-scroll);background-clip:padding-box;border:4px solid transparent;border-radius:var(--core-r-full);min-height:40px}
+  .core::-webkit-scrollbar-thumb:hover,.core ::-webkit-scrollbar-thumb:hover,.core::-webkit-scrollbar-thumb:active,.core ::-webkit-scrollbar-thumb:active{background-color:var(--core-scroll-hover)}
+}
+/* ссылка: цвет текста, тонкое подчёркивание, которое проявляется при наведении */
+.core-link,.core-prose a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.22em;text-decoration-color:var(--core-text-3);transition:text-decoration-color var(--core-dur-1) linear;border-radius:2px}
+@media (hover:hover){.core-link:hover,.core-prose a:hover{text-decoration-color:currentColor}}
+.core-link:active,.core-prose a:active{color:var(--core-text-2)}
+/* клавиша и разделитель */
+.core-kbd{display:inline-flex;align-items:center;min-height:20px;padding:0 var(--core-s-1);border-radius:calc(var(--core-r-sm) - 2px);background:var(--core-fill-2);box-shadow:inset 0 0 0 1px var(--core-line);font:var(--core-machine-1);color:var(--core-text-2);white-space:nowrap}
+
+/* длинный текст для чтения: человеческий голос, код — машинный */
+.core-prose{font:var(--core-human-3);color:var(--core-text);overflow-wrap:break-word}
+.core-prose :where(p,ul,ol,blockquote,pre,table,hr){margin:0 0 var(--core-s-4)}
+.core-prose :where(h1,h2,h3,h4){margin:var(--core-s-8) 0 var(--core-s-3);color:var(--core-text)}
+.core-prose :where(h1){font:var(--core-human-5);letter-spacing:var(--core-track-5)}
+.core-prose :where(h2){font:var(--core-human-4);letter-spacing:var(--core-track-4)}
+.core-prose :where(h3,h4){font:var(--core-human-3);font-weight:var(--core-w-3)}
+.core-prose :where(ul,ol){padding-left:var(--core-s-6)}
+.core-prose :where(li){margin:var(--core-s-1) 0}
+.core-prose :where(li)::marker{color:var(--core-text-3)}
+.core-prose :where(strong,b){font-weight:var(--core-w-3)}
+.core-prose :where(blockquote){padding-left:var(--core-s-4);border-left:1px solid var(--core-line-2);color:var(--core-text-2)}
+.core-prose :where(hr){height:1px;border:0;background:var(--core-line)}
+.core-prose :where(code,kbd,samp){font:var(--core-machine-2)}
+.core-prose :where(:not(pre)>code){padding:1px var(--core-s-1);border-radius:calc(var(--core-r-sm) - 2px);background:var(--core-fill-2)}
+.core-prose>:first-child{margin-top:0}
+.core-prose>:last-child{margin-bottom:0}
+
+/* ═══ 5. Курсор ═══
+   Три формы через штатный cursor (без скрипта, без задержки). Для остального — системные курсоры.
+   На устройствах без мыши правил нет вовсе. Нулевая специфичность: любое явное правило страницы сильнее. */
+@media (any-pointer:fine){
+  .core{cursor:var(--core-cursor)}
+  /* текст, который можно выделить */
+  .core :where(p,h1,h2,h3,h4,h5,h6,li,dt,dd,blockquote,figcaption,td,th,pre,code,samp,.core-prose,.core-selectable){cursor:var(--core-cursor-text)}
+  /* всё нажимаемое — вместе с содержимым */
+  .core :where(a[href],button,summary,select,[role=button],[role=link],[role=tab],[role=menuitem],[role=menuitemradio],[role=menuitemcheckbox],[role=option],[role=switch],[role=checkbox],[role=radio],input:is([type=checkbox],[type=radio],[type=button],[type=submit],[type=reset],[type=file],[type=range],[type=color],[type=image]),[data-core-open],[data-core-close],[data-core-menu],.core-click),
+  .core :where(a[href],button,summary,[role=button],[role=link],[role=tab],[role=menuitem],[role=menuitemradio],[role=menuitemcheckbox],[role=option],.core-click) :where(*){cursor:var(--core-cursor-action)}
+  /* текст, который можно править */
+  .core :where(input:not([type]),input:is([type=text],[type=search],[type=email],[type=password],[type=url],[type=tel],[type=number]),textarea,[contenteditable]:not([contenteditable=false])){cursor:var(--core-cursor-text)}
+  /* системные подсказки сохраняются */
+  .core :where(:disabled,[aria-disabled=true]),.core :where(:disabled,[aria-disabled=true]) :where(*){cursor:not-allowed}
+  .core :where([aria-busy=true]),.core :where([aria-busy=true]) :where(*){cursor:progress}
+}
+
+/* ═══ 6. Машинный голос — без лигатур: «=>» и «!=» остаются теми знаками, которые набраны.
+   Сокращение font сбрасывает эту настройку, поэтому правило стоит в самом конце файла. ═══ */
+[class*="core-machine-"],.core-kbd,.core-prose :where(code,kbd,samp){font-variant-ligatures:none}

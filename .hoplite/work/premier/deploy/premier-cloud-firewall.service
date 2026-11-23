@@ -1,0 +1,16 @@
+# Сетевая защита облачного компьютера: /etc/systemd/system/premier-cloud-firewall.service
+# Ставит и проверяет правила iptables, которые не пускают контейнеры пользователей к серверу, во внутренние сети и
+# к адресу метаданных. Правила пропадают при перезагрузке, поэтому юнит запускается при каждой загрузке после Docker,
+# а premier-cloud-firewall.timer повторяет проверку раз в минуту (и обновляет отметку, которую читает сервер Premier).
+[Unit]
+Description=Premier: сетевая защита облачного компьютера (iptables)
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /opt/premier/scripts/cloud-firewall.sh apply
+TimeoutStartSec=60
+
+[Install]
+WantedBy=multi-user.target
