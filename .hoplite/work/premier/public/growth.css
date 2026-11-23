@@ -1,0 +1,149 @@
+/* Premier — пробный период, скидка первой покупки, лимиты Free, «Пригласи друга», «Поделиться» (js/15-growth.js) */
+.gw-share{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border-radius:8px;border:1px solid var(--line2);color:var(--text);font-size:13px;background:transparent;cursor:pointer;flex:none}
+.gw-share svg{width:16px;height:16px}.gw-share:hover{background:var(--hover,rgba(255,255,255,.06))}
+@media(max-width:700px){.gw-share span{display:none}.gw-share{width:34px;padding:0;justify-content:center}}
+/* строка над полем ввода: счётчик, мягкое предупреждение, лимит исчерпан */
+.gw-bar{max-width:740px;margin:0 auto 8px;display:flex;flex-direction:column;gap:6px}
+.gw-left{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--dim)}
+.gw-left .gw-meter{flex:none;width:64px;height:4px;border-radius:3px;background:var(--line2);overflow:hidden}.gw-left .gw-meter i{display:block;height:100%;background:var(--accent)}
+.gw-left.low .gw-meter i{background:var(--p-warn,#e9a35e)}.gw-left.out .gw-meter i{background:var(--p-bad,#e5484d)}
+.gw-left button{margin-left:auto;font-size:12.5px;color:var(--accent-l,var(--accent));background:none;border:0;cursor:pointer;padding:0}
+.gw-warn,.gw-out{display:flex;align-items:center;gap:10px;padding:9px 10px 9px 14px;border-radius:12px;font-size:13.5px;line-height:1.4}
+.gw-warn{background:color-mix(in srgb,var(--p-warn,#e9a35e) 10%,transparent);border:1px solid color-mix(in srgb,var(--p-warn,#e9a35e) 35%,transparent);color:var(--text)}
+.gw-out{background:color-mix(in srgb,var(--p-bad,#e5484d) 9%,transparent);border:1px solid color-mix(in srgb,var(--p-bad,#e5484d) 32%,transparent);color:var(--text)}
+.gw-warn span,.gw-out span{flex:1;min-width:0}.gw-out small{display:block;color:var(--muted);font-size:12.5px}
+.gw-warn .btn,.gw-out .btn{height:30px;padding:0 12px;font-size:13px;flex:none;width:auto}
+.gw-x{flex:none;width:26px;height:26px;border-radius:7px;border:0;background:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1}.gw-x:hover{background:var(--hover,rgba(255,255,255,.06))}
+/* экран «сообщения закончились» */
+.gw-end{text-align:center;padding:4px 2px 2px}.gw-end .gw-clock{font-size:34px;font-weight:680;letter-spacing:-.02em;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.gw-end p{color:var(--muted);font-size:14px;margin:6px auto 0;max-width:420px}.gw-end .gw-acts{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.gw-end .gw-acts .btn{width:100%;height:42px}.gw-end .gw-trial-l{font-size:13.5px;color:var(--muted);margin-top:4px}
+/* карточка пробного периода в окне тарифов */
+.gw-trial{position:relative;display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:16px;padding:16px 16px 14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--p-ok,#3fb27f) 50%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--p-ok,#3fb27f) 12%,transparent),transparent 85%),var(--p-surface,#18181b)}
+.gw-trial .tag{position:absolute;top:-10px;left:16px;font-size:11px;font-weight:600;background:var(--p-ok,#2f9e6b);color:#fff;border-radius:6px;padding:2px 8px}
+.gw-trial>div{flex:1;min-width:200px}.gw-trial b{display:block;font-size:17px}.gw-trial small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.gw-trial .btn{flex:none;width:auto}
+.plan .gw-first{font-size:12.5px;color:var(--p-ok,#5fbf8f);margin-top:-6px}
+/* пробный период тарифа в карточке окна тарифов: «или 3 дня за 249 ₽» */
+.plan .gw-tr{display:block;width:100%;margin-top:8px;padding:6px 0;border:0;background:none;color:var(--muted);font-size:13px;text-align:center;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.plan .gw-tr:hover{color:var(--text)}
+.plan .price s{color:var(--dim);font-weight:500;margin-right:6px}
+/* «Пригласи друга» (режим «бонус после оплаты») */
+/* базовая разметка карточки — для английской версии (в русской она есть в chat.html); :where() не перебивает цвета темы */
+:where(.refcard){position:relative;margin-top:18px;padding:16px 16px 14px;border-radius:14px;background:linear-gradient(160deg,rgba(47,111,228,.16),rgba(255,255,255,.02) 46%);border:1px solid rgba(94,159,232,.38);overflow:hidden}
+:where(.refcard)::before{content:'';position:absolute;top:-45%;left:-15%;width:70%;height:90%;background:radial-gradient(closest-side,rgba(47,111,228,.25),transparent);pointer-events:none}
+:where(.rc-top){display:flex;gap:12px;align-items:center;position:relative}
+:where(.rc-ic){width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent-l));color:#fff;flex:none}:where(.rc-ic) svg{width:20px;height:20px}
+:where(.rc-tt) b{font-size:15px;letter-spacing:.1px}:where(.rc-tt) small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px;line-height:1.35}
+:where(.rc-link){display:flex;gap:8px;margin-top:14px;position:relative}
+:where(.rc-link) code{flex:1;min-width:0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:var(--accent-l);background:var(--code);border:1px solid var(--line2);border-radius:9px;padding:9px 11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+:where(.rc-copy){flex:none;padding:8px 12px;font-size:13px}
+:where(.rc-stats){display:flex;gap:8px;margin-top:12px;position:relative}
+:where(.rc-stat){flex:1;display:flex;flex-direction:column;gap:1px;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--line)}:where(.rc-stat) b{font-size:16px;letter-spacing:.2px}:where(.rc-stat) small{font-size:11.5px;color:var(--muted)}
+.refcard .rc-note{position:relative;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.refcard .rc-rules{position:relative;margin:10px 0 0;padding:0 0 0 18px;font-size:12.5px;color:var(--muted)}.refcard .rc-rules li{margin:2px 0}
+/* «Поделиться чатом» */
+.gw-sh p{color:var(--muted);font-size:13.5px;margin:0 0 12px}.gw-sh .gw-row{display:flex;gap:8px}
+.gw-sh input{flex:1;min-width:0;height:38px;padding:0 12px;border-radius:8px;border:1px solid var(--line2);background:var(--p-bg,#0f0f10);color:var(--text);font:13px/1 var(--p-font-mono,ui-monospace,Menlo,monospace)}
+.gw-sh .gw-row .btn{width:auto;flex:none}.gw-sh .gw-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.gw-sh .gw-acts .btn{width:auto}.gw-sh a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.gw-sh .gw-meta{font-size:12.5px;color:var(--dim);margin-top:10px}.gw-sh .btn.bad{color:var(--p-bad,#e5484d)}
+.gw-sh .msgline{margin-top:8px}
+
+/* срок оплаты в окне тарифов: 1 / 3 / 6 / 12 месяцев со скидкой */
+.pm-per{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0 auto 14px;padding:4px;border-radius:12px;background:var(--surface-2,rgba(127,127,127,.1));width:max-content;max-width:100%}
+.pm-per button{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:inherit;font:inherit;font-size:13.5px;padding:7px 12px;border-radius:9px;cursor:pointer;opacity:.75}
+.pm-per button:hover{opacity:1}
+.pm-per button.on{background:var(--card,#fff);opacity:1;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.pm-per small{font-size:11.5px;font-weight:600;color:#2F9E6B}
+.pm-month{font-size:12.5px;opacity:.7;margin-top:-4px}
+
+/* файлы проекта */
+.kn .kn-list{display:flex;flex-direction:column;gap:6px;margin:4px 0 8px}
+.kn .kn-row{display:flex;align-items:center;gap:10px;padding:7px 8px 7px 12px;border:1px solid var(--line,rgba(127,127,127,.25));border-radius:10px}
+.kn .kn-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kn .kn-row small{opacity:.65;white-space:nowrap}
+.kn .kn-del{border:0;background:none;color:inherit;opacity:.6;cursor:pointer;font-size:18px;line-height:1;padding:2px 6px;border-radius:6px}
+.kn .kn-del:hover{opacity:1;background:rgba(127,127,127,.15)}
+.kn .kn-sum,.kn .kn-empty{opacity:.65}
+.kn .kn-add{align-self:flex-start;cursor:pointer;margin-bottom:6px}
+
+/* PWA: карточка «Установите Premier» и строка «Уведомления» в аккаунте (js/16-pwa.js) */
+.pwa-card{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;align-items:center;gap:12px;max-width:390px;padding:12px 10px 12px 14px;border-radius:14px;border:1px solid var(--line2);background:var(--card,var(--surface,#1b1a17));color:var(--text);box-shadow:0 12px 32px rgba(0,0,0,.28);animation:pwaIn .25s ease}
+.pwa-card img{width:40px;height:40px;border-radius:10px;flex:none}
+.pwa-txt{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:13px;line-height:1.35}.pwa-txt b{font-size:14px}.pwa-txt span{color:var(--muted)}
+.pwa-act{display:flex;align-items:center;gap:4px;flex:none}
+.pwa-x{width:28px;height:28px;border:0;border-radius:8px;background:transparent;color:var(--muted);font-size:20px;line-height:1;cursor:pointer}.pwa-x:hover{background:var(--hover,rgba(255,255,255,.06));color:var(--text)}
+@keyframes pwaIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:700px){.pwa-card{left:10px;right:10px;bottom:10px;max-width:none}}
+.push-btns{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}.push-btns [hidden]{display:none}
+
+/* ---------- Командный тариф (js/17-team.js) ---------- */
+.tm{display:flex;flex-direction:column;gap:12px}
+.tm-intro{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+.tm-box{border:1px solid var(--line2);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.tm-invite{border-color:var(--accent);background:var(--accent-l)}
+.tm-warn{color:var(--muted);font-size:14px}
+.tm-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.tm-hd b{font-size:15px;color:var(--text)}
+.tm-meta{color:var(--muted);font-size:13px;line-height:1.45}
+.tm-warnt{color:#e5a000}
+.tm-st{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line2);color:var(--muted);white-space:nowrap}
+.tm-st.on{border-color:var(--accent);color:var(--accent)}
+.tm-row{display:flex;gap:8px;align-items:center}
+.tm-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.tm-inp{flex:1;min-width:0;padding:9px 11px;border-radius:10px;border:1px solid var(--line2);background:transparent;color:var(--text);font:inherit;font-size:14px}
+.tm-inp:focus{outline:none;border-color:var(--accent)}
+.tm-f{font-size:12px;color:var(--dim);margin-top:4px}
+.tm-linkrow code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:9px 11px;border-radius:10px;background:var(--code);font-size:13px}
+.tm-btn{padding:8px 14px;border-radius:10px;border:1px solid var(--line2);background:transparent;color:var(--text);font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
+.tm-btn:hover{border-color:var(--accent)}
+.tm-btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.tm-btn:disabled{opacity:.5;cursor:default}
+.tm-step{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tm-step button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line2);background:transparent;color:var(--text);font-size:18px;cursor:pointer}
+.tm-step input{width:70px;height:34px;text-align:center;border-radius:10px;border:1px solid var(--line2);background:transparent;color:var(--text);font:inherit;font-size:15px}
+.tm-step .tm-meta{margin-left:6px}
+.tm-seg{display:flex;flex-wrap:wrap;gap:6px}
+.tm-seg button{padding:7px 12px;border-radius:999px;border:1px solid var(--line2);background:transparent;color:var(--text);font:inherit;font-size:13px;cursor:pointer}
+.tm-seg button.on{border-color:var(--accent);background:var(--accent-l);color:var(--accent)}
+.tm-paym{margin-top:2px}
+.tm-sum{font-size:14px;color:var(--text);line-height:1.55;padding:10px 12px;border-radius:10px;background:var(--code)}
+.tm-off{color:var(--accent);font-weight:600}
+.tm-tot{margin-top:6px;font-size:15px}
+.tm-tot s{color:var(--dim);margin-left:6px}
+.tm-pay{align-self:flex-start;padding:10px 20px}
+.tm-err{color:#e5484d;font-size:13px;margin:0;min-height:1em}
+.tm-link{align-self:flex-start;background:none;border:0;padding:0;color:var(--accent);font:inherit;font-size:13px;cursor:pointer}
+.tm-list{display:flex;flex-direction:column;margin-top:4px;border-top:1px solid var(--line2)}
+.tm-who{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:14px}
+.tm-who small{color:var(--dim)}
+.tm-noseat{color:#e5a000;font-size:12px}
+.tm-rm{background:none;border:0;color:var(--muted);font:inherit;font-size:13px;cursor:pointer}
+.tm-rm:hover{color:#e5484d}
+.tm-acc,.team-cta{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border:1px solid var(--line2);border-radius:14px}
+.team-cta{margin-top:16px}
+.tm-acc-ic{width:22px;height:22px;flex:none;color:var(--accent)}
+.tm-acc-tt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tm-acc-tt b{font-size:14px;color:var(--text)}
+.tm-acc-tt span{font-size:13px;color:var(--muted)}
+@media (max-width:560px){.tm-row{flex-wrap:wrap}.tm-linkrow code{flex-basis:100%}.tm-acc,.team-cta{flex-wrap:wrap}.tm-pay{align-self:stretch}}
+
+/* двухфакторная защита — Аккаунт → Безопасность (js/18-2fa.js) */
+.tfa-row small{max-width:440px}
+.tfa-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.tfa-box{margin:4px 0 14px;padding:14px;border:1px solid var(--line2);border-radius:14px;display:flex;flex-direction:column;gap:12px}
+.tfa-box p{margin:0;font-size:14px;color:var(--muted);line-height:1.5}
+.tfa-box p b{color:var(--text)}
+.tfa-setup{display:flex;gap:16px;align-items:flex-start}
+.tfa-qr{flex:none;width:168px;height:168px;padding:6px;border-radius:12px;background:#fff;box-sizing:border-box}
+.tfa-qr svg{display:block;width:100%;height:100%}
+.tfa-side{display:flex;flex-direction:column;gap:10px;min-width:0}
+.tfa-key{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.tfa-key code{font-size:13px;padding:6px 8px;border-radius:8px;background:var(--code);word-break:break-all;letter-spacing:.04em;color:var(--text)}
+.tfa-form{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tfa-form input{width:190px;height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--line2);background:transparent;color:var(--text);font:inherit;font-size:16px;letter-spacing:.1em;outline:none}
+.tfa-form input:focus{border-color:var(--accent)}
+.tfa-codes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 16px;padding:12px 14px;border-radius:10px;background:var(--code);color:var(--text);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;letter-spacing:.06em;user-select:all}
+.tfa-err{color:#e5484d;font-size:13px;margin:0}
+.tfa-err:empty{display:none}
+@media (max-width:560px){.tfa-row{flex-wrap:wrap}.tfa-setup{flex-direction:column;align-items:center}.tfa-form input{flex:1;min-width:0}}

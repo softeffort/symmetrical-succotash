@@ -1,0 +1,10 @@
+[Unit]
+Description=Premier: проверка сетевой защиты облачного компьютера каждую минуту
+
+[Timer]
+OnBootSec=20s
+OnUnitActiveSec=1min
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target

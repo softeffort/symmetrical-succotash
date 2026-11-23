@@ -1,0 +1,82 @@
+/* Панель: раздел «Уведомления» и окно отправки (public/admin/v-notices.js). Сама карточка — /notices.css. */
+.modal.nc-modal{max-width:1040px;padding:22px 24px}
+/* кнопки «Отмена / Отправить» всегда видны внизу окна */
+.nc-modal>.btns{position:sticky;bottom:-22px;z-index:3;margin:14px -24px -22px;padding:12px 24px 18px;background:var(--card);border-top:1px solid var(--line)}
+.nc-modal>[data-merr]{position:sticky;bottom:52px;z-index:3;margin:10px -24px -10px;padding:8px 24px;background:var(--card)}
+.nc-modal>[data-merr]:empty{min-height:0;padding:0;margin:0}
+.nc-grid{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:22px;align-items:start}
+.nc-aud{display:flex;flex-direction:column;gap:10px;padding:12px 14px;margin-bottom:16px;border:1px solid var(--line);border-radius:14px;background:var(--card2)}
+.nc-pick{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.nc-pick textarea{flex:1 1 100%;min-height:58px}
+.nc-sum{display:flex;align-items:center;gap:12px;min-width:0}
+.nc-sum .grow{min-width:0}
+.nc-sum b{display:block;font-size:14px;font-weight:650}
+.nc-sum small{display:block;font-size:12.5px;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nc-ico{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:var(--p-accent-soft);color:var(--p-accent-ink)}
+.nc-ico svg{width:18px;height:18px}
+.nc-lv{flex-wrap:wrap}
+.nc-lv button{display:inline-flex;align-items:center;gap:7px}
+.nc-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--info)}
+.nc-dot.warn{background:var(--warn)}.nc-dot.urgent{background:var(--p-accent)}.nc-dot.critical{background:var(--bad)}
+.nc-tplrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:-2px 0 12px}
+.nc-tplname{display:inline-flex;gap:6px}
+.nc-tplname .inp{width:180px}
+.nc-draft{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 10px 8px 12px}
+.nc-draft .btn{margin-left:auto}
+.nc-vars{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:6px}
+.nc-var{height:24px;padding:0 8px;border-radius:7px;border:1px dashed var(--line2);font:500 12px/1 var(--p-font-mono);color:var(--muted);background:transparent;cursor:pointer}
+.nc-var:hover{color:var(--text);border-color:var(--p-accent-line);background:var(--p-accent-soft)}
+.nc-cnt{margin-left:auto;font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
+.nc-cnt.over{color:var(--bad);font-weight:600}
+details.nc-en{margin:2px 0 12px;border:1px solid var(--line);border-radius:12px;padding:0 12px}
+details.nc-en[open]{padding-bottom:4px}
+details.nc-en summary{cursor:pointer;padding:10px 0;font-size:13.5px;font-weight:550;color:var(--muted);list-style-position:inside}
+.nc-armed{display:block;margin-top:4px}
+.nc-armed svg{width:15px;height:15px;vertical-align:-2px;color:var(--warn)}
+.nc-side{position:sticky;top:0}
+.nc-ph{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12.5px;color:var(--muted)}
+.nc-ph b{font-weight:600}
+.seg.sm{padding:2px}
+.seg.sm button{height:24px;padding:0 8px;font-size:12px;display:inline-flex;align-items:center}
+.seg.sm button svg{width:14px;height:14px}
+.nc-stage{position:relative;height:440px;border-radius:16px;border:1px solid var(--line);overflow:hidden;background:#F7F4EE}
+.nc-stage.pn-theme-dark{background:#12110F;border-color:#34302A}
+.nc-page{position:absolute;inset:0;display:flex}
+.nc-mside{width:92px;padding:14px 10px;display:flex;flex-direction:column;gap:8px;border-right:1px solid color-mix(in srgb,var(--pn-text) 8%,transparent);background:color-mix(in srgb,var(--pn-text) 2.5%,transparent)}
+.nc-mside i,.nc-mmain i{display:block;height:9px;border-radius:5px;background:color-mix(in srgb,var(--pn-text) 8%,transparent)}
+.nc-mmain{flex:1;padding:22px 18px;display:flex;flex-direction:column;gap:14px}
+.nc-mmain i{height:30px;border-radius:12px}
+.nc-minput{margin-top:auto;height:40px;border-radius:14px;border:1px solid color-mix(in srgb,var(--pn-text) 12%,transparent);background:color-mix(in srgb,var(--pn-text) 3%,transparent)}
+.nc-slot{position:absolute;left:12px;right:12px;bottom:12px;max-height:calc(100% - 24px);overflow:auto}
+.nc-slot .pn-card{box-shadow:var(--pn-shadow)}
+.nc-tip{margin-top:8px;font-size:12px;color:var(--dim)}
+@media (max-width:960px){.nc-grid{grid-template-columns:1fr}.nc-side{position:static}.nc-stage{height:380px}}
+/* список и карточка рассылки */
+.nt{min-width:0;max-width:520px}
+.nt-h{display:flex;align-items:center;gap:7px;margin-bottom:3px;min-width:0}
+.nt-h b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nt-t{white-space:normal;font-size:12.5px;color:var(--dim);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.nt-aud{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nr{min-width:150px}
+.nr .track{height:6px;border-radius:999px;background:var(--p-surface-2);overflow:hidden}
+.nr .track i{display:block;height:100%;border-radius:999px;background:var(--info)}
+.nr small{display:block;margin-top:5px;font-size:12px;color:var(--dim);white-space:nowrap}
+.nprev{padding:18px;margin-bottom:16px;border-radius:16px;border:1px solid var(--line);background:var(--p-bg);background-image:radial-gradient(color-mix(in srgb,var(--p-text) 7%,transparent) 1px,transparent 1px);background-size:14px 14px}
+.nrep{padding:12px 0;border-top:1px solid var(--line)}
+.nrep:first-child{border-top:0;padding-top:2px}
+.nrep p{margin-top:5px;font-size:13.5px;white-space:pre-wrap;overflow-wrap:anywhere}
+.nrep.unread{position:relative}
+.nrep.unread::before{content:"";position:absolute;left:-12px;top:16px;width:6px;height:6px;border-radius:50%;background:var(--p-accent)}
+.nc-av{color:#fff}
+.nc-av svg{width:20px;height:20px}
+.nc-av.info{background:var(--info)}.nc-av.warn{background:var(--warn)}.nc-av.urgent{background:var(--p-accent)}.nc-av.critical{background:var(--bad)}
+
+/* «Оповестить …» в панели инструментов раздела «Пользователи» */
+#uNotify{display:contents}
+#uNotifyB{max-width:340px}
+#uNotifyB .un-l{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+#uNotifyB .un-n{font-style:normal;font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:999px;background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc)}
+#uNotifyB:disabled .un-n{background:var(--line);color:var(--dim)}
+/* панель «Выбрано: N» (там же кнопка «Уведомить») прилипает к низу экрана, а не стоит в конце длинного списка */
+#uBulk,#rvBulk{position:sticky;bottom:16px;z-index:15}
+#uBulk .bulkbar,#rvBulk .bulkbar{position:static}

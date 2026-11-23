@@ -1,0 +1,23 @@
+# Автотесты Premier: запускаются сами при каждом push и pull request (вкладка Actions на GitHub).
+# Зависимостей нет — нужен только Node.js 22.13+ (встроенная SQLite) и python3 (тест терминала).
+name: Тесты
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  test:
+    name: npm test (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24'] # 22 — как на сервере (deploy/install.sh), 24 — следующая версия
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: node --version && python3 --version
+      - run: npm test

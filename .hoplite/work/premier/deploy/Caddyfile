@@ -1,0 +1,37 @@
+# Caddy сам получает и продлевает HTTPS-сертификат. /etc/caddy/Caddyfile
+# Замените example.ru на ваш домен (DNS-запись A должна указывать на сервер).
+example.ru {
+	encode gzip
+	reverse_proxy 127.0.0.1:3000 {
+		header_up X-Real-IP {remote_host}
+		# ответы модели идут потоком — не буферизуем
+		flush_interval -1
+	}
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+	request_body {
+		max_size 45MB
+	}
+}
+
+# www → без www
+www.example.ru {
+	redir https://example.ru{uri} permanent
+}
+
+# Облачный компьютер: отдельные адреса для сайтов, запущенных у пользователей (в premier.env —
+# CLOUD_PREVIEW_URL=https://*.pc.example.ru). Нужна DNS-запись A для *.pc.example.ru на этот сервер.
+# Каждому открытию сайта — свой поддомен: код этих сайтов не должен работать на домене Premier и не должен видеть
+# данные другого проекта. Сертификат на *.pc.example.ru Caddy получает только через DNS (сборка Caddy с модулем
+# вашего DNS-провайдера и строка «tls { dns ... }» в блоке) либо укажите готовый: tls /путь/cert.pem /путь/key.pem.
+# Раскомментируйте:
+#*.pc.example.ru {
+#	reverse_proxy 127.0.0.1:3000 {
+#		flush_interval -1
+#	}
+#	request_body {
+#		max_size 45MB
+#	}
+#}
