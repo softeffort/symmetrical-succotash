@@ -1,0 +1,431 @@
+/* Premier · Core — базовые компоненты (шаг 1 редизайна). Описание: /CORE-DESIGN-SYSTEM.md
+   Подключается после core-tokens.css и core-base.css. Все классы — с префиксом core-, старые стили не задеты.
+   Состояния: покой, наведение, нажатие, фокус (рамка — в core-base.css), выключено, загрузка (aria-busy), ошибка (aria-invalid).
+   Янтарь — только у главной кнопки и там, где работает ИИ. «Включено» показывается светом, а не цветом. */
+
+/* ═══ Кнопки ═══ */
+.core-btn{
+  --_h:var(--core-h-md);--_px:var(--core-s-4);--_ink:var(--core-text);
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:var(--core-s-2);flex:none;
+  min-height:var(--_h);min-width:var(--_h);margin:0;padding:0 var(--_px);border:0;border-radius:var(--core-r-sm);
+  background:var(--core-fill-2);box-shadow:inset 0 0 0 1px var(--core-line-2);
+  -webkit-backdrop-filter:var(--core-backdrop-near);backdrop-filter:var(--core-backdrop-near);
+  color:var(--_ink);font:var(--core-human-2);font-weight:var(--core-w-2);letter-spacing:0;white-space:nowrap;text-decoration:none;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-appearance:none;appearance:none;
+  transition:background-color var(--core-dur-1) linear,box-shadow var(--core-dur-1) linear,color var(--core-dur-1) linear,filter var(--core-dur-1) linear,transform var(--core-dur-1) var(--core-ease-out);
+}
+.core-btn svg{flex:none;width:var(--core-icon);height:var(--core-icon)}
+@media (hover:hover){.core-btn:hover{background:var(--core-fill-3);box-shadow:inset 0 0 0 1px var(--core-text-3)}}
+.core-btn:active{background:var(--core-fill-1);transform:scale(.98)}
+.core-btn--sm{--_h:var(--core-h-sm);--_px:var(--core-s-3);font-size:var(--core-fs-1);line-height:var(--core-lh-1)}
+.core-btn--lg{--_h:var(--core-h-lg);--_px:var(--core-s-5);font-size:var(--core-fs-3);line-height:var(--core-lh-3)}
+.core-btn--block{display:flex;width:100%}
+
+/* главная: раскалённая — свет идёт изнутри, середина горячее краёв. Одна на экран. При наведении горячее, при нажатии остывает. */
+.core-btn--main{
+  --_ink:var(--core-text-on-heat);font-weight:var(--core-w-3);
+  background:radial-gradient(110% 170% at 50% 50%,var(--core-heat-4),var(--core-heat-3) 70%);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--core-heat-5) 38%,transparent),0 6px 22px -8px color-mix(in srgb,var(--core-heat-3) 70%,transparent);
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+}
+@media (hover:hover){.core-btn--main:hover{
+  background:radial-gradient(110% 170% at 50% 50%,var(--core-heat-4),var(--core-heat-3) 70%);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--core-heat-5) 64%,transparent),0 8px 28px -8px color-mix(in srgb,var(--core-heat-3) 92%,transparent);
+  filter:brightness(1.09);
+}}
+.core-btn--main:active{
+  background:radial-gradient(110% 170% at 50% 50%,var(--core-heat-3),var(--core-heat-2) 78%);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--core-heat-4) 36%,transparent),0 3px 10px -6px color-mix(in srgb,var(--core-heat-3) 70%,transparent);
+  filter:none;
+}
+/* тихая: без поверхности, пока не навели */
+.core-btn--quiet{--_ink:var(--core-text-2);background:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (hover:hover){.core-btn--quiet:hover{--_ink:var(--core-text);background:var(--core-fill-1);box-shadow:none}}
+.core-btn--quiet:active{--_ink:var(--core-text);background:var(--core-fill-2)}
+/* опасная: цвет ошибки на тексте и тонкой грани, без сплошной заливки */
+.core-btn--danger{--_ink:var(--core-bad);background:var(--core-bad-soft);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--core-bad) 34%,transparent)}
+@media (hover:hover){.core-btn--danger:hover{background:color-mix(in srgb,var(--core-bad) 22%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--core-bad) 56%,transparent)}}
+.core-btn--danger:active{background:color-mix(in srgb,var(--core-bad) 10%,transparent)}
+/* кнопка-значок: квадрат, подпись — в aria-label */
+.core-btn--icon{padding:0;width:var(--_h)}
+/* выключено: главная остывает до стекла, остальные гаснут */
+.core-btn:disabled,.core-btn[aria-disabled=true]{--_ink:var(--core-text-3);background:var(--core-fill-1);box-shadow:inset 0 0 0 1px var(--core-line);filter:none;transform:none;opacity:.72}
+.core-btn--quiet:disabled,.core-btn--quiet[aria-disabled=true]{background:transparent;box-shadow:none}
+/* загрузка: подпись уходит, по трём точкам бежит импульс; ширина не меняется */
+.core-btn[aria-busy=true]{color:transparent;pointer-events:none}
+.core-btn[aria-busy=true]::before{
+  content:"";position:absolute;left:50%;top:50%;width:26px;height:6px;margin:-3px 0 0 -13px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--_ink) 30%,transparent) 0 30%,var(--_ink) 50%,color-mix(in srgb,var(--_ink) 30%,transparent) 70% 100%) 100% 0/300% 100%;
+  -webkit-mask:radial-gradient(circle 3px at 3px 3px,#000 94%,#0000) 0 0/10px 6px repeat-x;mask:radial-gradient(circle 3px at 3px 3px,#000 94%,#0000) 0 0/10px 6px repeat-x;
+  animation:core-run 1.1s linear infinite;
+}
+@keyframes core-run{to{background-position:0 0}}
+
+/* ═══ Поля ═══ */
+.core-field{display:grid;gap:var(--core-s-2);min-width:0}
+.core-field__label{font:var(--core-human-2);font-weight:var(--core-w-2);color:var(--core-text)}
+.core-field__hint{font:var(--core-human-1);color:var(--core-text-3)}
+.core-field__error{font:var(--core-human-1);color:var(--core-bad)}
+.core-input,.core-inputbox{
+  display:block;width:100%;min-width:0;min-height:var(--core-h-md);margin:0;padding:0 var(--core-s-3);
+  border:1px solid var(--core-line-2);border-radius:var(--core-r-sm);
+  background-color:var(--core-well);color:var(--core-text);font:var(--core-human-2);letter-spacing:0;
+  -webkit-appearance:none;appearance:none;
+  transition:border-color var(--core-dur-1) linear,box-shadow var(--core-dur-1) linear,background-color var(--core-dur-1) linear;
+}
+@media (hover:hover){.core-input:hover,.core-inputbox:hover{border-color:var(--core-text-3)}}
+.core-input:focus,.core-input:focus-visible,.core-inputbox:focus-within{border-color:var(--core-focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--core-focus) 18%,transparent);outline:2px solid transparent;outline-offset:0}
+.core-input[aria-invalid=true],.core-inputbox[aria-invalid=true],.core-inputbox:has([aria-invalid=true]){border-color:var(--core-bad)}
+.core-input[aria-invalid=true]:focus,.core-inputbox[aria-invalid=true]:focus-within,.core-inputbox:has([aria-invalid=true]):focus-within{box-shadow:0 0 0 3px color-mix(in srgb,var(--core-bad) 24%,transparent)}
+.core-input:disabled,.core-inputbox[aria-disabled=true],.core-inputbox:has(:disabled){background-color:transparent;border-color:var(--core-line);color:var(--core-text-3);opacity:.72}
+.core-input[readonly]{background-color:transparent}
+textarea.core-input{min-height:calc(var(--core-lh-2) * 3 + var(--core-s-4) + 2px);padding:var(--core-s-2) var(--core-s-3);resize:vertical}
+select.core-input{padding-right:var(--core-s-8);background-image:var(--core-select-arrow);background-repeat:no-repeat;background-position:right var(--core-s-2) center;background-size:16px 16px;text-overflow:ellipsis}
+select.core-input option,select.core-input optgroup{background:var(--core-solid-near);color:var(--core-text)}
+/* поле со значком или кнопкой внутри */
+.core-inputbox{display:flex;align-items:center;gap:var(--core-s-2)}
+.core-inputbox>svg{flex:none;width:var(--core-icon);height:var(--core-icon);color:var(--core-text-3)}
+.core-inputbox>input{flex:1 1 0;width:0;min-width:0;height:calc(var(--core-h-md) - 2px);margin:0;padding:0;border:0;background:none;color:inherit;font:inherit;outline:none!important;-webkit-appearance:none;appearance:none}
+.core-inputbox>.core-btn{margin-right:calc(var(--core-s-2) * -1)}
+.core-inputbox[aria-busy=true]::after{
+  content:"";flex:none;width:26px;height:6px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--core-point) 30%,transparent) 0 30%,var(--core-point) 50%,color-mix(in srgb,var(--core-point) 30%,transparent) 70% 100%) 100% 0/300% 100%;
+  -webkit-mask:radial-gradient(circle 3px at 3px 3px,#000 94%,#0000) 0 0/10px 6px repeat-x;mask:radial-gradient(circle 3px at 3px 3px,#000 94%,#0000) 0 0/10px 6px repeat-x;
+  animation:core-run 1.1s linear infinite;
+}
+
+/* ═══ Флажок, радио, переключатель ═══ */
+.core-check,.core-radio,.core-switch{display:inline-flex;align-items:center;gap:var(--core-s-2);min-height:var(--core-h-md);font:var(--core-human-2);color:var(--core-text);-webkit-user-select:none;user-select:none}
+.core-check input,.core-radio input{
+  -webkit-appearance:none;appearance:none;flex:none;display:grid;place-content:center;width:18px;height:18px;margin:0;
+  border:1px solid var(--core-text-3);border-radius:calc(var(--core-r-sm) - 3px);background:var(--core-well);
+  transition:background-color var(--core-dur-1) linear,border-color var(--core-dur-1) linear,transform var(--core-dur-1) var(--core-ease-out);
+}
+.core-radio input{border-radius:50%}
+.core-check input::before{content:"";width:14px;height:14px;background:var(--core-on-ink);-webkit-mask:var(--core-glyph-check) center/contain no-repeat;mask:var(--core-glyph-check) center/contain no-repeat;opacity:0;transform:scale(.5);transition:transform var(--core-dur-2) var(--core-ease-out),opacity var(--core-dur-1) linear}
+.core-radio input::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--core-on-ink);opacity:0;transform:scale(.4);transition:transform var(--core-dur-2) var(--core-ease-out),opacity var(--core-dur-1) linear}
+.core-check input:indeterminate::before{-webkit-mask-image:var(--core-glyph-dash);mask-image:var(--core-glyph-dash)}
+.core-check input:checked,.core-check input:indeterminate,.core-radio input:checked{background:var(--core-on);border-color:var(--core-on)}
+.core-check input:checked::before,.core-check input:indeterminate::before,.core-radio input:checked::before{opacity:1;transform:none}
+@media (hover:hover){.core-check:hover input:not(:checked,:indeterminate,:disabled),.core-radio:hover input:not(:checked,:disabled){border-color:var(--core-text)}}
+.core-check input:active:not(:disabled),.core-radio input:active:not(:disabled){transform:scale(.9)}
+.core-check input[aria-invalid=true],.core-radio input[aria-invalid=true]{border-color:var(--core-bad)}
+.core-check:has(:disabled),.core-radio:has(:disabled),.core-switch:has(:disabled){color:var(--core-text-3)}
+.core-check input:disabled,.core-radio input:disabled,.core-switch input:disabled{opacity:.5}
+/* переключатель: ручка — искра. Выключено — тусклая и малая; включено — яркая; по пути поворачивается на четверть оборота. */
+.core-switch input{
+  -webkit-appearance:none;appearance:none;flex:none;position:relative;width:36px;height:20px;margin:0;border-radius:var(--core-r-full);
+  background:var(--core-well);box-shadow:inset 0 0 0 1px var(--core-text-3);
+  transition:background-color var(--core-dur-2) linear,box-shadow var(--core-dur-2) linear;
+}
+.core-switch input::before{
+  content:"";position:absolute;left:3px;top:3px;width:14px;height:14px;background:var(--core-text-3);
+  -webkit-mask:var(--core-glyph-spark) center/contain no-repeat;mask:var(--core-glyph-spark) center/contain no-repeat;
+  transform:translateX(0) rotate(-90deg) scale(.78);
+  transition:transform var(--core-dur-2) var(--core-ease-move),background-color var(--core-dur-2) linear;
+}
+.core-switch input:checked{background:color-mix(in srgb,var(--core-on) 24%,transparent);box-shadow:inset 0 0 0 1px var(--core-on)}
+.core-switch input:checked::before{background:var(--core-on);transform:translateX(16px) rotate(0deg) scale(1)}
+@media (hover:hover){.core-switch:hover input:not(:checked,:disabled){box-shadow:inset 0 0 0 1px var(--core-text)}.core-switch:hover input:not(:checked,:disabled)::before{background:var(--core-text-2)}}
+.core-switch input:active:not(:disabled)::before{transform:translateX(0) rotate(-90deg) scale(.66)}
+.core-switch input:checked:active:not(:disabled)::before{transform:translateX(16px) rotate(0deg) scale(.86)}
+.core-switch[aria-busy=true] input::before{animation:core-breathe 900ms ease-in-out infinite alternate}
+
+/* ═══ Сегменты и вкладки ═══ */
+.core-seg{
+  --_n:1;--_i:0;position:relative;isolation:isolate;display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;
+  min-height:var(--core-h-md);padding:var(--core-s-05);border-radius:var(--core-r-sm);
+  background:var(--core-well);box-shadow:inset 0 0 0 1px var(--core-line);-webkit-user-select:none;user-select:none;
+}
+.core-seg__item{position:relative;display:grid;min-width:0;margin:0;padding:0;border:0;border-radius:calc(var(--core-r-sm) - 2px);background:none;color:var(--core-text-2);font:var(--core-human-2);font-weight:var(--core-w-2);transition:color var(--core-dur-1) linear}
+/* невидимое поле пункта выше самого пункта на отступ рамки: цель касания — вся высота элемента */
+.core-seg__item>input{position:absolute;inset:calc(var(--core-s-05) * -1) 0;width:100%;height:calc(100% + 2 * var(--core-s-05));margin:0;opacity:0;cursor:inherit}
+.core-seg__item>span{display:grid;place-items:center;min-width:0;padding:0 var(--core-s-3);border-radius:inherit;white-space:nowrap}
+.core-seg__item>input:checked+span,.core-seg__item[aria-pressed=true]>span{color:var(--core-text);background:var(--core-fill-3);box-shadow:inset 0 0 0 1px var(--core-line-2)}
+.core-seg__item>input:focus-visible+span{outline:2px solid var(--core-focus);outline-offset:1px}
+.core-seg__item>input:disabled+span,.core-seg__item:disabled>span{color:var(--core-text-3);opacity:.6}
+@media (hover:hover){.core-seg__item:hover{color:var(--core-text)}}
+/* подложка скользит между пунктами (до шести); без :has() подсвечен сам пункт — правила выше */
+@supports selector(:has(*)){
+  .core-seg::before{
+    content:"";position:absolute;z-index:-1;top:var(--core-s-05);bottom:var(--core-s-05);left:var(--core-s-05);width:calc((100% - 2 * var(--core-s-05)) / var(--_n));
+    border-radius:calc(var(--core-r-sm) - 2px);background:var(--core-fill-3);box-shadow:inset 0 0 0 1px var(--core-line-2);
+    transform:translateX(calc(var(--_i) * 100%));transition:transform var(--core-dur-2) var(--core-ease-move);
+  }
+  .core-seg__item>input:checked+span,.core-seg__item[aria-pressed=true]>span{background:none;box-shadow:none}
+  .core-seg:has(.core-seg__item:nth-child(2)){--_n:2}
+  .core-seg:has(.core-seg__item:nth-child(3)){--_n:3}
+  .core-seg:has(.core-seg__item:nth-child(4)){--_n:4}
+  .core-seg:has(.core-seg__item:nth-child(5)){--_n:5}
+  .core-seg:has(.core-seg__item:nth-child(6)){--_n:6}
+  .core-seg:has(.core-seg__item:nth-child(2)>input:checked),.core-seg:has(.core-seg__item:nth-child(2)[aria-pressed=true]){--_i:1}
+  .core-seg:has(.core-seg__item:nth-child(3)>input:checked),.core-seg:has(.core-seg__item:nth-child(3)[aria-pressed=true]){--_i:2}
+  .core-seg:has(.core-seg__item:nth-child(4)>input:checked),.core-seg:has(.core-seg__item:nth-child(4)[aria-pressed=true]){--_i:3}
+  .core-seg:has(.core-seg__item:nth-child(5)>input:checked),.core-seg:has(.core-seg__item:nth-child(5)[aria-pressed=true]){--_i:4}
+  .core-seg:has(.core-seg__item:nth-child(6)>input:checked),.core-seg:has(.core-seg__item:nth-child(6)[aria-pressed=true]){--_i:5}
+  .core-seg:not(:has(input:checked,[aria-pressed=true]))::before{opacity:0}
+}
+.core-tabs{display:flex;gap:var(--core-s-1);box-shadow:inset 0 -1px 0 var(--core-line);overflow-x:auto;scrollbar-width:none}
+.core-tabs::-webkit-scrollbar{display:none}
+.core-tab{position:relative;flex:none;min-height:var(--core-h-md);margin:0;padding:0 var(--core-s-3);border:0;border-radius:var(--core-r-sm) var(--core-r-sm) 0 0;background:none;color:var(--core-text-2);font:var(--core-human-2);font-weight:var(--core-w-2);white-space:nowrap;-webkit-user-select:none;user-select:none;transition:color var(--core-dur-1) linear}
+.core-tab::after{content:"";position:absolute;left:var(--core-s-3);right:var(--core-s-3);bottom:0;height:2px;border-radius:2px 2px 0 0;background:var(--core-text);opacity:0;transform:scaleX(.4);transition:transform var(--core-dur-2) var(--core-ease-out),opacity var(--core-dur-1) linear}
+.core-tab[aria-selected=true]{color:var(--core-text)}
+.core-tab[aria-selected=true]::after{opacity:1;transform:none}
+@media (hover:hover){.core-tab:hover{color:var(--core-text)}}
+.core-tab:active{color:var(--core-text-2)}
+.core-tab:disabled,.core-tab[aria-disabled=true]{color:var(--core-text-3);opacity:.6}
+.core .core-tab:focus-visible{outline-offset:-2px}
+.core-tabpanel{padding-top:var(--core-s-4)}
+.core-tabpanel[hidden]{display:none}
+
+/* ═══ Чип, метка, бейдж ═══ */
+.core-chip{
+  position:relative;display:inline-flex;align-items:center;gap:var(--core-s-15);min-height:var(--core-h-sm);margin:0;padding:0 var(--core-s-3);
+  border:0;border-radius:var(--core-r-full);background:var(--core-fill-1);box-shadow:inset 0 0 0 1px var(--core-line-2);
+  -webkit-backdrop-filter:var(--core-backdrop-near);backdrop-filter:var(--core-backdrop-near);
+  color:var(--core-text-2);font:var(--core-human-2);white-space:nowrap;text-decoration:none;-webkit-user-select:none;user-select:none;
+  transition:background-color var(--core-dur-1) linear,box-shadow var(--core-dur-1) linear,color var(--core-dur-1) linear,transform var(--core-dur-1) var(--core-ease-out);
+}
+.core-chip svg{flex:none;width:var(--core-icon);height:var(--core-icon)}
+@media (hover:hover){.core-chip:hover{background:var(--core-fill-2);color:var(--core-text)}}
+.core-chip:active{background:var(--core-fill-1);transform:scale(.97)}
+.core-chip[aria-pressed=true],.core-chip[aria-selected=true]{background:var(--core-fill-3);box-shadow:inset 0 0 0 1px var(--core-text-2);color:var(--core-text)}
+.core-chip:disabled,.core-chip[aria-disabled=true]{color:var(--core-text-3);box-shadow:inset 0 0 0 1px var(--core-line);opacity:.6;transform:none}
+.core-tag{display:inline-flex;align-items:center;gap:var(--core-s-1);min-height:20px;padding:0 var(--core-s-15);border-radius:calc(var(--core-r-sm) - 2px);background:var(--core-fill-2);box-shadow:inset 0 0 0 1px var(--core-line);color:var(--core-text-2);font:var(--core-machine-1);white-space:nowrap;vertical-align:middle}
+.core-tag--ok{background:var(--core-ok-soft);box-shadow:none;color:var(--core-ok)}
+.core-tag--warn{background:var(--core-warn-soft);box-shadow:none;color:var(--core-warn)}
+.core-tag--bad{background:var(--core-bad-soft);box-shadow:none;color:var(--core-bad)}
+/* «ИИ работает»: точка Ядра дышит рядом с подписью */
+.core-tag--heat{color:var(--core-text)}
+.core-tag--heat::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--core-heat-3);animation:core-breathe 900ms ease-in-out infinite alternate}
+.core-badge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 var(--core-s-1);border-radius:var(--core-r-full);background:var(--core-on);color:var(--core-on-ink);font:var(--core-machine-1);line-height:18px;font-variant-numeric:tabular-nums;vertical-align:middle}
+.core-badge--quiet{background:var(--core-fill-3);color:var(--core-text)}
+.core-badge--ok{background:var(--core-ok);color:var(--core-on-ink)}
+.core-badge--warn{background:var(--core-warn);color:var(--core-on-ink)}
+.core-badge--bad{background:var(--core-bad);color:var(--core-on-ink)}
+.core-badge--dot{min-width:8px;width:8px;height:8px;padding:0}
+
+/* ═══ Карточка и строка списка ═══ */
+.core-card{display:block;margin:0;padding:var(--core-s-5);border:0;color:var(--core-text);font:var(--core-human-2);text-align:left;text-decoration:none}
+.core-card__title{margin:0 0 var(--core-s-1);font:var(--core-human-3);font-weight:var(--core-w-3);color:var(--core-text)}
+.core-card__text{margin:0;font:var(--core-human-2);color:var(--core-text-2)}
+.core-card__meta{display:block;margin-top:var(--core-s-3);font:var(--core-machine-1);color:var(--core-text-3)}
+.core-card--action{width:100%;transition:transform var(--core-dur-1) var(--core-ease-out)}
+@media (hover:hover){.core-card--action:hover{--_tint:var(--core-fill-1)}}
+.core-card--action:active{--_tint:var(--core-fill-2);transform:scale(.995)}
+.core-card[aria-selected=true],.core-card[aria-current=true],.core-card[aria-pressed=true]{--_tint:var(--core-fill-2);--_edge:var(--core-edge-near)}
+.core-card:disabled,.core-card[aria-disabled=true]{opacity:.6;--_tint:transparent;transform:none}
+.core-card[aria-busy=true]{pointer-events:none}
+.core-list{display:grid;gap:var(--core-s-05);margin:0;padding:0;list-style:none}
+.core-row{display:flex;align-items:center;gap:var(--core-s-3);width:100%;min-width:0;min-height:var(--core-h-lg);margin:0;padding:var(--core-s-15) var(--core-s-3);border:0;border-radius:var(--core-r-sm);background:none;color:var(--core-text);font:var(--core-human-2);text-align:left;text-decoration:none;transition:background-color var(--core-dur-1) linear}
+.core-row>svg{flex:none;width:var(--core-icon);height:var(--core-icon);color:var(--core-text-2)}
+.core-row__body{flex:1;min-width:0;display:grid}
+.core-row__title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.core-row__sub{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:var(--core-human-1);color:var(--core-text-2)}
+.core-row__trail{flex:none;display:inline-flex;align-items:center;gap:var(--core-s-2);font:var(--core-machine-1);color:var(--core-text-3)}
+@media (hover:hover){.core-row--action:hover{background:var(--core-fill-1)}}
+.core-row--action:active{background:var(--core-fill-2)}
+.core-row[aria-current=true],.core-row[aria-current=page],.core-row[aria-selected=true]{background:var(--core-fill-2)}
+.core-row:disabled,.core-row[aria-disabled=true]{color:var(--core-text-3);background:none;opacity:.6}
+.core .core-row:focus-visible{outline-offset:-2px}
+
+/* ═══ Слой всплывающих поверхностей (создаёт core-ui.js) ═══ */
+.core-layers{position:fixed;inset:0;z-index:var(--core-z-float);pointer-events:none}
+.core-layers>*{pointer-events:auto}
+.core-dialog[hidden],.core-menu[hidden],.core-tip[hidden],.core-toast[hidden],.core-capsule[hidden]{display:none!important}
+
+/* ═══ Меню ═══ */
+.core-menu{position:fixed;display:flex;flex-direction:column;min-width:200px;max-width:min(320px,calc(100vw - 16px));max-height:min(420px,calc(100dvh - 16px));padding:var(--core-s-15);border-radius:var(--core-r-md);overflow:hidden;color:var(--core-text);font:var(--core-human-2);-webkit-user-select:none;user-select:none}
+.core-menu:focus{outline:none}
+.core-menu__scroll{min-height:0;margin:calc(var(--core-s-15) * -1);padding:var(--core-s-15);overflow:auto;overscroll-behavior:contain}
+.core-menu__item{display:flex;align-items:center;gap:var(--core-s-2);flex:none;width:100%;min-height:32px;margin:0;padding:0 var(--core-s-2);border:0;border-radius:var(--core-r-sm);background:none;color:var(--core-text);font:inherit;text-align:left;text-decoration:none;white-space:nowrap}
+.core-menu__item>svg{flex:none;width:var(--core-icon);height:var(--core-icon);color:var(--core-text-2)}
+.core-menu__item>span:first-of-type{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.core-menu__hint{flex:none!important;margin-left:auto;padding-left:var(--core-s-4);font:var(--core-machine-1);color:var(--core-text-3)}
+@media (hover:hover){.core-menu__item:hover{background:var(--core-fill-2)}}
+.core-menu__item:focus-visible{background:var(--core-fill-2)}
+.core .core-menu__item:focus-visible{outline-offset:-2px}
+.core-menu__item:active{background:var(--core-fill-3)}
+.core-menu__item[aria-checked=true]::after,.core-menu__item[aria-selected=true]::after{content:"";flex:none;width:16px;height:16px;margin-left:auto;background:currentColor;-webkit-mask:var(--core-glyph-check) center/contain no-repeat;mask:var(--core-glyph-check) center/contain no-repeat}
+.core-menu__item--danger,.core-menu__item--danger>svg{color:var(--core-bad)}
+@media (hover:hover){.core-menu__item--danger:hover{background:var(--core-bad-soft)}}
+.core-menu__item--danger:focus-visible{background:var(--core-bad-soft)}
+.core-menu__item:disabled,.core-menu__item[aria-disabled=true]{color:var(--core-text-3);background:none;opacity:.6}
+.core-menu__sep{flex:none;height:1px;margin:var(--core-s-1) var(--core-s-2);border:0;background:var(--core-line)}
+.core-menu__label{padding:var(--core-s-2) var(--core-s-2) var(--core-s-1);font:var(--core-human-1);color:var(--core-text-3)}
+.core-menu[data-core-state=opening],.core-capsule[data-core-state=opening]{animation:core-pop var(--core-dur-2) var(--core-ease-out) both}
+.core-menu[data-core-state=closing],.core-capsule[data-core-state=closing]{animation:core-unpop var(--core-dur-1) var(--core-ease-in) both}
+@keyframes core-pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+@keyframes core-unpop{from{opacity:1;transform:none}to{opacity:0;transform:scale(.8)}}
+
+/* ═══ Подсказка ═══ */
+.core-tip{position:fixed;z-index:calc(var(--core-z-tip) - var(--core-z-float));display:flex;align-items:center;gap:var(--core-s-2);max-width:min(280px,calc(100vw - 16px));padding:var(--core-s-15) var(--core-s-3);border-radius:var(--core-r-sm);color:var(--core-text);font:var(--core-human-1);pointer-events:none}
+.core-layers>.core-tip{pointer-events:none}
+.core-tip[data-core-state=opening]{animation:core-pop var(--core-dur-2) var(--core-ease-out) both}
+.core-tip[data-core-state=closing]{animation:core-unpop var(--core-dur-1) var(--core-ease-in) both}
+
+/* ═══ Уведомление: капсула вылетает из Ядра и возвращается в него (полёт задаёт core-ui.js) ═══ */
+.core-toasts{position:fixed;z-index:calc(var(--core-z-toast) - var(--core-z-float));top:calc(var(--core-s-4) + env(safe-area-inset-top,0px));left:0;right:0;display:grid;justify-items:center;gap:var(--core-s-2);padding:0 var(--core-s-3);pointer-events:none!important}
+.core-toast{display:flex;align-items:center;gap:var(--core-s-3);min-height:44px;max-width:min(520px,100%);padding:var(--core-s-1) var(--core-s-5);border-radius:var(--core-r-lg);color:var(--core-text);font:var(--core-human-2);pointer-events:auto}
+.core-toast:has(.core-btn){padding-right:var(--core-s-2)}
+.core-toast__mark{flex:none;width:8px;height:8px;border-radius:50%;background:var(--core-point)}
+.core-toast[data-tone=ok] .core-toast__mark{background:var(--core-ok)}
+.core-toast[data-tone=warn] .core-toast__mark{background:var(--core-warn)}
+.core-toast[data-tone=bad] .core-toast__mark{background:var(--core-bad)}
+.core-toast__text{min-width:0;padding:var(--core-s-2) 0;overflow-wrap:anywhere}
+
+/* ═══ Окно: рождается из точки нажатия, сворачивается обратно в искру ═══ */
+.core-dialog{position:fixed;inset:0;z-index:var(--core-z-dialog);display:grid;place-items:center;padding:var(--core-s-6);overflow:hidden;perspective:1400px}
+/* фон под окном: гаснет и размывается одним слоем — само окно второй раз не размывает */
+.core-dialog::before{content:"";position:absolute;inset:0;background:var(--core-scrim);-webkit-backdrop-filter:blur(var(--core-scrim-blur));backdrop-filter:blur(var(--core-scrim-blur))}
+.core-dialog[data-core-state=opening]::before{animation:core-fade var(--core-dur-3) linear both}
+.core-dialog[data-core-state=closing]::before{animation:core-fade var(--core-dur-2) linear both reverse}
+.core-dialog__pane{
+  --_backdrop:none;--core-light:.7;--core-at-x:var(--core-x);--core-at-y:var(--core-y);
+  display:flex;flex-direction:column;width:min(520px,100%);max-height:100%;border-radius:var(--core-r-lg);overflow:hidden;color:var(--core-text);font:var(--core-human-2);
+}
+.core-dialog--sm .core-dialog__pane{width:min(400px,100%)}
+.core-dialog--lg .core-dialog__pane{width:min(720px,100%)}
+.core-dialog__pane:focus{outline:none}
+.core-dialog[data-core-state=opening] .core-dialog__pane{animation:core-birth var(--core-dur-3) var(--core-ease-out) both}
+.core-dialog[data-core-state=closing] .core-dialog__pane{animation:core-collapse var(--core-dur-2) var(--core-ease-in) both}
+.core-dialog__head{display:flex;align-items:center;gap:var(--core-s-3);flex:none;min-height:56px;padding:var(--core-s-3) var(--core-s-3) var(--core-s-2) var(--core-s-6)}
+.core-dialog__title{margin:0 auto 0 0;font:var(--core-human-4);letter-spacing:var(--core-track-4);color:var(--core-text)}
+.core-dialog__body{min-height:0;padding:var(--core-s-2) var(--core-s-6) var(--core-s-6);overflow:auto;overscroll-behavior:contain;color:var(--core-text-2)}
+.core-dialog__foot{display:flex;justify-content:flex-end;gap:var(--core-s-2);flex:none;padding:var(--core-s-4) var(--core-s-6);border-top:1px solid var(--core-line)}
+@keyframes core-fade{from{opacity:0}to{opacity:1}}
+@keyframes core-birth{
+  from{opacity:0;transform:translate3d(var(--core-from-x,0px),var(--core-from-y,16px),0) rotateX(var(--core-tilt-x,0deg)) rotateY(var(--core-tilt-y,0deg)) scale(.12)}
+  35%{opacity:1}
+  to{opacity:1;transform:translate3d(0,0,0) rotateX(0deg) rotateY(0deg) scale(1)}
+}
+@keyframes core-collapse{
+  from{opacity:1;transform:translate3d(0,0,0) rotateX(0deg) rotateY(0deg) scale(1)}
+  60%{opacity:1}
+  to{opacity:0;transform:translate3d(var(--core-from-x,0px),var(--core-from-y,16px),0) rotateX(var(--core-tilt-x,0deg)) rotateY(var(--core-tilt-y,0deg)) scale(.04)}
+}
+/* искра на месте свернувшегося окна */
+.core-glint{position:fixed;width:16px;height:16px;margin:-8px 0 0 -8px;background:var(--core-text);-webkit-mask:var(--core-glyph-spark) center/contain no-repeat;mask:var(--core-glyph-spark) center/contain no-repeat;pointer-events:none!important;animation:core-glint var(--core-dur-2) var(--core-ease-out) both}
+@keyframes core-glint{from{opacity:.9;transform:none}to{opacity:0;transform:rotate(45deg) scale(.3)}}
+
+/* ═══ Капсула подтверждения: рядом с курсором, вместо confirm / prompt / alert ═══ */
+.core-capsule-layer{position:fixed;inset:0}
+.core-capsule{position:fixed;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:var(--core-s-1) var(--core-s-3);width:max-content;max-width:min(440px,calc(100vw - 16px));padding:var(--core-s-2) var(--core-s-2) var(--core-s-2) var(--core-s-4);border-radius:var(--core-r-lg);color:var(--core-text);font:var(--core-human-2)}
+.core-capsule:focus{outline:none}
+.core-capsule__text{flex:1 1 auto;min-width:0;margin:0;padding:var(--core-s-2) 0;white-space:pre-line;overflow-wrap:anywhere}
+.core-capsule__field{flex:1 1 100%;margin:0 var(--core-s-2) var(--core-s-1) 0}
+.core-capsule__acts{display:flex;gap:var(--core-s-2);margin-left:auto}
+
+/* ═══ Кольцо лимита: малое ядро в кольце; гаснет, пока лимит тратится. --core-ring-v — остаток, 0…1 ═══ */
+@property --core-ring-v{syntax:'<number>';inherits:true;initial-value:1}
+.core-ring{
+  --_s:28px;--_w:2.5px;--_c:var(--core-heat-3);
+  position:relative;display:inline-grid;place-items:center;flex:none;width:var(--_s);height:var(--_s);vertical-align:middle;
+  transition:--core-ring-v var(--core-dur-4) var(--core-ease-move);
+}
+@supports (color:color-mix(in oklab,red,blue)){.core-ring{--_c:color-mix(in oklab,var(--core-heat-4) calc(var(--core-ring-v) * 100%),var(--core-heat-1))}}
+.core-ring::before{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(var(--_c) calc(var(--core-ring-v) * 360deg),var(--core-line-2) 0);
+  -webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - var(--_w) - .5px),#000 calc(100% - var(--_w)));mask:radial-gradient(farthest-side,#0000 calc(100% - var(--_w) - .5px),#000 calc(100% - var(--_w)));
+}
+.core-ring::after{content:"";width:30%;height:30%;border-radius:50%;background:var(--_c);opacity:calc(.22 + .78 * var(--core-ring-v));box-shadow:0 0 calc(var(--_s) * .24 * var(--core-ring-v)) var(--_c)}
+.core-ring[aria-valuenow="0"]{--_c:var(--core-text-3)}
+.core-ring--sm{--_s:20px;--_w:2px}
+.core-ring--lg{--_s:48px;--_w:3px}
+.core-limit{display:inline-flex;align-items:center;gap:var(--core-s-2);font:var(--core-machine-2);color:var(--core-text-2);font-variant-numeric:tabular-nums}
+.core-limit b{font-weight:var(--core-w-2);color:var(--core-text)}
+
+/* ═══ Загрузка: точки собираются в форму будущего содержимого ═══ */
+.core-gather{display:grid;gap:var(--core-s-3);color:var(--core-point)}
+.core-gather__line,.core-gather__block,.core-gather__dot{
+  display:block;border-radius:var(--core-r-sm);
+  background:radial-gradient(circle,currentColor 1px,transparent 1.7px) 50% 50%/6px 6px;
+  opacity:.72;
+  animation:core-gather var(--core-dur-4) var(--core-ease-out) both,core-breathe var(--core-ambient) ease-in-out var(--core-dur-4) infinite alternate;
+}
+.core-gather__line{width:var(--w,100%);height:12px;margin:6px 0}
+.core-gather__block{width:var(--w,100%);height:var(--h,96px);border-radius:var(--core-r-md)}
+.core-gather__dot{width:var(--w,36px);height:var(--w,36px);border-radius:50%}
+.core-gather>:nth-child(2){animation-delay:40ms,calc(var(--core-dur-4) + 200ms)}
+.core-gather>:nth-child(3){animation-delay:80ms,calc(var(--core-dur-4) + 400ms)}
+.core-gather>:nth-child(n+4){animation-delay:120ms,calc(var(--core-dur-4) + 600ms)}
+@keyframes core-gather{from{background-size:20px 20px;opacity:0}to{background-size:6px 6px;opacity:.72}}
+@keyframes core-breathe{from{opacity:.72}to{opacity:.34}}
+
+/* ═══ Таблица, разделитель, аватар ═══ */
+.core-table-wrap{overflow-x:auto;border-radius:inherit}
+.core-table{width:100%;border-collapse:collapse;color:var(--core-text);font:var(--core-human-2)}
+.core-table th{padding:var(--core-s-2) var(--core-s-3);border-bottom:1px solid var(--core-line-2);color:var(--core-text-3);font:var(--core-human-1);font-weight:var(--core-w-2);text-align:left;white-space:nowrap}
+.core-table td{padding:var(--core-s-3);border-bottom:1px solid var(--core-line);vertical-align:middle}
+.core-table tbody tr:last-child td{border-bottom:0}
+.core-table .core-num{font:var(--core-machine-2);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.core-table th.core-num{font:var(--core-human-1);font-weight:var(--core-w-2)}
+@media (hover:hover){.core-table tbody tr:hover td{background:var(--core-fill-1)}}
+.core-table tr[aria-selected=true] td{background:var(--core-fill-2)}
+.core-divider{display:block;height:1px;margin:var(--core-s-4) 0;border:0;background:var(--core-line)}
+.core-divider--v{align-self:stretch;width:1px;height:auto;min-height:var(--core-s-4);margin:0 var(--core-s-2)}
+.core-divider--label{display:flex;align-items:center;gap:var(--core-s-3);height:auto;background:none;color:var(--core-text-3);font:var(--core-human-1)}
+.core-divider--label::before,.core-divider--label::after{content:"";flex:1;height:1px;background:var(--core-line)}
+.core-avatar{--_s:32px;display:inline-grid;place-items:center;flex:none;width:var(--_s);height:var(--_s);border-radius:50%;overflow:hidden;background:var(--core-fill-3);box-shadow:inset 0 0 0 1px var(--core-line-2);color:var(--core-text);font:var(--core-human-1);font-weight:var(--core-w-3);-webkit-user-select:none;user-select:none;vertical-align:middle}
+.core-avatar img{display:block;width:100%;height:100%;object-fit:cover}
+.core-avatar--sm{--_s:24px;font-size:.625rem}
+.core-avatar--lg{--_s:44px;font:var(--core-human-3);font-weight:var(--core-w-3)}
+
+/* ═══ Блок кода: самое тёмное, плотное стекло; машинный голос ═══ */
+.core-code{display:flex;flex-direction:column;overflow:hidden;color:var(--core-text)}
+.core-code__head{display:flex;align-items:center;gap:var(--core-s-2);flex:none;min-height:36px;padding:0 var(--core-s-1) 0 var(--core-s-4);border-bottom:1px solid var(--core-line);color:var(--core-text-3);font:var(--core-machine-1)}
+.core-code__name{margin-right:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--core-text-2)}
+.core-code pre{margin:0;padding:var(--core-s-3) var(--core-s-4);overflow:auto;font:var(--core-machine-2);white-space:pre;tab-size:2;-moz-tab-size:2}
+.core-code code{font:inherit}
+.core-code .hljs-comment,.core-code .hljs-quote,.core-syn-comment{color:var(--core-syn-comment);font-style:italic}
+.core-code .hljs-keyword,.core-code .hljs-selector-tag,.core-code .hljs-literal,.core-code .hljs-meta,.core-syn-keyword{color:var(--core-syn-keyword)}
+.core-code .hljs-string,.core-code .hljs-regexp,.core-code .hljs-addition,.core-code .hljs-attr,.core-syn-string{color:var(--core-syn-string)}
+.core-code .hljs-number,.core-code .hljs-symbol,.core-code .hljs-bullet,.core-code .hljs-variable,.core-syn-number{color:var(--core-syn-number)}
+.core-code .hljs-title,.core-code .hljs-section,.core-code .hljs-name,.core-syn-func{color:var(--core-syn-func);font-weight:var(--core-w-2)}
+.core-code .hljs-type,.core-code .hljs-built_in,.core-code .hljs-class,.core-code .hljs-attribute,.core-syn-type{color:var(--core-syn-type)}
+.core-code .hljs-punctuation,.core-code .hljs-operator,.core-code .hljs-deletion,.core-syn-punct{color:var(--core-syn-punct)}
+
+/* ═══ Телефон и палец: окно — лист снизу, цели касания не меньше 44 px ═══ */
+@media (max-width:600px){
+  .core-dialog{padding:0;place-items:end center}
+  .core-dialog__pane,.core-dialog--sm .core-dialog__pane,.core-dialog--lg .core-dialog__pane{width:100%;max-height:92dvh;border-radius:var(--core-r-lg) var(--core-r-lg) 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .core-dialog__head{padding-left:var(--core-s-5)}
+  .core-dialog__body{padding-left:var(--core-s-5);padding-right:var(--core-s-5)}
+  .core-dialog__foot{flex-direction:column-reverse;padding:var(--core-s-4) var(--core-s-5)}
+  .core-dialog__foot .core-btn{width:100%}
+  .core-capsule{left:var(--core-s-2)!important;right:var(--core-s-2);width:auto;max-width:none}
+}
+@media (pointer:coarse),(max-width:600px){
+  .core-input,.core-inputbox{font-size:1rem}   /* меньше 16 px — iOS приближает страницу при фокусе */
+  .core-menu__item{min-height:var(--core-hit)}
+  .core-tab{min-height:var(--core-hit)}
+  .core-check,.core-radio,.core-switch{min-height:var(--core-hit)}
+  .core-btn::after,.core-chip::after{content:"";position:absolute;left:50%;top:50%;width:max(100%,var(--core-hit));height:max(100%,var(--core-hit));transform:translate(-50%,-50%)}
+  .core-check input,.core-radio input{width:22px;height:22px}
+  .core-check input::before{width:16px;height:16px}
+  .core-radio input::before{width:10px;height:10px}
+  .core-switch input{width:44px;height:26px}
+  .core-switch input::before{left:4px;top:4px;width:18px;height:18px}
+  .core-switch input:checked::before{transform:translateX(18px) rotate(0deg) scale(1)}
+  .core-switch input:checked:active:not(:disabled)::before{transform:translateX(18px) rotate(0deg) scale(.86)}
+}
+
+/* ═══ Курсор у компонентов: подпись-переключатель нажимается целиком; на раскалённой кнопке искра — тушью ═══ */
+@media (any-pointer:fine){
+  .core-check,.core-radio,.core-switch,.core-seg__item{cursor:var(--core-cursor-action)}
+  .core-check:has(:disabled),.core-radio:has(:disabled),.core-switch:has(:disabled),.core-seg__item:has(:disabled){cursor:not-allowed}
+  .core-btn--main:not(:disabled,[aria-disabled=true],[aria-busy=true]),.core-btn--main:not(:disabled,[aria-disabled=true],[aria-busy=true]) *{cursor:var(--core-cursor-action-on-heat)}
+  .core-field__label,.core-menu__label,.core-toast,.core-tip,.core-capsule__text{cursor:var(--core-cursor)}
+}
+
+/* ═══ «Уменьшить движение»: переходы уже мгновенны (токены), здесь гаснут фоновые циклы ═══ */
+@media (prefers-reduced-motion:reduce){
+  .core-btn[aria-busy=true]::before,.core-inputbox[aria-busy=true]::after,.core-tag--heat::before,.core-switch[aria-busy=true] input::before,.core-gather__line,.core-gather__block,.core-gather__dot,.core-glint{animation:none}
+}
+:root[data-core-motion=reduce] :is(.core-btn[aria-busy=true],.core-inputbox[aria-busy=true],.core-tag--heat,.core-switch[aria-busy=true] input)::before,
+:root[data-core-motion=reduce] .core-inputbox[aria-busy=true]::after,
+:root[data-core-motion=reduce] :is(.core-gather__line,.core-gather__block,.core-gather__dot,.core-glint){animation:none}
+
+/* ═══ Машинный голос — без лигатур (font сбрасывает настройку, поэтому правило последнее в файле) ═══ */
+.core-tag,.core-badge,.core-menu__hint,.core-row__trail,.core-card__meta,.core-limit,.core-table .core-num,.core-code__head,.core-code pre,.core-code code{font-variant-ligatures:none}

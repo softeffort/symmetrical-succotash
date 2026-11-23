@@ -1,0 +1,18 @@
+{
+  "theme": "dark", "w": 1440, "h": 900, "dpr": 1, "quality": "high", "bare": true,
+  "clip": [370, 60, 700, 700], "cols": 4, "scale": 0.5,
+  "cells": [
+    { "label": "sphere", "set": { "form": "sphere" }, "wait": 3000 },
+    { "label": "torus", "set": { "form": "torus" }, "wait": 5000 },
+    { "label": "spiral", "set": { "form": "spiral" }, "wait": 5000 },
+    { "label": "lattice", "set": { "form": "lattice" }, "wait": 5000 },
+    { "label": "helix", "set": { "form": "helix" }, "wait": 5000 },
+    { "label": "knot", "set": { "form": "knot" }, "wait": 5000 },
+    { "label": "bloom", "set": { "form": "bloom" }, "wait": 5000 },
+    { "label": "orbits", "set": { "form": "orbits" }, "wait": 5000 },
+    { "label": "ribbon", "set": { "form": "ribbon" }, "wait": 5000 },
+    { "label": "vortex", "set": { "form": "vortex" }, "wait": 5000 },
+    { "label": "crystal", "set": { "form": "crystal" }, "wait": 5000 },
+    { "label": "sphere again", "set": { "form": "sphere" }, "wait": 5000 }
+  ]
+}

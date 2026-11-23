@@ -1,0 +1,275 @@
+/* Premier · Core — токены дизайн-системы (шаг 1 редизайна). Описание: /CORE-DESIGN-SYSTEM.md
+   Все решения оформления заданы здесь именованными значениями. Префикс --core-: со старыми --p-* не пересекается.
+   Темы — как во всём продукте: по системной настройке; data-theme="dark|light" на <html> задаёт тему принудительно.
+   Основная тема — тёмная; светлая — та же система «тушью по бумаге». Шрифты локальные (OFL), без CDN. */
+@font-face{font-family:'Onest';font-style:normal;font-weight:100 900;font-display:swap;src:url(/fonts/onest-cyrillic-wght-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Onest';font-style:normal;font-weight:100 900;font-display:swap;src:url(/fonts/onest-latin-wght-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url(/fonts/jetbrains-mono-cyrillic-wght-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url(/fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* Положение и сила света Ядра — числа, чтобы смена состояния экрана шла плавно. Меняются в одном месте: на <html>. */
+@property --core-x{syntax:'<number>';inherits:true;initial-value:50}
+@property --core-y{syntax:'<number>';inherits:true;initial-value:50}
+@property --core-light{syntax:'<number>';inherits:true;initial-value:1}
+
+:root{
+  color-scheme:dark;
+
+  /* ── 1. Свет. Ядро — единственный источник: --core-x/--core-y — его центр в процентах окна (0…100),
+        --core-light — сила света на интерфейсе (1 — покой, меньше — Ядро отступило под окно).
+        --core-at-x/--core-at-y — где в окне стоит сама поверхность (по умолчанию центр). */
+  --core-x:50;--core-y:50;--core-light:1;
+  --core-at-x:50;--core-at-y:50;
+
+  /* ── 2. Сцена: очень тёмный, чуть тёплый чёрный под всем интерфейсом */
+  --core-scene:#0B0A08;
+
+  /* ── 3. Стекло: три глубины и плотное. Глубины отличаются только размытием, яркостью и тенью. */
+  --core-glass-far:rgb(20 18 15 / .58);
+  --core-glass-mid:rgb(31 28 24 / .6);
+  --core-glass-near:rgb(44 40 35 / .72);
+  --core-glass-dense:rgb(9 8 7 / .9);
+  --core-blur-far:36px;--core-blur-mid:24px;--core-blur-near:14px;--core-blur-dense:24px;
+  --core-bright-far:.5;--core-bright-mid:.52;--core-bright-near:.52;--core-bright-dense:.5;
+  --core-backdrop-far:blur(var(--core-blur-far)) saturate(1.8) brightness(var(--core-bright-far));
+  --core-backdrop-mid:blur(var(--core-blur-mid)) saturate(1.8) brightness(var(--core-bright-mid));
+  --core-backdrop-near:blur(var(--core-blur-near)) saturate(1.8) brightness(var(--core-bright-near));
+  --core-backdrop-dense:blur(var(--core-blur-dense)) saturate(1.3) brightness(var(--core-bright-dense));
+  --core-shadow-far:0 1px 2px rgb(0 0 0 / .2);
+  --core-shadow-mid:0 2px 4px rgb(0 0 0 / .24),0 18px 40px -12px rgb(0 0 0 / .56);
+  --core-shadow-near:0 1px 2px rgb(0 0 0 / .4),0 10px 24px -6px rgb(0 0 0 / .72);
+  --core-glass-hi:inset 0 0 0 0 transparent;
+  /* запасной вид без размытия (старый браузер, «уменьшить прозрачность») */
+  --core-solid-far:#13110F;--core-solid-mid:#1C1916;--core-solid-near:#282420;--core-solid-dense:#0A0908;
+
+  /* ── 4. Кромка: свет Ядра на тонкой грани. Число — яркость освещённой стороны для каждой глубины. */
+  --core-edge:#FFE9CF;
+  --core-edge-far:.26;--core-edge-mid:.42;--core-edge-near:.6;
+  --core-edge-shade:.2;   /* доля яркости на стороне, отвёрнутой от Ядра */
+  --core-edge-even:.5;    /* доля яркости, когда Ядро прямо за поверхностью */
+  --core-sheen:.04;       /* мягкий отсвет внутри стекла со стороны Ядра */
+
+  /* ── 5. Поверх стекла: заливки состояний, углубление поля, линии */
+  --core-fill-1:rgb(255 240 222 / .05);
+  --core-fill-2:rgb(255 240 222 / .09);
+  --core-fill-3:rgb(255 240 222 / .14);
+  --core-well:rgb(0 0 0 / .26);
+  --core-line:rgb(255 240 222 / .08);
+  --core-line-2:rgb(255 240 222 / .17);
+  --core-scrim:rgb(6 5 4 / .5);--core-scrim-blur:12px;
+
+  /* ── 6. Текст: три уровня и чернила на раскалённой кнопке */
+  --core-text:#F4EEE5;
+  --core-text-2:#C6BDB1;
+  --core-text-3:#9C9388;
+  --core-text-on-heat:#1C1308;
+  /* «включено»: выбранный флажок, переключатель, сегмент — светом, не янтарём */
+  --core-on:#F4EEE5;--core-on-ink:#14110E;
+
+  /* ── 7. Накал: от уголька до белого каления. Только главное действие и «ИИ работает». */
+  --core-heat-1:#A63A12;
+  --core-heat-2:#E8590C;
+  --core-heat-3:#FF8B2C;
+  --core-heat-4:#FFB65C;
+  --core-heat-5:#FFF0D6;
+  --core-point:var(--core-heat-3);       /* точка Ядра в интерфейсе: загрузка, искры */
+  --core-point-hot:var(--core-heat-5);   /* она же в самый горячий момент */
+
+  /* ── 8. Статус — только для статуса */
+  --core-ok:#62D09A;--core-warn:#F0C24B;--core-bad:#FF8791;
+  --core-ok-soft:rgb(98 208 154 / .14);--core-warn-soft:rgb(240 194 75 / .14);--core-bad-soft:rgb(255 135 145 / .14);
+
+  /* ── 9. Мелочи */
+  --core-focus:#FFF4E3;
+  --core-select:rgb(255 236 214 / .24);
+  --core-caret:var(--core-heat-3);
+  --core-scroll:rgb(255 240 222 / .18);--core-scroll-hover:rgb(255 240 222 / .34);
+
+  /* ── 10. Подсветка кода (на плотном стекле) */
+  --core-syn-comment:#9C9388;--core-syn-keyword:#E8C39A;--core-syn-string:#B5CFA3;
+  --core-syn-number:#E9A66C;--core-syn-func:#F4EEE5;--core-syn-type:#A9C4D4;--core-syn-punct:#C6BDB1;
+
+  /* ── 11. Типографика: два голоса, шесть размеров */
+  --core-font-human:Onest,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --core-font-machine:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --core-w-1:400;--core-w-2:500;--core-w-3:600;
+  --core-lh-1:1rem;--core-lh-2:1.25rem;--core-lh-3:1.5rem;--core-lh-4:1.75rem;--core-lh-5:2.25rem;--core-lh-6:2.75rem;
+  /* человеческий голос (Onest): 12 · 14 · 16 · 20 · 28 · 40 */
+  --core-fs-1:.75rem;--core-fs-2:.875rem;--core-fs-3:1rem;--core-fs-4:1.25rem;--core-fs-5:1.75rem;--core-fs-6:2.5rem;
+  /* машинный голос (JetBrains Mono) — на шаг плотнее, чтобы строчные совпадали по росту: 11 · 13 · 15 · 18 · 26 · 36 */
+  --core-fsm-1:.6875rem;--core-fsm-2:.8125rem;--core-fsm-3:.9375rem;--core-fsm-4:1.125rem;--core-fsm-5:1.625rem;--core-fsm-6:2.25rem;
+  --core-human-1:var(--core-w-1) var(--core-fs-1)/var(--core-lh-1) var(--core-font-human);
+  --core-human-2:var(--core-w-1) var(--core-fs-2)/var(--core-lh-2) var(--core-font-human);
+  --core-human-3:var(--core-w-1) var(--core-fs-3)/var(--core-lh-3) var(--core-font-human);
+  --core-human-4:var(--core-w-3) var(--core-fs-4)/var(--core-lh-4) var(--core-font-human);
+  --core-human-5:var(--core-w-3) var(--core-fs-5)/var(--core-lh-5) var(--core-font-human);
+  --core-human-6:var(--core-w-3) var(--core-fs-6)/var(--core-lh-6) var(--core-font-human);
+  --core-machine-1:var(--core-w-2) var(--core-fsm-1)/var(--core-lh-1) var(--core-font-machine);
+  --core-machine-2:var(--core-w-1) var(--core-fsm-2)/var(--core-lh-2) var(--core-font-machine);
+  --core-machine-3:var(--core-w-1) var(--core-fsm-3)/var(--core-lh-3) var(--core-font-machine);
+  --core-machine-4:var(--core-w-2) var(--core-fsm-4)/var(--core-lh-4) var(--core-font-machine);
+  --core-machine-5:var(--core-w-2) var(--core-fsm-5)/var(--core-lh-5) var(--core-font-machine);
+  --core-machine-6:var(--core-w-2) var(--core-fsm-6)/var(--core-lh-6) var(--core-font-machine);
+  --core-track-4:-.01em;--core-track-5:-.02em;--core-track-6:-.03em;--core-track-caps:.06em;
+
+  /* ── 12. Радиусы: три ступени, вложенные друг в друга (lg − 8 = md, md − 6 = sm). Капсула — форма, не ступень. */
+  --core-r-sm:8px;--core-r-md:14px;--core-r-lg:22px;--core-r-full:999px;
+
+  /* ── 13. Отступы: сетка 4 px (номер — множитель). --core-s-05 и --core-s-15 — полушаги для оптики и вложенных радиусов. */
+  --core-s-05:2px;--core-s-1:4px;--core-s-15:6px;--core-s-2:8px;--core-s-3:12px;--core-s-4:16px;--core-s-5:20px;--core-s-6:24px;
+  --core-s-8:32px;--core-s-10:40px;--core-s-12:48px;--core-s-16:64px;--core-s-24:96px;
+
+  /* ── 14. Размеры элементов управления и минимальная зона касания */
+  --core-h-sm:28px;--core-h-md:36px;--core-h-lg:44px;--core-hit:44px;
+  --core-icon:16px;--core-icon-lg:20px;
+
+  /* ── 15. Движение: быстро и спокойно, без отскоков, не дольше трети секунды */
+  --core-dur-1:80ms;    /* наведение, нажатие */
+  --core-dur-2:140ms;   /* переключатели, меню, подсказки */
+  --core-dur-3:220ms;   /* рождение окна */
+  --core-dur-4:320ms;   /* полёт уведомления, смена положения света */
+  --core-ease-out:cubic-bezier(.16,1,.3,1);     /* появление: быстро вышло, мягко встало */
+  --core-ease-in:cubic-bezier(.5,0,.85,.25);    /* исчезновение: сворачивается в искру */
+  --core-ease-move:cubic-bezier(.4,0,.2,1);     /* перемещение на месте */
+  --core-ambient:2400ms;                        /* фоновое «дыхание» (загрузка), не переход */
+
+  /* ── 16. Слои */
+  --core-z-scene:-1;--core-z-dialog:2000;--core-z-float:2100;--core-z-toast:2200;--core-z-tip:2300;
+
+  /* ── 17. Знаки (маски): искра, галочка, черта, шеврон, крест */
+  --core-glyph-spark:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0Q9.1 6.9 16 8 9.1 9.1 8 16 6.9 9.1 0 8 6.9 6.9 8 0Z'/%3E%3C/svg%3E");
+  --core-glyph-check:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.4l3 3 6-6.6'/%3E%3C/svg%3E");
+  --core-glyph-dash:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4 8h8'/%3E%3C/svg%3E");
+  --core-glyph-chevron:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6.2l4 4 4-4'/%3E%3C/svg%3E");
+  --core-select-arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23C6BDB1' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6.2l4 4 4-4'/%3E%3C/svg%3E");
+  --core-glyph-close:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M4 4l8 8M12 4l-8 8'/%3E%3C/svg%3E");
+
+  /* ── 18. Курсор: искра, та же искра под 45° над нажимаемым, тонкая черта над текстом. Центр — точка 16 16.
+        Цвет один: «свет» (glow) на тёмном стекле, «тушь» (ink) на бумаге и на раскалённой кнопке. */
+  --core-cursor-spark-glow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath fill='%23FFF4E3' d='M16 8Q17.1 14.9 24 16 17.1 17.1 16 24 14.9 17.1 8 16 14.9 14.9 16 8Z'/%3E%3C/svg%3E") 16 16,default;
+  --core-cursor-spark-turn-glow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath fill='%23FFF4E3' transform='rotate(45 16 16)' d='M16 8Q17.1 14.9 24 16 17.1 17.1 16 24 14.9 17.1 8 16 14.9 14.9 16 8Z'/%3E%3C/svg%3E") 16 16,pointer;
+  --core-cursor-bar-glow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect fill='%23FFF4E3' x='15' y='7' width='2' height='18' rx='1'/%3E%3C/svg%3E") 16 16,text;
+  --core-cursor-spark-ink:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath fill='%231B1714' d='M16 8Q17.1 14.9 24 16 17.1 17.1 16 24 14.9 17.1 8 16 14.9 14.9 16 8Z'/%3E%3C/svg%3E") 16 16,default;
+  --core-cursor-spark-turn-ink:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath fill='%231B1714' transform='rotate(45 16 16)' d='M16 8Q17.1 14.9 24 16 17.1 17.1 16 24 14.9 17.1 8 16 14.9 14.9 16 8Z'/%3E%3C/svg%3E") 16 16,pointer;
+  --core-cursor-bar-ink:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect fill='%231B1714' x='15' y='7' width='2' height='18' rx='1'/%3E%3C/svg%3E") 16 16,text;
+  --core-cursor:var(--core-cursor-spark-glow);
+  --core-cursor-action:var(--core-cursor-spark-turn-glow);
+  --core-cursor-text:var(--core-cursor-bar-glow);
+  --core-cursor-action-on-heat:var(--core-cursor-spark-turn-ink);
+}
+/* Safari до 2026 г. растягивает SVG-курсор на Retina — даём ему тот же рисунок двойного размера */
+@supports (cursor:-webkit-image-set(url("a.svg") 2x) 0 0,auto) and (font:-apple-system-body){:root{
+  --core-cursor-spark-glow:-webkit-image-set(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 32 32'%3E%3Cpath fill='%23FFF4E3' d='M16 8Q17.1 14.9 24 16 17.1 17.1 16 24 14.9 17.1 8 16 14.9 14.9 16 8Z'/%3E%3C/svg%3E") 2x) 16 16,default;
+  --core-cursor-spark-turn-glow:-webkit-image-set(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 32 32'%3E%3Cpath fill='%23FFF4E3' transform='rotate(45 16 16)' d='M16 8Q17.1 14.9 24 16 17.1 17.1 16 24 14.9 17.1 8 16 14.9 14.9 16 8Z'/%3E%3C/svg%3E") 2x) 16 16,pointer;
+  --core-cursor-bar-glow:-webkit-image-set(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 32 32'%3E%3Crect fill='%23FFF4E3' x='15' y='7' width='2' height='18' rx='1'/%3E%3C/svg%3E") 2x) 16 16,text;
+  --core-cursor-spark-ink:-webkit-image-set(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 32 32'%3E%3Cpath fill='%231B1714' d='M16 8Q17.1 14.9 24 16 17.1 17.1 16 24 14.9 17.1 8 16 14.9 14.9 16 8Z'/%3E%3C/svg%3E") 2x) 16 16,default;
+  --core-cursor-spark-turn-ink:-webkit-image-set(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 32 32'%3E%3Cpath fill='%231B1714' transform='rotate(45 16 16)' d='M16 8Q17.1 14.9 24 16 17.1 17.1 16 24 14.9 17.1 8 16 14.9 14.9 16 8Z'/%3E%3C/svg%3E") 2x) 16 16,pointer;
+  --core-cursor-bar-ink:-webkit-image-set(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 32 32'%3E%3Crect fill='%231B1714' x='15' y='7' width='2' height='18' rx='1'/%3E%3C/svg%3E") 2x) 16 16,text;
+}}
+
+/* ── Светлая тема: тушью по бумаге ── */
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]){
+  color-scheme:light;
+  --core-scene:#F1ECE3;
+  --core-glass-far:rgb(255 252 247 / .56);
+  --core-glass-mid:rgb(255 253 250 / .66);
+  --core-glass-near:rgb(255 255 255 / .82);
+  --core-glass-dense:rgb(250 247 241 / .92);
+  --core-backdrop-far:blur(var(--core-blur-far)) contrast(.4) brightness(1.38);
+  --core-backdrop-mid:blur(var(--core-blur-mid)) contrast(.42) brightness(1.44);
+  --core-backdrop-near:blur(var(--core-blur-near)) contrast(.45) brightness(1.5);
+  --core-backdrop-dense:blur(var(--core-blur-dense)) contrast(.45) brightness(1.4);
+  --core-shadow-far:0 1px 2px rgb(60 40 20 / .05);
+  --core-shadow-mid:0 1px 2px rgb(60 40 20 / .06),0 16px 36px -14px rgb(60 40 20 / .22);
+  --core-shadow-near:0 1px 2px rgb(60 40 20 / .1),0 10px 22px -8px rgb(60 40 20 / .3);
+  --core-glass-hi:inset 0 1px 0 rgb(255 255 255 / .7);
+  --core-solid-far:#F8F4ED;--core-solid-mid:#FCFAF6;--core-solid-near:#FFFFFF;--core-solid-dense:#F6F2EA;
+  --core-edge:#1B1714;
+  --core-edge-far:.1;--core-edge-mid:.14;--core-edge-near:.19;
+  --core-edge-shade:.5;--core-edge-even:.75;--core-sheen:0;
+  --core-fill-1:rgb(27 23 20 / .045);
+  --core-fill-2:rgb(27 23 20 / .08);
+  --core-fill-3:rgb(27 23 20 / .12);
+  --core-well:rgb(27 23 20 / .035);
+  --core-line:rgb(27 23 20 / .09);
+  --core-line-2:rgb(27 23 20 / .2);
+  --core-scrim:rgb(241 236 227 / .58);
+  --core-text:#1B1714;--core-text-2:#4F4840;--core-text-3:#6B635A;--core-text-on-heat:#1B1206;
+  --core-on:#1B1714;--core-on-ink:#FBF8F3;
+  --core-heat-1:#9A3A0E;--core-heat-2:#D85A0E;--core-heat-3:#EE6A12;--core-heat-4:#FF9838;--core-heat-5:#FFE2BD;
+  --core-point:#1B1714;--core-point-hot:#1B1714;
+  --core-ok:#1A7F54;--core-warn:#8A5A00;--core-bad:#C22F3E;
+  --core-ok-soft:rgb(26 127 84 / .11);--core-warn-soft:rgb(138 90 0 / .11);--core-bad-soft:rgb(194 47 62 / .1);
+  --core-focus:#1B1714;
+  --core-select:rgb(27 23 20 / .16);
+  --core-scroll:rgb(27 23 20 / .2);--core-scroll-hover:rgb(27 23 20 / .38);
+  --core-syn-comment:#6B635A;--core-syn-keyword:#8A4B14;--core-syn-string:#3F6B2E;
+  --core-syn-number:#A14A0E;--core-syn-func:#1B1714;--core-syn-type:#2F5F7A;--core-syn-punct:#4F4840;
+  --core-select-arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%234F4840' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6.2l4 4 4-4'/%3E%3C/svg%3E");
+  --core-cursor:var(--core-cursor-spark-ink);
+  --core-cursor-action:var(--core-cursor-spark-turn-ink);
+  --core-cursor-text:var(--core-cursor-bar-ink);
+}}
+:root[data-theme=light]{
+  color-scheme:light;
+  --core-scene:#F1ECE3;
+  --core-glass-far:rgb(255 252 247 / .56);
+  --core-glass-mid:rgb(255 253 250 / .66);
+  --core-glass-near:rgb(255 255 255 / .82);
+  --core-glass-dense:rgb(250 247 241 / .92);
+  --core-backdrop-far:blur(var(--core-blur-far)) contrast(.4) brightness(1.38);
+  --core-backdrop-mid:blur(var(--core-blur-mid)) contrast(.42) brightness(1.44);
+  --core-backdrop-near:blur(var(--core-blur-near)) contrast(.45) brightness(1.5);
+  --core-backdrop-dense:blur(var(--core-blur-dense)) contrast(.45) brightness(1.4);
+  --core-shadow-far:0 1px 2px rgb(60 40 20 / .05);
+  --core-shadow-mid:0 1px 2px rgb(60 40 20 / .06),0 16px 36px -14px rgb(60 40 20 / .22);
+  --core-shadow-near:0 1px 2px rgb(60 40 20 / .1),0 10px 22px -8px rgb(60 40 20 / .3);
+  --core-glass-hi:inset 0 1px 0 rgb(255 255 255 / .7);
+  --core-solid-far:#F8F4ED;--core-solid-mid:#FCFAF6;--core-solid-near:#FFFFFF;--core-solid-dense:#F6F2EA;
+  --core-edge:#1B1714;
+  --core-edge-far:.1;--core-edge-mid:.14;--core-edge-near:.19;
+  --core-edge-shade:.5;--core-edge-even:.75;--core-sheen:0;
+  --core-fill-1:rgb(27 23 20 / .045);
+  --core-fill-2:rgb(27 23 20 / .08);
+  --core-fill-3:rgb(27 23 20 / .12);
+  --core-well:rgb(27 23 20 / .035);
+  --core-line:rgb(27 23 20 / .09);
+  --core-line-2:rgb(27 23 20 / .2);
+  --core-scrim:rgb(241 236 227 / .58);
+  --core-text:#1B1714;--core-text-2:#4F4840;--core-text-3:#6B635A;--core-text-on-heat:#1B1206;
+  --core-on:#1B1714;--core-on-ink:#FBF8F3;
+  --core-heat-1:#9A3A0E;--core-heat-2:#D85A0E;--core-heat-3:#EE6A12;--core-heat-4:#FF9838;--core-heat-5:#FFE2BD;
+  --core-point:#1B1714;--core-point-hot:#1B1714;
+  --core-ok:#1A7F54;--core-warn:#8A5A00;--core-bad:#C22F3E;
+  --core-ok-soft:rgb(26 127 84 / .11);--core-warn-soft:rgb(138 90 0 / .11);--core-bad-soft:rgb(194 47 62 / .1);
+  --core-focus:#1B1714;
+  --core-select:rgb(27 23 20 / .16);
+  --core-scroll:rgb(27 23 20 / .2);--core-scroll-hover:rgb(27 23 20 / .38);
+  --core-syn-comment:#6B635A;--core-syn-keyword:#8A4B14;--core-syn-string:#3F6B2E;
+  --core-syn-number:#A14A0E;--core-syn-func:#1B1714;--core-syn-type:#2F5F7A;--core-syn-punct:#4F4840;
+  --core-select-arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%234F4840' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6.2l4 4 4-4'/%3E%3C/svg%3E");
+  --core-cursor:var(--core-cursor-spark-ink);
+  --core-cursor-action:var(--core-cursor-spark-turn-ink);
+  --core-cursor-text:var(--core-cursor-bar-ink);
+}
+
+/* ── «Уменьшить движение»: всё мгновенно. data-core-motion="reduce" на <html> — то же принудительно. ── */
+@media (prefers-reduced-motion:reduce){:root{--core-dur-1:.01ms;--core-dur-2:.01ms;--core-dur-3:.01ms;--core-dur-4:.01ms;--core-ambient:0s}}
+:root[data-core-motion=reduce]{--core-dur-1:.01ms;--core-dur-2:.01ms;--core-dur-3:.01ms;--core-dur-4:.01ms;--core-ambient:0s}
+
+/* ── Без размытия: браузер не умеет или включено «уменьшить прозрачность» (data-core-transparency="reduce" — принудительно) ── */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){:root{
+  --core-glass-far:var(--core-solid-far);--core-glass-mid:var(--core-solid-mid);--core-glass-near:var(--core-solid-near);--core-glass-dense:var(--core-solid-dense);
+  --core-backdrop-far:none;--core-backdrop-mid:none;--core-backdrop-near:none;--core-backdrop-dense:none;--core-scrim-blur:0px;
+}}
+@media (prefers-reduced-transparency:reduce){:root{
+  --core-glass-far:var(--core-solid-far);--core-glass-mid:var(--core-solid-mid);--core-glass-near:var(--core-solid-near);--core-glass-dense:var(--core-solid-dense);
+  --core-backdrop-far:none;--core-backdrop-mid:none;--core-backdrop-near:none;--core-backdrop-dense:none;--core-scrim-blur:0px;
+}}
+:root[data-core-transparency=reduce]{
+  --core-glass-far:var(--core-solid-far);--core-glass-mid:var(--core-solid-mid);--core-glass-near:var(--core-solid-near);--core-glass-dense:var(--core-solid-dense);
+  --core-backdrop-far:none;--core-backdrop-mid:none;--core-backdrop-near:none;--core-backdrop-dense:none;--core-scrim-blur:0px;
+}
+
+/* ── Палец и ширина телефона: элементы управления не ниже 44 px ── */
+@media (pointer:coarse),(max-width:600px){:root{--core-h-sm:36px;--core-h-md:44px;--core-h-lg:48px}}

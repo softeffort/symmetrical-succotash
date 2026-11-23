@@ -1,0 +1,46 @@
+СКОРОСТЬ И ДОСТУПНОСТЬ (пакеты C и D, 2026-11-16)
+================================================
+
+C. Скорость
+-----------
+1. Стили вынесены из HTML в файлы, которые браузер кеширует:
+   index.html 83 → 41 КБ (public/css/landing-main.css, landing-visual.css — общие для RU и EN),
+   chat.html 75 → 16 КБ (public/css/chat-main.css; EN — chat-main-en.css). Порядок стилей не менялся.
+2. Кеш статики в server.js: файлы с ?v= отдаются с «кешировать год» (при правке файла меняйте номер ?v=);
+   остальные — с ETag: если файл не менялся, браузер получает 304 и ничего не скачивает заново.
+   Номера версий подняты: tokens.css?v=3 (на всех страницах), 10-account.js, 19-limits.js.
+3. deploy/nginx.conf: включено gzip-сжатие текста (HTML, CSS, JS, JSON, SVG) — в 3–5 раз меньше трафика.
+   В Caddy сжатие уже было. После замены конфига: sudo nginx -t && sudo systemctl reload nginx
+4. deploy/optimize-images.sh — сжимает тяжёлые картинки (icon-p-2.png 254 КБ, og.png 180 КБ, icon-512.png 160 КБ…):
+   sudo apt install pngquant optipng && sh /opt/premier/deploy/optimize-images.sh
+   Сам я картинки сжать не мог — их содержимое есть только у вас в архиве/на сервере.
+5. Удалены неиспользуемые файлы (сервер и страницы их не подключали):
+   routes/ (10 файлов — дубли старых обработчиков; живые — в server.js), public/js/16-resets.js, public/resets.css,
+   public/js/17-pay.js, public/pay.css, public/coffee.html (копия demo/coffee.html), chrome-test.js, chrome-test2.js.
+   В «Полном проекте» их уже нет. При распаковке ПОВЕРХ папки они останутся — удалите их командой из
+   УДАЛИТЬ-ФАЙЛЫ.txt (есть в архиве «Только изменения») или вручную; на работу сайта они не влияют.
+
+D. Доступность
+--------------
+6. Контраст мелкого серого текста: --p-dim #857B70 → #6F655B (было 3,8:1, стало ≥ 4,5:1 на фоне и карточках).
+   То же в странице «Поделиться» (share.js).
+7. Рамка фокуса с клавиатуры (Tab) на кнопках, ссылках, вкладках — во всех страницах (tokens.css). Мышью не видна.
+8. Настройка системы «уменьшить движение» отключает анимации и плавную прокрутку на всём сайте.
+9. Скелетоны вместо «Загружаю…»: Аккаунт → Тариф и Память (RU и EN), «Мои платежи» в «Лимиты и покупки».
+   Для экранных дикторов остаётся скрытый текст «Загружаю…».
+
+Файлы
+-----
+Новые:     public/css/landing-main.css, public/css/landing-visual.css, public/css/chat-main.css, public/css/chat-main-en.css,
+           deploy/optimize-images.sh, tests/static-assets.test.js, ИЗМЕНЕНИЯ-СКОРОСТЬ-ДОСТУПНОСТЬ.txt
+Изменены:  public/index.html, public/en/index.html, public/chat.html, public/en/chat.html, public/tokens.css, server.js,
+           share.js, blog.js, deploy/nginx.conf, public/js/10-account.js, public/en/js/10-account.js, public/js/19-limits.js,
+           public/login.html, public/en/login.html, public/panel.html, public/protrial.html, public/en/protrial.html,
+           public/en/developers.html (номер версии tokens.css)
+Удалены:   см. п. 5
+
+Как применить
+-------------
+Лучше всего — «Полный проект с обновлением» (в нём уже нет удалённых файлов):
+бэкап → systemctl stop premier → распаковать поверх /opt/premier → удалить файлы из п. 5 (если остались) →
+npm test → systemctl start premier → (nginx) sudo nginx -t && sudo systemctl reload nginx → по желанию optimize-images.sh.

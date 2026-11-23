@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free Pro Day · Premier</title>
+<link rel="icon" type="image/svg+xml" href="/icon-p-amber.svg"><link rel="icon" type="image/png" href="/icon-p-2.png">
+<meta name="description" content="Get Pro for 24 hours — no card, no auto-renewal, one time per account. 300 messages, 50 code runs, 30 websites, 30 images, and cloud computer.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Pro Day · Premier">
+<meta property="og:description" content="Get Pro for 24 hours, no card required.">
+<meta property="og:image" content="/og-protrial.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/og-protrial.png">
+<meta name="theme-color" content="#F7F4EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#12110F" media="(prefers-color-scheme: dark)">
+<link rel="alternate" hreflang="ru" href="/protrial">
+<link rel="alternate" hreflang="en" href="/en/protrial">
+<link rel="alternate" hreflang="x-default" href="/protrial">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" href="/fonts/onest-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/unbounded-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/tokens.css?v=3">
+<link rel="stylesheet" href="/protrial.css?v=1">
+</head>
+<body>
+
+<svg style="display:none"><defs>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></symbol>
+<symbol id="i-tg" viewBox="0 0 24 24"><path d="M21 4 3 11l6 2.2M21 4l-3 16-6.5-5M21 4 9 13.2m0 0V19l2.5-4"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4Z"/></symbol>
+<symbol id="i-code" viewBox="0 0 24 24"><path d="m7 8-4 4 4 4M17 8l4 4-4 4M14 4l-4 16"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></symbol>
+<symbol id="i-video" viewBox="0 0 24 24"><path d="m15 10 5-3v10l-5-3V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-4"/></symbol>
+<symbol id="i-term" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol>
+</defs></svg>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="/" class="brand">
+      <span class="nav-mark"><img src="/icon-p-amber.svg" alt="" width="26" height="26" style="display:block"></span>
+      Premier
+    </a>
+    <div class="sp"></div>
+    <nav class="lang-sw" aria-label="Language">
+      <a href="/protrial" aria-label="Russian">RU</a>
+      <a href="/en/protrial" aria-current="true" aria-label="English">EN</a>
+    </nav>
+    <a href="https://t.me/eidevip" class="tgnav" target="_blank" rel="noopener" aria-label="Telegram channel">
+      <svg><use href="#i-tg"/></svg><span>Telegram</span>
+    </a>
+    <a href="/chat" class="btn pri sm">Open Premier</a>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-kicker rv">
+        <span class="kicker-dot" aria-hidden="true"></span>
+        GIFT · 24 HOURS
+      </div>
+      <h1 class="rv d1">Pro for a day — <span>free</span></h1>
+      <p class="lead rv d2">Try all Pro features — no card, no auto-renewal.</p>
+
+      <div class="pt-timer-wrap rv d2">
+        <div class="pt-timer" id="ptTimer">24:00:00</div>
+        <div class="pt-timer-label" id="ptTimerLabel">Time remaining</div>
+      </div>
+
+      <div class="pt-cta rv d3" id="ptCtaWrap">
+        <button class="btn pri" id="ptBtn" onclick="ptClaim()">
+          Get Pro for 24 hours<svg aria-hidden="true"><use href="#i-arrow"/></svg>
+        </button>
+        <p class="pt-note">No card · no auto-renewal · one time per account</p>
+      </div>
+      <div class="pt-status" id="ptStatus" style="display:none"></div>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="wrap center">
+      <div class="eyebrow rv">What’s included</div>
+      <h2 class="h2 rv">All Pro features — for 24 hours</h2>
+      <div class="feat-grid" id="featGrid">
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-chat"/></svg></div>
+          <div class="feat-num" id="fn-msgs">300</div>
+          <h3>Messages per day</h3>
+          <p>All models available for the trial period</p>
+        </div>
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-code"/></svg></div>
+          <div class="feat-num" id="fn-code">50</div>
+          <h3>Code runs</h3>
+          <p>Python runs on cloud Linux</p>
+        </div>
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-globe"/></svg></div>
+          <div class="feat-num" id="fn-sites">30</div>
+          <h3>Websites</h3>
+          <p>Build and publish sites with a shareable link</p>
+        </div>
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-image"/></svg></div>
+          <div class="feat-num" id="fn-images">30</div>
+          <h3>Images</h3>
+          <p>AI image generation on demand</p>
+        </div>
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-video"/></svg></div>
+          <h3>Animations</h3>
+          <p>Animated clips with a “Download MP4” button</p>
+        </div>
+        <div class="feat-card rv">
+          <div class="feat-ic"><svg><use href="#i-term"/></svg></div>
+          <h3>Cloud computer</h3>
+          <p>Your own Linux with terminal and files</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="compare" style="padding-top:0">
+    <div class="wrap">
+      <div class="eyebrow rv center">Comparison</div>
+      <h2 class="h2 rv center">What changes</h2>
+      <table class="cmp-table rv" aria-label="Free vs Pro">
+        <thead>
+          <tr>
+            <th style="width:50%">Feature</th>
+            <th style="width:25%;text-align:center">Free</th>
+            <th class="pro-col" style="width:25%;text-align:center">🌟 Pro for 24 h</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="feat-label">Messages per day</td>
+            <td style="text-align:center;color:var(--p-muted)" id="cmp-free-msgs">limited</td>
+            <td class="pro-col" style="text-align:center"><span class="ck"><svg><use href="#i-check"/></svg>300 / day</span></td>
+          </tr>
+          <tr>
+            <td class="feat-label">Python code runs</td>
+            <td style="text-align:center;color:var(--p-muted)" id="cmp-free-code">limited</td>
+            <td class="pro-col" style="text-align:center"><span class="ck"><svg><use href="#i-check"/></svg>50 / day</span></td>
+          </tr>
+          <tr>
+            <td class="feat-label">Website creation</td>
+            <td style="text-align:center;color:var(--p-muted)" id="cmp-free-sites">limited</td>
+            <td class="pro-col" style="text-align:center"><span class="ck"><svg><use href="#i-check"/></svg>30 / day</span></td>
+          </tr>
+          <tr>
+            <td class="feat-label">Image generation</td>
+            <td style="text-align:center"><span class="no"><svg><use href="#i-x"/></svg></span></td>
+            <td class="pro-col" style="text-align:center"><span class="ck"><svg><use href="#i-check"/></svg>Yes</span></td>
+          </tr>
+          <tr>
+            <td class="feat-label">Cloud computer</td>
+            <td style="text-align:center"><span class="no"><svg><use href="#i-x"/></svg></span></td>
+            <td class="pro-col" style="text-align:center"><span class="ck"><svg><use href="#i-check"/></svg>Yes</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap center">
+      <div class="eyebrow rv">Three steps</div>
+      <h2 class="h2 rv">How it works</h2>
+      <div class="steps">
+        <div class="step rv">
+          <div class="step-num">1</div>
+          <h3>Sign in</h3>
+          <p>Via Google or GitHub. Takes one minute.</p>
+        </div>
+        <div class="step rv">
+          <div class="step-num">2</div>
+          <h3>Click the button</h3>
+          <p>Pro activates instantly. No card needed.</p>
+        </div>
+        <div class="step rv">
+          <div class="step-num">3</div>
+          <h3>Enjoy</h3>
+          <p>24 hours of Pro with no limits. Then choose a plan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="eyebrow rv center">Questions</div>
+      <h2 class="h2 rv center">FAQ</h2>
+      <div class="faq rv">
+        <details class="faq-item">
+          <summary class="faq-q">How many times can I claim it?<svg><use href="#i-down"/></svg></summary>
+          <div class="faq-a">Once per account. Gmail aliases and dots don’t help.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Do I need a card?<svg><use href="#i-down"/></svg></summary>
+          <div class="faq-a">No card needed. No auto-renewal. After 24 hours you go back to Free.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Who is eligible?<svg><use href="#i-down"/></svg></summary>
+          <div class="faq-a">Free-plan users who have never paid. If you’ve already claimed a day, it won’t work again.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">What happens after 24 hours?<svg><use href="#i-down"/></svg></summary>
+          <div class="faq-a">Your plan returns to Free. All chats are saved. If you like Pro, you’ll see an offer in chat.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Can I still get a first-purchase discount?<svg><use href="#i-down"/></svg></summary>
+          <div class="faq-a">Yes. The free day is the first step toward a purchase. The discount is kept.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <div class="final">
+    <div class="wrap">
+      <div class="final-card rv" id="finalCard">
+        <div class="glow" aria-hidden="true"></div>
+        <div class="badge-free"><i></i>Free</div>
+        <h2 class="h2">Claim Pro today</h2>
+        <p class="sub">No card · no auto-renewal · one time per account</p>
+        <button class="btn pri" onclick="ptClaim()">Get Pro for 24 hours<svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <div class="tgline">
+          <svg><use href="#i-tg"/></svg>
+          <span>News in our <a href="https://t.me/eidevip" target="_blank" rel="noopener">Telegram channel</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="/" class="brand" style="font-size:15px">
+      <span class="nav-mark" style="width:22px;height:22px"><img src="/icon-p-amber.svg" alt="" width="22" height="22" style="display:block"></span>
+      Premier
+    </a>
+    <span>© <span id="yr"></span></span>
+    <div class="sp"></div>
+    <a href="https://t.me/royesee" target="_blank" rel="noopener">Support: @royesee</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+  </div>
+</footer>
+
+<script>
+'use strict';
+document.getElementById('yr').textContent = new Date().getFullYear();
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive: true });
+if (document.documentElement.classList.contains('js')) {
+  const obs = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } }), { threshold: 0.12 });
+  document.querySelectorAll('.rv').forEach((el) => { if (!el.closest('.hero')) obs.observe(el); else el.classList.add('in'); });
+}
+let PT = null, PT_TIMER = null;
+const ptBtn = document.getElementById('ptBtn');
+const ptStatus = document.getElementById('ptStatus');
+const ptTimer = document.getElementById('ptTimer');
+const ptTimerLabel = document.getElementById('ptTimerLabel');
+function fmtTime(ms) {
+  if (ms <= 0) return '00:00:00';
+  const s = Math.floor(ms / 1000), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+function startCountdown(until) {
+  if (PT_TIMER) clearInterval(PT_TIMER);
+  ptTimer.classList.add('active'); ptTimerLabel.textContent = 'Pro time remaining';
+  const tick = () => { const left = until - Date.now(); ptTimer.textContent = fmtTime(left); if (left <= 0) { clearInterval(PT_TIMER); ptTimerLabel.textContent = 'Pro has ended'; } };
+  tick(); PT_TIMER = setInterval(tick, 1000);
+}
+function showStatus(type, title, body) {
+  ptStatus.className = 'pt-status ' + type; ptStatus.style.display = '';
+  ptStatus.innerHTML = (title ? '<b>' + title + '</b>' : '') + (body || '');
+}
+function applyStatus(d) {
+  const s = d && d.protrial; if (!s) return;
+  if (!s.on) { ptBtn.disabled = true; ptBtn.innerHTML = 'Offer ended'; document.getElementById('finalCard').querySelector('button').disabled = true; return; }
+  if (s.state === 'active' && s.until) {
+    startCountdown(s.until); ptBtn.textContent = 'Open chat'; ptBtn.onclick = () => location.href = '/chat';
+    document.getElementById('finalCard').querySelector('button').textContent = 'Open chat';
+    document.getElementById('finalCard').querySelector('button').onclick = () => location.href = '/chat';
+    showStatus('ok', 'Pro is active', 'Active until ' + new Date(s.until).toLocaleString('en-US', {hour:'2-digit',minute:'2-digit',day:'numeric',month:'long'})); return;
+  }
+  if (s.state === 'used') {
+    ptBtn.innerHTML = 'Already claimed — Pro for 3 days at $0.99<svg aria-hidden="true"><use href="#i-arrow"/></svg>';
+    ptBtn.onclick = () => location.href = '/chat?buy=trial'; ptBtn.classList.remove('pri'); ptBtn.classList.add('ghost'); return;
+  }
+  if (s.state === 'has_plan') { ptBtn.textContent = 'You already have Pro — open chat'; ptBtn.onclick = () => location.href = '/chat'; ptBtn.classList.remove('pri'); ptBtn.classList.add('ghost'); return; }
+  if (s.state === 'paid' || s.state === 'ineligible') { ptBtn.disabled = true; ptBtn.textContent = 'Available for new Free users only'; return; }
+}
+function applyPlans(d) {
+  if (!d || !d.plans) return;
+  const free = d.plans.find((p) => p.tier === 0), pro = d.plans.find((p) => p.id === 'pro');
+  if (free) {
+    if (free.msgs != null) document.getElementById('cmp-free-msgs').textContent = free.msgs + ' / day';
+    if (free.code != null) document.getElementById('cmp-free-code').textContent = free.code + ' / day';
+    if (free.sites != null) document.getElementById('cmp-free-sites').textContent = free.sites + ' / day';
+  }
+  if (pro) {
+    if (pro.msgs == null) document.getElementById('fn-msgs').innerHTML = '&infin;'; else document.getElementById('fn-msgs').textContent = pro.msgs;
+    if (pro.code == null) document.getElementById('fn-code').innerHTML = '&infin;'; else document.getElementById('fn-code').textContent = pro.code;
+    if (pro.sites == null) document.getElementById('fn-sites').innerHTML = '&infin;'; else document.getElementById('fn-sites').textContent = pro.sites;
+    if (pro.images == null) document.getElementById('fn-images').innerHTML = '&infin;'; else if (pro.images != null) document.getElementById('fn-images').textContent = pro.images;
+  }
+}
+async function ptLoad() {
+  try { const r = await fetch('/api/protrial/status'); if (!r.ok) return; PT = await r.json(); applyStatus(PT); applyPlans(PT); } catch {}
+}
+ptLoad();
+async function ptClaim() {
+  if (!PT || PT.protrial === undefined) {
+    document.cookie = 'premier_next=' + encodeURIComponent('/en/protrial') + '; Path=/; Max-Age=3600; SameSite=Lax';
+    location.href = '/login'; return;
+  }
+  if (PT.protrial.state !== 'eligible') { applyStatus(PT); return; }
+  ptBtn.setAttribute('aria-busy', 'true'); ptBtn.textContent = 'Activating…';
+  try {
+    const r = await fetch('/api/protrial/claim', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+    const j = await r.json(); ptBtn.removeAttribute('aria-busy');
+    if (j.ok) { PT = { ...PT, protrial: { on: true, state: 'active', until: j.until } }; applyStatus(PT); startCountdown(j.until); showStatus('ok', 'Pro activated!', 'Open chat and enjoy.'); }
+    else { ptBtn.textContent = 'Get Pro for 24 hours'; showStatus('err', 'Error', j.error || 'Please try again'); }
+  } catch { ptBtn.removeAttribute('aria-busy'); ptBtn.textContent = 'Get Pro for 24 hours'; showStatus('err', '', 'Network error, please try again'); }
+}
+if (new URLSearchParams(location.search).has('claimed')) {
+  history.replaceState(null, '', '/en/protrial');
+  window.addEventListener('load', async () => { await ptLoad(); if (PT && PT.protrial && PT.protrial.state === 'eligible') ptClaim(); });
+}
+</script>
+</body>
+</html>

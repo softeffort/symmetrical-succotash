@@ -1,0 +1,13 @@
+/* Premier — «видео кодом» (js/22-anim.js): полоса «Скачать MP4» под шапкой окна предпросмотра. Только переменные --p-* из tokens.css — светлая и тёмная тема. */
+.animbar{gap:10px;flex-wrap:wrap}
+.animbar .anim-info{flex:1;min-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--p-muted)}
+.animbar .anim-info.anim-err{color:var(--p-bad);white-space:normal}
+.animbar button.pri{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 12px;border-radius:var(--p-r-sm);border:1px solid var(--p-accent);background:var(--p-accent);color:var(--p-on-accent);font-weight:600;cursor:pointer;transition:background .15s,border-color .15s}
+.animbar button.pri svg{width:15px;height:15px;flex:none}
+.animbar button.pri:hover:not(:disabled){background:var(--p-accent-h);border-color:var(--p-accent-h);color:var(--p-on-accent)}
+.animbar button.pri:focus-visible{outline:2px solid var(--p-accent-ink);outline-offset:2px}
+.animbar button.pri:disabled{opacity:.6;cursor:progress}
+.animbar .anim-prog{flex-basis:100%;height:4px;border-radius:2px;background:var(--p-line-2);overflow:hidden}
+.animbar .anim-prog i{display:block;height:100%;width:0;background:var(--p-accent);transition:width .3s ease}
+@media (max-width:700px){.animbar button.pri{min-height:44px}.animbar .anim-info{white-space:normal}}
+@media (prefers-reduced-motion:reduce){.animbar .anim-prog i,.animbar button.pri{transition:none}}
