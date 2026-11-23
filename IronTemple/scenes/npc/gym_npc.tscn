@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/gym_npc.gd" id="1_npc"]
+[ext_resource type="Script" path="res://scripts/player/character_model.gd" id="2_model"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.26
+height = 1.8
+
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+variation_embolden = 0.7
+
+[node name="GymNpc" type="AnimatableBody3D"]
+sync_to_physics = false
+script = ExtResource("1_npc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Model" type="Node3D" parent="."]
+script = ExtResource("2_model")
+render_layers = 1
+
+[node name="NameTag" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 0)
+layers = 2
+pixel_size = 0.002
+billboard = 1
+modulate = Color(1, 1, 1, 1)
+outline_modulate = Color(0.2, 0.08, 0.38, 1)
+text = "Mike | LVL 4 | 3 Months"
+font = SubResource("FontVariation_bold")
+font_size = 64
+outline_size = 18
+
+[node name="Bubble" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55, 0)
+visible = false
+layers = 2
+pixel_size = 0.0026
+billboard = 1
+modulate = Color(1, 1, 1, 1)
+outline_modulate = Color(0.36, 0.2, 0.62, 1)
+text = "Nice form, bro."
+font = SubResource("FontVariation_bold")
+font_size = 64
+outline_size = 26

@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/player/player_arms.gd" id="2_arms"]
+[ext_resource type="Script" path="res://scripts/player/character_model.gd" id="3_model"]
+[ext_resource type="Script" path="res://scripts/combat/combat_controller.gd" id="4_combat"]
+[ext_resource type="Script" path="res://scripts/combat/time_fx.gd" id="5_time_fx"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.28
+height = 1.95
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 5
+floor_max_angle = 0.8
+floor_snap_length = 0.35
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.975, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Head" type="Node3D" parent="."]
+physics_interpolation_mode = 2
+top_level = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.78, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+cull_mask = 1048571
+current = true
+fov = 80.0
+near = 0.05
+far = 1500.0
+
+[node name="InteractRay" type="RayCast3D" parent="Head/Camera3D"]
+target_position = Vector3(0, 0, -3)
+collision_mask = 13
+
+[node name="Arms" type="Node3D" parent="Head/Camera3D"]
+script = ExtResource("2_arms")
+
+[node name="Model" type="Node3D" parent="."]
+script = ExtResource("3_model")
+
+[node name="Combat" type="Node" parent="."]
+script = ExtResource("4_combat")
+
+[node name="TimeFx" type="Node" parent="Combat"]
+script = ExtResource("5_time_fx")

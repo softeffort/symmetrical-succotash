@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/mirror.gd" id="1_mirror"]
+
+[node name="Mirror" type="Node3D"]
+script = ExtResource("1_mirror")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+msaa_3d = 1
+size = Vector2i(1280, 384)
+render_target_update_mode = 0
+
+[node name="MirrorCamera" type="Camera3D" parent="SubViewport"]
+physics_interpolation_mode = 2
+cull_mask = 1048565
+projection = 2
+current = true
+
+[node name="Surface" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+
+[node name="NameTag" type="Label3D" parent="."]
+visible = false
+pixel_size = 0.0016
+billboard = 1
+modulate = Color(1, 1, 1, 1)
+outline_modulate = Color(0.2, 0.08, 0.38, 1)
+text = "LVL 1 | Skinny Rookie | 0 Days"
+font_size = 64
+outline_size = 18

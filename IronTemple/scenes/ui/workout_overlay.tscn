@@ -1,0 +1,311 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/workout_overlay.gd" id="1_overlay"]
+[ext_resource type="Script" path="res://scripts/ui/gauge_bar.gd" id="2_gauge"]
+
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+variation_embolden = 0.7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 24.0
+content_margin_top = 14.0
+content_margin_right = 24.0
+content_margin_bottom = 14.0
+bg_color = Color(0.055, 0.063, 0.082, 0.88)
+border_width_top = 3
+border_color = Color(0.66, 0.45, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_keycap"]
+content_margin_left = 11.0
+content_margin_top = 1.0
+content_margin_right = 11.0
+content_margin_bottom = 1.0
+bg_color = Color(0.96, 0.97, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="WorkoutOverlay" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_overlay")
+
+[node name="Danger" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 170.0
+offset_bottom = 222.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.32, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0, 0.01, 0.95)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 36
+text = "DANGER"
+horizontal_alignment = 1
+
+[node name="Dock" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -460.0
+offset_bottom = -104.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+alignment = 2
+
+[node name="Panel" type="PanelContainer" parent="Dock"]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Rows" type="VBoxContainer" parent="Dock/Panel"]
+custom_minimum_size = Vector2(660, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="Dock/Panel/Rows"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Dock/Panel/Rows/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96, 0.97, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 22
+text = "BENCH PRESS"
+
+[node name="Counter" type="Label" parent="Dock/Panel/Rows/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.74, 0.58, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 20
+text = "REPS  0"
+
+[node name="Selector" type="HBoxContainer" parent="Dock/Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PrevKey" type="PanelContainer" parent="Dock/Panel/Rows/Selector"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_keycap")
+
+[node name="Label" type="Label" parent="Dock/Panel/Rows/Selector/PrevKey"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07, 0.07, 0.09, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 20
+text = "A"
+horizontal_alignment = 1
+
+[node name="SelectorValue" type="Label" parent="Dock/Panel/Rows/Selector"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.97, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 32
+text = "60 kg"
+horizontal_alignment = 1
+
+[node name="NextKey" type="PanelContainer" parent="Dock/Panel/Rows/Selector"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_keycap")
+
+[node name="Label" type="Label" parent="Dock/Panel/Rows/Selector/NextKey"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07, 0.07, 0.09, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 20
+text = "D"
+horizontal_alignment = 1
+
+[node name="SelectorDetail" type="Label" parent="Dock/Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.69, 0.76, 1)
+theme_override_font_sizes/font_size = 16
+text = "Needs 60 Strength"
+horizontal_alignment = 1
+
+[node name="BalanceRow" type="VBoxContainer" parent="Dock/Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="BalanceCaption" type="Label" parent="Dock/Panel/Rows/BalanceRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.69, 0.76, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 13
+text = "A                                                     BALANCE                                                     D"
+horizontal_alignment = 1
+
+[node name="Balance" type="Control" parent="Dock/Panel/Rows/BalanceRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_gauge")
+value = 0.5
+centered = true
+
+[node name="RhythmRow" type="VBoxContainer" parent="Dock/Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="RhythmCaption" type="Label" parent="Dock/Panel/Rows/RhythmRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.69, 0.76, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 13
+text = "RHYTHM"
+horizontal_alignment = 1
+
+[node name="Rhythm" type="Control" parent="Dock/Panel/Rows/RhythmRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_gauge")
+fill = true
+
+[node name="ArmsRow" type="HBoxContainer" parent="Dock/Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 22
+
+[node name="LeftBox" type="VBoxContainer" parent="Dock/Panel/Rows/ArmsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="LeftCaption" type="Label" parent="Dock/Panel/Rows/ArmsRow/LeftBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.69, 0.76, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 13
+text = "LEFT ARM  -  LMB"
+horizontal_alignment = 1
+
+[node name="LeftArm" type="Control" parent="Dock/Panel/Rows/ArmsRow/LeftBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_gauge")
+fill = true
+marker = false
+
+[node name="RightBox" type="VBoxContainer" parent="Dock/Panel/Rows/ArmsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="RightCaption" type="Label" parent="Dock/Panel/Rows/ArmsRow/RightBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.69, 0.76, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 13
+text = "RIGHT ARM  -  RMB"
+horizontal_alignment = 1
+
+[node name="RightArm" type="Control" parent="Dock/Panel/Rows/ArmsRow/RightBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_gauge")
+fill = true
+marker = false
+
+[node name="SpeedRow" type="VBoxContainer" parent="Dock/Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="SpeedCaption" type="Label" parent="Dock/Panel/Rows/SpeedRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.97, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 20
+text = "8.0 km/h"
+horizontal_alignment = 1
+
+[node name="Speed" type="Control" parent="Dock/Panel/Rows/SpeedRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_gauge")
+fill = true
+
+[node name="StrainRow" type="VBoxContainer" parent="Dock/Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="StrainCaption" type="Label" parent="Dock/Panel/Rows/StrainRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.69, 0.76, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 13
+text = "STRAIN"
+horizontal_alignment = 1
+
+[node name="Strain" type="Control" parent="Dock/Panel/Rows/StrainRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_gauge")
+fill = true
+marker = false
+fill_color = Color(1, 0.78, 0.3, 1)
+
+[node name="Hint" type="Label" parent="Dock/Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.69, 0.76, 1)
+theme_override_font_sizes/font_size = 15
+text = "Hint"
+horizontal_alignment = 1
