@@ -127,7 +127,8 @@ func mesh(shape: Mesh, pos: Vector3, material: Material, rot_deg: Vector3 = Vect
 
 
 func box(size: Vector3, pos: Vector3, material: Material, rot_deg: Vector3 = Vector3.ZERO) -> void:
-	add(Shapes.box(size), Transform3D(_basis(rot_deg), pos), material)
+	var soft := Shapes.soft_box(size, material)
+	add(soft if soft != null else Shapes.box(size), Transform3D(_basis(rot_deg), pos), material)
 
 
 ## Box with rounded edges (padding, cushions, moulded plastic).

@@ -53,6 +53,8 @@ func _ready() -> void:
 	_build_slabs()
 	_build_stairs()
 	_build_exterior()
+	for interior in _interiors:
+		GymKit.soften_boxes(interior)
 
 
 func _process(_delta: float) -> void:

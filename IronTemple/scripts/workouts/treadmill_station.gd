@@ -18,7 +18,7 @@ const STAMINA_GROWTH := 0.3
 const DECK_HEIGHT := 0.2
 const BELT_FROM := -0.88
 const BELT_LENGTH := 1.52
-const BELT_WIDTH := 0.62
+const BELT_WIDTH := 0.66
 ## Tread marks along the belt; one mark's spacing is also the period of the belt animation.
 const STRIPES := 6
 const SCREEN_TILT := -20.5
@@ -44,7 +44,8 @@ func _build() -> void:
 	exit_position = Vector3(0.0, 0.0, -1.5)
 	# The running surface: one quad whose rubber pattern is scrolled by the belt's own travel.
 	var size := Vector2(BELT_WIDTH, BELT_LENGTH + 0.02)
-	var belt := Assembly.place(self, Shapes.plane(size), Vector3(0.0, DECK_HEIGHT + 0.004, BELT_FROM + BELT_LENGTH * 0.5))
+	# (The library deck carries a 2 cm belt of its own; this one lies just over it.)
+	var belt := Assembly.place(self, Shapes.plane(size), Vector3(0.0, DECK_HEIGHT + 0.027, BELT_FROM + BELT_LENGTH * 0.5))
 	belt.name = "Belt"
 	belt.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_belt = GymIron.belt_material(size, BELT_LENGTH / STRIPES)

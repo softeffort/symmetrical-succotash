@@ -161,13 +161,15 @@ static func steel(color: Color, roughness: float = 0.52) -> StandardMaterial3D:
 	return standard(color, roughness, 0.35, Surface.STEEL)
 
 
-static func chrome(color: Color = Color(0.86, 0.88, 0.92), roughness: float = 0.16) -> StandardMaterial3D:
-	return standard(color, roughness, 1.0, Surface.METAL)
+## Polished plate. Not fully metallic: indoors a perfect mirror only shows the dark ceiling,
+## so a share of the pale base colour is kept to read as bright metal from every angle.
+static func chrome(color: Color = Color(0.86, 0.88, 0.92), roughness: float = 0.2) -> StandardMaterial3D:
+	return standard(color, roughness, 0.78, Surface.METAL)
 
 
 ## Knurled bare metal: barbell shafts and dumbbell grips.
-static func knurled(color: Color = Color(0.78, 0.8, 0.84), roughness: float = 0.34) -> StandardMaterial3D:
-	return standard(color, roughness, 1.0, Surface.KNURL)
+static func knurled(color: Color = Color(0.78, 0.8, 0.84), roughness: float = 0.36) -> StandardMaterial3D:
+	return standard(color, roughness, 0.75, Surface.KNURL)
 
 
 static func canvas(color: Color) -> StandardMaterial3D:

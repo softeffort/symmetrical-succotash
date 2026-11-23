@@ -16,7 +16,7 @@ func _ready() -> void:
 	var height := width * 0.42
 	var casing := Assembly.new()
 	casing.rbox(Vector3(width, height, 0.07), 0.025, Vector3(0.0, 0.0, 0.035), Stylized.steel(Color(0.03, 0.03, 0.038), 0.4))
-	casing.box(Vector3(width - 0.07, height - 0.07, 0.004), Vector3(0.0, 0.0, 0.071), Build.mat(Color(0.008, 0.008, 0.012), 0.2))
+	casing.box(Vector3(width - 0.07, height - 0.07, 0.004), Vector3(0.0, 0.0, 0.071), GymKit.screen())
 	# Wall brackets, visible from the side.
 	for side: float in [-1.0, 1.0]:
 		casing.box(Vector3(0.05, height * 0.5, 0.03), Vector3(side * width * 0.3, 0.0, -0.012), Stylized.steel(Color(0.05, 0.05, 0.06)))

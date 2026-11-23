@@ -35,6 +35,16 @@ static func rubber() -> StandardMaterial3D:
 	return Stylized.rubber(RUBBER_BLACK)
 
 
+## Dead-flat black of display faces and sign panels: no grain, so lettering stays clean.
+static func screen() -> StandardMaterial3D:
+	if not _materials.has("screen"):
+		var material := StandardMaterial3D.new()
+		material.albedo_color = Color(0.008, 0.008, 0.012)
+		material.roughness = 0.5
+		_materials["screen"] = material
+	return _materials["screen"]
+
+
 ## Moulded plastic housings.
 static func plastic(color: Color = Color(0.05, 0.052, 0.06)) -> StandardMaterial3D:
 	return Stylized.standard(color, 0.42, 0.0, Stylized.Surface.PLAIN)
@@ -44,7 +54,7 @@ static func plastic(color: Color = Color(0.05, 0.052, 0.06)) -> StandardMaterial
 ## ModelLoader's "palette" option). `overrides` replaces or adds entries.
 static func palette(accent: Color = ACCENT, overrides: Dictionary = {}) -> Dictionary:
 	var steel := {"color": STEEL_DARK, "roughness": 0.5, "metallic": 0.35, "surface": Stylized.Surface.STEEL}
-	var bright := {"color": CHROME, "roughness": 0.2, "metallic": 1.0, "surface": Stylized.Surface.METAL, "bump": 0.12}
+	var bright := {"color": CHROME, "roughness": 0.22, "metallic": 0.78, "surface": Stylized.Surface.METAL, "bump": 0.12}
 	var paint := {
 		"frame": steel,
 		"steel": steel,
@@ -55,8 +65,8 @@ static func palette(accent: Color = ACCENT, overrides: Dictionary = {}) -> Dicti
 		"metal": bright,
 		"chrome": bright,
 		"accent": {"color": accent, "roughness": 0.5},
-		"pad": {"color": Color(0.05, 0.05, 0.058), "roughness": 0.56, "surface": Stylized.Surface.LEATHER, "bump": 0.3},
-		"leather": {"color": Color(0.1, 0.045, 0.035), "roughness": 0.56, "surface": Stylized.Surface.LEATHER, "bump": 0.3},
+		"pad": Stylized.leather(Color(0.05, 0.05, 0.058), 0.52),
+		"leather": Stylized.leather(Color(0.1, 0.045, 0.035), 0.52),
 		"carcass": {"color": Color(0.11, 0.12, 0.15), "roughness": 0.5, "metallic": 0.3, "surface": Stylized.Surface.STEEL},
 		"timber": {"color": Color(0.42, 0.27, 0.15), "roughness": 0.6, "surface": Stylized.Surface.WOOD},
 	}
@@ -208,7 +218,7 @@ static func floor_marker(parent: Node, pos: Vector3, yaw_deg: float, storey: Str
 	Assembly.spawn(root, "floor_marker/%s" % color.to_html(), func(a: Assembly) -> void:
 		var rim := Stylized.steel(Color(0.04, 0.04, 0.05), 0.4)
 		a.box(Vector3(2.9, 0.012, 1.0), Vector3(0.0, 0.006, 0.0), rim)
-		a.box(Vector3(2.8, 0.006, 0.9), Vector3(0.0, 0.013, 0.0), Build.mat(Color(0.015, 0.015, 0.02), 0.3))
+		a.box(Vector3(2.8, 0.006, 0.9), Vector3(0.0, 0.013, 0.0), screen())
 		var lit := Build.glow(color, 2.6)
 		for side: float in [-1.0, 1.0]:
 			a.box(Vector3(2.8, 0.008, 0.035), Vector3(0.0, 0.016, side * 0.42), lit)
@@ -229,7 +239,7 @@ static func wall_sign(parent: Node, pos: Vector3, yaw_deg: float, lines: Array[S
 	var height := row * lines.size() + 0.2
 	var casing := Assembly.new()
 	casing.rbox(Vector3(width, height, 0.07), 0.02, Vector3(0.0, 0.0, 0.035), Stylized.steel(Color(0.035, 0.035, 0.045), 0.4))
-	casing.box(Vector3(width - 0.12, height - 0.12, 0.004), Vector3(0.0, 0.0, 0.072), Build.mat(Color(0.012, 0.012, 0.016), 0.25))
+	casing.box(Vector3(width - 0.12, height - 0.12, 0.004), Vector3(0.0, 0.0, 0.072), screen())
 	for i in lines.size():
 		var y := height * 0.5 - 0.1 - row * (i + 0.5)
 		casing.box(Vector3(0.05, row * 0.62, 0.006), Vector3(-width * 0.5 + 0.14, y, 0.074), Build.glow(colors[i % colors.size()], 2.6))
@@ -384,8 +394,10 @@ static func cone_material(color: Color, strength: float) -> ShaderMaterial:
 static func room_probe(parent: Node, centre: Vector3, size: Vector3, ambient: Color, energy: float) -> ReflectionProbe:
 	var probe := ReflectionProbe.new()
 	probe.name = "RoomProbe"
-	probe.position = centre
-	probe.size = size
+	# The box reaches below the floor: a probe fades out towards its faces, which would hand
+	# the floor and the foot of everything standing on it back to the sky.
+	probe.position = centre - Vector3(0.0, 0.2, 0.0)
+	probe.size = size + Vector3(0.0, 0.4, 0.0)
 	probe.interior = true
 	probe.box_projection = true
 	probe.enable_shadows = false
@@ -394,8 +406,30 @@ static func room_probe(parent: Node, centre: Vector3, size: Vector3, ambient: Co
 	probe.ambient_color = ambient
 	probe.ambient_color_energy = energy
 	probe.max_distance = 40.0
+	# Keep the room's own reflections right up to the walls instead of fading to the sky.
+	probe.blend_distance = 0.25
 	parent.add_child(probe)
 	return probe
+
+
+## Swaps the plain box meshes of furniture-sized parts under `root` for chamfered ones, so
+## their edges catch the light. Only the drawn mesh changes: colliders keep their shapes.
+static func soften_boxes(root: Node) -> int:
+	var swapped := 0
+	var pending: Array[Node] = [root]
+	while not pending.is_empty():
+		var node: Node = pending.pop_back()
+		pending.append_array(node.get_children())
+		var instance := node as MeshInstance3D
+		var box: BoxMesh = (instance.mesh as BoxMesh) if instance != null else null
+		if box == null:
+			continue
+		var material := instance.material_override if instance.material_override != null else box.material
+		var soft := Shapes.soft_box(box.size, material)
+		if soft != null:
+			instance.mesh = soft
+			swapped += 1
+	return swapped
 
 
 static func _longest_line(text: String) -> int:

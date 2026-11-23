@@ -76,6 +76,8 @@ func _run() -> void:
 	for layer in get_tree().root.find_children("*", "CanvasLayer", true, false):
 		(layer as CanvasLayer).visible = false
 	var camera := Camera3D.new()
+	# The player's body is drawn, the first-person arms are not.
+	camera.set_cull_mask_value(2, false)
 	add_child(camera)
 	camera.current = true
 	var settled := ""
@@ -93,8 +95,44 @@ func _run() -> void:
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png("%s/%s.png" % [_out, shot_name])
 		print("SHOT ", shot_name)
+	if _wanted("1f_treadmill_running"):
+		await _treadmill_running(camera)
 	print("DONE")
 	get_tree().quit(0)
+
+
+## Puts the player on a treadmill at speed and looks down at the belt and the console, to see
+## the tread pattern travel and the read-out count.
+func _treadmill_running(camera: Camera3D) -> void:
+	var player := get_tree().get_first_node_in_group(&"player") as Player
+	var station: TreadmillStation = null
+	for node in get_tree().get_nodes_in_group(&"gym_stations"):
+		if node is TreadmillStation:
+			station = node
+			break
+	if player == null or station == null:
+		print("MISSING treadmill")
+		return
+	player.place_at(station.get_exit_transform(), true)
+	for i in 20:
+		await get_tree().physics_frame
+	station._on_interacted(player)
+	Input.action_press(&"move_forward")
+	for i in 200:
+		await get_tree().physics_frame
+	Input.action_release(&"move_forward")
+	for frame in 2:
+		camera.fov = 58.0
+		camera.look_at_from_position(station.global_transform * Vector3(1.25, 1.75, -1.5), station.global_transform * Vector3(0.0, 0.75, 0.25))
+		camera.current = true
+		for i in 4 + frame * 3:
+			await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		get_viewport().get_texture().get_image().save_png("%s/1f_treadmill_running_%d.png" % [_out, frame + 1])
+		print("SHOT 1f_treadmill_running_%d  speed=%.1f scroll=%.3f" % [frame + 1, station.speed, station._belt.get_shader_parameter("scroll")])
+	station.request_exit()
+	for i in 30:
+		await get_tree().physics_frame
 
 
 func _wanted(shot_name: String) -> bool:

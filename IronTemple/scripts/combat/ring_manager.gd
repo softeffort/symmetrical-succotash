@@ -365,25 +365,46 @@ func _set_gate(locked: bool) -> void:
 func _build_gate() -> void:
 	var top := platform_height + fence_height
 	var middle := platform_height + fence_height * 0.5
-	var mesh := Build.mat(Color(0.05, 0.05, 0.07, 0.3), 0.6)
-	var pad := Build.mat(pad_color, 0.6)
-	var post := Build.mat(Color(0.1, 0.1, 0.12), 0.6)
+	var steel := GymKit.frame()
+	var foam := FightKit.vinyl()
 	var wing := (side_length - gate_width) * 0.5
 	for side: float in [-1.0, 1.0]:
 		var x := side * (gate_width + wing) * 0.5
 		if wing > 0.2:
-			Build.box(self, Vector3(wing - 0.1, fence_height - 0.2, 0.02), Vector3(x, middle, gate_distance), mesh)
+			# Short fixed bay of chain-link either side of the door.
+			Assembly.place(self, FightKit.fence_bay_mesh(wing - 0.24, fence_height, pad_color), Vector3(x - side * 0.03, platform_height, gate_distance)).name = "Wing"
+			FightKit.chain_link(self, Vector2(wing - 0.24, fence_height - 0.2), Vector3(x - side * 0.03, middle + 0.02, gate_distance))
 			Build.blocker(self, Vector3(wing, fence_height, 0.14), Vector3(x, middle, gate_distance))
-			Build.box(self, Vector3(wing - 0.1, 0.14, 0.14), Vector3(x, top, gate_distance), pad)
-		Build.cyl(self, 0.07, fence_height, Vector3(side * gate_width * 0.5, middle, gate_distance), post)
+	# Door posts: steel in a foam sleeve, with a header above head height tying them together.
+	var jambs := Assembly.new()
+	for side: float in [-1.0, 1.0]:
+		var x := side * (gate_width * 0.5 + 0.02)
+		jambs.box(Vector3(0.07, fence_height + 0.5, 0.07), Vector3(x, platform_height + (fence_height + 0.5) * 0.5, gate_distance), steel)
+		jambs.rbox(Vector3(0.13, fence_height - 0.1, 0.13), 0.04, Vector3(x, middle, gate_distance), foam)
+	jambs.box(Vector3(gate_width + 0.11, 0.07, 0.07), Vector3(0.0, top + 0.465, gate_distance), steel)
+	jambs.box(Vector3(0.9, 0.16, 0.012), Vector3(0.0, top + 0.33, gate_distance + 0.03), Build.mat(pad_color.darkened(0.1), 0.5))
+	jambs.commit(self, "GateFrame")
+	Build.text(self, "ENTER", Vector3(0.0, top + 0.33, gate_distance + 0.04), 0.11, Color(0.97, 0.97, 0.95), Vector3.ZERO, 1.3)
 
+	# The door swings about its hinge post at local x = 0.
 	_gate = Build.group(self, "Gate", Vector3(-gate_width * 0.5, platform_height, gate_distance))
 	var door := gate_width - 0.16
 	var centre := gate_width * 0.5
-	Build.box(_gate, Vector3(door, fence_height - 0.3, 0.02), Vector3(centre, fence_height * 0.5, 0.0), mesh)
-	for height: float in [0.14, fence_height - 0.12]:
-		Build.box(_gate, Vector3(door, 0.08, 0.08), Vector3(centre, height, 0.0), pad)
-	Build.box(_gate, Vector3(0.08, fence_height - 0.26, 0.08), Vector3(gate_width - 0.12, fence_height * 0.5, 0.0), pad)
+	var leaf := Assembly.new()
+	var near := centre - door * 0.5
+	var far := centre + door * 0.5
+	leaf.path([Vector3(near, 0.1, 0.0), Vector3(near, fence_height - 0.06, 0.0), Vector3(far, fence_height - 0.06, 0.0), Vector3(far, 0.1, 0.0), Vector3(near, 0.1, 0.0)] as Array[Vector3], 0.022, steel, 8)
+	leaf.tube(Vector3(near, fence_height * 0.5, 0.0), Vector3(far, fence_height * 0.5, 0.0), 0.012, steel, 6)
+	leaf.rbox(Vector3(door, 0.16, 0.16), 0.07, Vector3(centre, fence_height - 0.02, 0.0), foam)
+	leaf.rbox(Vector3(door, 0.13, 0.13), 0.05, Vector3(centre, 0.13, 0.0), foam)
+	leaf.box(Vector3(0.4, 0.06, 0.004), Vector3(centre, fence_height - 0.02, 0.082), Build.mat(pad_color, 0.5))
+	# Hinges on the post side, latch and pull on the other.
+	for hinge: float in [0.35, fence_height - 0.4]:
+		leaf.cyl(0.02, 0.1, Vector3(near - 0.035, hinge, 0.0), GymKit.chrome(), Vector3.ZERO, -1.0, 8)
+	leaf.box(Vector3(0.1, 0.06, 0.05), Vector3(far + 0.02, fence_height * 0.55, 0.0), GymKit.chrome())
+	leaf.path([Vector3(far - 0.12, fence_height * 0.5 + 0.1, 0.03), Vector3(far - 0.12, fence_height * 0.5 + 0.1, 0.09), Vector3(far - 0.12, fence_height * 0.5 + 0.3, 0.09), Vector3(far - 0.12, fence_height * 0.5 + 0.3, 0.03)] as Array[Vector3], 0.011, GymKit.chrome(), 6)
+	leaf.commit(_gate, "Leaf")
+	FightKit.chain_link(_gate, Vector2(door - 0.04, fence_height - 0.22), Vector3(centre, fence_height * 0.5 + 0.02, 0.0))
 	_gate.rotation.y = GATE_OPEN
 
 	var body := Build.blocker(self, Vector3(gate_width, fence_height, 0.14), Vector3(0.0, middle, gate_distance))

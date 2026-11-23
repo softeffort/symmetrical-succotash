@@ -8,6 +8,8 @@ const BAG_RADIUS := 0.2
 const BAG_LENGTH := 1.3
 ## Height of the bag's centre above the floor.
 const BAG_CENTRE := 1.55
+## Height of the swivel the four short chains meet at, above the top of the bag.
+const CHAIN_HANG := 0.5
 const GRAVITY := 9.8
 const DAMPING := 1.1
 const MAX_SWING := 0.32
@@ -67,20 +69,15 @@ func _physics_process(delta: float) -> void:
 		set_physics_process(false)
 
 
+## The swing still turns `_pivot` and the twist still turns `_bag`; only what hangs there
+## changed: a stitched leather bag on four chains (twisting with it), the long chain up to the
+## shackle (swinging with it) and the bracket that clamps the shackle under the beam.
 func _build() -> void:
-	var chain := GymProps.steel()
 	_pivot = Build.group(self, "Pivot", Vector3(0.0, mount_height, 0.0))
 	_bag = Build.group(_pivot, "Bag", Vector3(0.0, -_length, 0.0))
-	var half := BAG_LENGTH * 0.5
-	Build.cyl(_bag, BAG_RADIUS, BAG_LENGTH, Vector3.ZERO, Stylized.leather(color, 0.55))
-	Build.cyl(_bag, BAG_RADIUS + 0.005, 0.07, Vector3(0.0, half, 0.0), GymProps.frame())
-	Build.cyl(_bag, BAG_RADIUS + 0.005, 0.07, Vector3(0.0, -half, 0.0), GymProps.frame())
-	Build.cyl(_bag, BAG_RADIUS + 0.003, 0.14, Vector3(0.0, 0.3, 0.0), Build.mat(Color(0.95, 0.95, 0.97), 0.6))
-	var top := half + 0.03
-	for i in 4:
-		var angle := i * PI * 0.5 + PI * 0.25
-		Build.tube(_bag, Vector3(cos(angle) * 0.15, top, sin(angle) * 0.15), Vector3(0.0, top + 0.47, 0.0), 0.008, chain, 4)
-	Build.tube(_pivot, Vector3(0.0, -_length + top + 0.47, 0.0), Vector3.ZERO, 0.012, chain, 4)
+	Assembly.place(_bag, FightKit.heavy_bag_mesh(BAG_RADIUS, BAG_LENGTH, CHAIN_HANG, color)).name = "Leather"
+	Assembly.place(_pivot, FightKit.bag_chain_mesh(_length - BAG_LENGTH * 0.5 - CHAIN_HANG - 0.05)).name = "Chain"
+	Assembly.place(self, FightKit.bag_mount_mesh(), Vector3(0.0, mount_height + 0.02, 0.0)).name = "Mount"
 
 
 ## Swings the bag without paying anyone out: a regular is working it.

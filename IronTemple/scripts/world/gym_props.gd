@@ -146,11 +146,11 @@ static func changing_bench(parent: Node, pos: Vector3, yaw_deg: float, length: f
 static func stool(parent: Node, pos: Vector3, seat_color: Color) -> Node3D:
 	var root := Build.group(parent, "Stool", pos)
 	Build.drum_blocker(root, 0.2, 0.8, Vector3(0.0, 0.4, 0.0))
-	var bright := {"color": GymKit.CHROME, "roughness": 0.16, "metallic": 1.0, "surface": Stylized.Surface.METAL}
+	var bright := {"color": GymKit.CHROME, "roughness": 0.2, "metallic": 0.78, "surface": Stylized.Surface.METAL, "bump": 0.1}
 	var paint := {
 		"surface": bright,
 		"accent": bright,
-		"soft": {"color": seat_color.darkened(0.25), "roughness": 0.42, "surface": Stylized.Surface.LEATHER},
+		"soft": Stylized.leather(seat_color.darkened(0.25), 0.46),
 	}
 	Assembly.place(root, ModelLoader.flat("gym/stool_bar_backless", 0.8, {"palette": paint}))
 	return root
@@ -162,8 +162,8 @@ static func sofa(parent: Node, pos: Vector3, yaw_deg: float, color: Color, width
 	var root := Build.group(parent, "Sofa", pos, yaw_deg)
 	Build.blocker(root, Vector3(width, 0.85, 0.95), Vector3(0.0, 0.425, 0.0))
 	var paint := {
-		"teak": {"color": Color(0.05, 0.045, 0.05), "roughness": 0.45, "surface": Stylized.Surface.LEATHER},
-		"navy": {"color": color.darkened(0.35), "roughness": 0.44, "surface": Stylized.Surface.LEATHER},
+		"teak": Stylized.leather(Color(0.05, 0.045, 0.05), 0.5),
+		"navy": Stylized.leather(color.darkened(0.3), 0.5),
 		"canvas": {"color": color.lightened(0.25), "roughness": 0.85, "surface": Stylized.Surface.FABRIC},
 	}
 	var id := "gym/sofa_modern" if width > 1.6 else "gym/armchair_lounge"

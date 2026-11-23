@@ -111,6 +111,22 @@ static func lathe(profile: PackedVector2Array, sides: int = 24, flat: bool = fal
 	return mesh
 
 
+## Chamfered stand-in for a plain box of furniture size drawn in `material`, or null where the
+## sharp box has to stay: slivers such as screens and decals, long architectural runs that butt
+## against each other, and materials that read the box's own UV layout or are seen through.
+static func soft_box(size: Vector3, material: Material) -> ArrayMesh:
+	var thin := minf(size.x, minf(size.y, size.z))
+	var long := maxf(size.x, maxf(size.y, size.z))
+	if thin < 0.03 or long > 2.6:
+		return null
+	var paint := material as StandardMaterial3D
+	if paint == null or paint.transparency != BaseMaterial3D.TRANSPARENCY_DISABLED:
+		return null
+	if paint.albedo_texture != null and not paint.uv1_triplanar:
+		return null
+	return rounded_box(size, clampf(thin * 0.16, 0.004, 0.012), 1)
+
+
 static func box(size: Vector3) -> BoxMesh:
 	var key := "box/%s" % [size]
 	if not _meshes.has(key):

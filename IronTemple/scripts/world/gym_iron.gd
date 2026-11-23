@@ -106,7 +106,7 @@ static func stitch(a: Assembly, from: Vector3, to: Vector3, color: Color = THREA
 ## Padded flat bench from the library, its pad re-upholstered in stitched leather. The pad
 ## top sits at 0.505 m, where the lifting profiles expect it.
 static func bench(root: Node3D, pos: Vector3, pad_color: Color) -> MeshInstance3D:
-	var paint := GymKit.palette(GymKit.ACCENT, {"pad": {"color": pad_color, "roughness": 0.52, "surface": Stylized.Surface.LEATHER, "bump": 0.3}})
+	var paint := GymKit.palette(GymKit.ACCENT, {"pad": Stylized.leather(pad_color, 0.5)})
 	var node := Assembly.place(root, ModelLoader.flat("gym/bench_flat", 0.505, {"palette": paint}), pos)
 	node.name = "Bench"
 	# At this size the library pad spans x +-0.19 and z +-0.69.
@@ -295,7 +295,7 @@ static func dumbbell(parent: Node, pos: Vector3, head_radius: float, color: Colo
 	var id := "gym/dumbbell_light" if head_radius < 0.075 else ("gym/dumbbell" if head_radius < 0.1 else "gym/dumbbell_heavy")
 	var paint := GymKit.palette(color, {
 		"rubber": {"color": GymKit.RUBBER_BLACK.lerp(color, 0.3), "roughness": 0.8, "surface": Stylized.Surface.RUBBER},
-		"metal": {"color": Color(0.8, 0.82, 0.86), "roughness": 0.3, "metallic": 1.0, "surface": Stylized.Surface.KNURL},
+		"metal": {"color": Color(0.8, 0.82, 0.86), "roughness": 0.32, "metallic": 0.75, "surface": Stylized.Surface.KNURL, "bump": 0.5},
 	})
 	var node := Assembly.place(root, ModelLoader.flat(id, head_radius * 2.0, {"palette": paint}), Vector3(0.0, -head_radius, 0.0))
 	# The library's handles are long for their heads.

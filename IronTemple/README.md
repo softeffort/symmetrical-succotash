@@ -9,7 +9,9 @@ living gym (regulars who react to your reputation, a supplement bar on the third
 and music, saving, a pause menu and particle effects), and fast, technical fights: head and body targeting,
 two guards, feints, intercept counters, a chin gauge with knockdowns, the clinch and five opponent styles.
 Step 6 is a visual overhaul: rigged CC0 character models, skinned first-person arms with MMA gloves drawn
-in their own view-model pass, a stylized PBR look and upgraded lighting. The world is still assembled in
+in their own view-model pass, a stylized PBR look and upgraded lighting. Step 7 carries that look through
+the gym's three storeys: detailed equipment, the cage, the bar and floor-by-floor lighting (see
+[Added in Step 7](#added-in-step-7)). The world is still assembled in
 code and every sound is synthesized; the models and four texture maps in `assets/` are CC0 and fetched by
 `tools/fetch_assets.py` (see [Added in Step 6](#added-in-step-6)). Open `project.godot` in the editor, let
 it import the models, and press **F5**.
@@ -657,6 +659,54 @@ scripts/combat/fighter_look.gd      FighterLook
 shaders/stylized_pbr.gdshader, shaders/character_body.gdshader, shaders/stylized_light.gdshaderinc
 ```
 
+### Added in Step 7
+
+A second visual pass, over the gym's interior: every storey is re-dressed with library models and baked
+multi-part assemblies in one set of finishes, and lit for its own mood. The stations, the cage, the bags,
+the bar and the regulars keep their root nodes, scripts, colliders, prompts and triggers; both check suites
+pass unmodified (498 + 665).
+
+**Models.** `tools/fetch_assets.py` gained 61 gym and interior props, so `assets/models/gym/` now holds 105
+CC0 `.glb` files (racks, benches, bars and plates, dumbbells, kettlebells, treadmill, bags and fight kit,
+lockers, stools, sofas, bar stock, lamps, ducts and fittings). The whole set is 149 downloads + 1 derived
+file, 25 MB, validated and credited exactly as in Step 6. `GymKit.model()` places them through `ModelLoader`
+at a real-world height, repainted by material name in the shared palette (`GymKit.palette()`).
+
+**Assemblies.** What no pack has is built from parts and baked into one mesh per prop (`Assembly`), with
+rounded boxes and lathed profiles from `Shapes`: colour-coded bumper and iron plates that stack on the bar
+as the weight changes, the knurled bar and collars, rack steelwork with chrome J-hooks and safeties, stitched
+bench pads, the eight-sided cage (printed canvas, apron, padded red and blue posts, chain-link bays under
+foam rails, gate and steps), the lighting truss, heavy bags on chains, bleachers, the fluted bar counter,
+shelf stock, the lit fridge and tube neon. Plain boxes of furniture size are chamfered, in assemblies
+(`Shapes.soft_box`) and across each storey once it is built (`GymKit.soften_boxes`); only the drawn mesh
+changes.
+
+**Finishes and shaders.** `Stylized` adds matte steel, chrome, knurled steel, canvas, foam and wood beside
+Step 6's leather, rubber and metal (noise normal and roughness maps, the same rim light), and `repaint` for
+library materials. New shaders: `gym_floor` (speckled rubber tiles with a
+seam grid), `treadmill_belt` (the belt's pattern scrolled by the distance the belt has actually run, so it
+follows the dialled speed), `chain_link` (alpha-cut wire with a metallic catch), `canvas_mat` (the cage
+canvas and its emblem), `light_cone` (the beams under the spotlights) and `poster`.
+
+**Storeys.** 1F: rubber floor, painted walls over a dark wainscot, posters, a digital clock, lockers, the
+framed mirror wall under strip lights, and treadmills with handrails, bottle holders and a live speed and
+pace console. 2F: the cage under a truss of spotlights with light cones, bags hung from ceiling steel (the swing is
+the PunchingBag's own), speed bag, wall padding, bleachers and the LED fight board (`fight_board.gd`, which
+only listens to the cage). 3F: counter with purple and amber LED strips, stocked shelves, blender, fridge,
+"IRON BAR" and "FUEL" neon, chrome-and-leather stools and sofas under warm pendants. Each storey has a
+`RoomProbe` for its own ambient and reflections, steel stairs with handrails and lit floor markers, and
+trusses, ducts and hanging LED fittings overhead.
+
+```
+scripts/visual/shapes.gd, assembly.gd   rounded boxes, lathes, baked multi-part meshes
+scripts/world/gym_kit.gd                GymKit: palette, floors, walls, ceilings, lights, signs, probes
+scripts/world/gym_iron.gd               weight-room hardware
+scripts/world/fight_kit.gd              cage, rig, bags
+scripts/world/bar_kit.gd                counter, stock, fridge, neon, lamps
+scripts/world/fight_board.gd            fight board and round timer
+shaders/gym_floor, treadmill_belt, chain_link, canvas_mat, light_cone, poster (.gdshader)
+```
+
 ## Scripts
 
 | Path | Role |
@@ -775,6 +825,9 @@ simulator for the balance table above, a sound measurement and a screenshot tour
 Step 6 was checked the same way: both suites pass unchanged with the models loaded, the first-floor, street
 and guard runners pass again with `assets/` removed (procedural fallbacks), and the screenshot tour and
 `tests/visual/lookdev.tscn` were rendered and looked at for the bodies, the fighters, the arms and the lighting.
+
+Step 7 likewise: `tools/fetch_assets.py --check` reports 150 files valid, both suites pass unchanged, and
+`tests/visual/gym_tour.tscn` was rendered and looked at for all three storeys.
 
 ## Windows build
 

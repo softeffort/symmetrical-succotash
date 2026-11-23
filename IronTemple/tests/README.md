@@ -78,6 +78,12 @@ first-person view model bare, wrapped and gloved), `armside` (the arms seen from
 (every library model the world places, at its placed size). It takes the
 same display and renderer flags as the tour: `res://tests/visual/lookdev.tscn -- --out=/tmp/look --set=fighters`.
 
+`visual/gym_tour.tscn` is a free-camera tour of the Step 7 interior, about thirty shots over the three
+storeys: `res://tests/visual/gym_tour.tscn -- --out=/tmp/tour --only=1f,2f_cage` (`--only` takes shot-name
+prefixes; `1f_treadmill_running` also starts a treadmill and logs the belt's speed and scroll).
+`visual/prop_sheet.tscn` is a contact sheet of the model library:
+`res://tests/visual/prop_sheet.tscn -- --out=/tmp/sheet --category=gym --match=bag,stool`.
+
 The models have to be imported once before any runner starts (`godot --headless --path . --import`, or
 just opening the editor). A first headless import prints `Parameter "t" is null` once per model: the
 dummy renderer cannot make thumbnails, and the import itself is complete.
