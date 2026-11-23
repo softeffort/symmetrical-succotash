@@ -23,11 +23,9 @@ var _plates: Node3D
 
 
 func _ready() -> void:
-	var steel := Build.mat(Color(0.74, 0.77, 0.82), 0.35, 0.55)
-	Build.tube(self, Vector3(-1.1, 0.0, 0.0), Vector3(1.1, 0.0, 0.0), 0.014, steel)
+	# Knurled shaft, shoulders and sleeves are one baked mesh shared by every bar.
+	Assembly.place(self, GymIron.barbell_mesh()).name = "Bar"
 	for side: float in [-1.0, 1.0]:
-		Build.tube(self, Vector3(side * (SLEEVE_START - 0.03), 0.0, 0.0), Vector3(side * 1.1, 0.0, 0.0), 0.024, steel)
-		Build.cyl(self, 0.045, 0.03, Vector3(side * (SLEEVE_START - 0.015), 0.0, 0.0), steel, false, Vector3(0.0, 0.0, 90.0))
 		var grip := Marker3D.new()
 		grip.position = Vector3(side * grip_half_width, 0.0, 0.0)
 		add_child(grip)
@@ -53,7 +51,6 @@ func set_weight(value: float) -> void:
 func _load_plates() -> void:
 	for child in _plates.get_children():
 		child.free()
-	var steel := Build.mat(Color(0.74, 0.77, 0.82), 0.35, 0.55)
 	for side: float in [-1.0, 1.0]:
 		var remaining := (weight - BAR_WEIGHT) * 0.5
 		var cursor := SLEEVE_START
@@ -64,7 +61,8 @@ func _load_plates() -> void:
 			var color: Color = plate["color"]
 			while remaining >= kg - 0.01:
 				remaining -= kg
-				Build.cyl(_plates, radius, width, Vector3(side * (cursor + width * 0.5), 0.0, 0.0), Build.mat(color, 0.6), false, Vector3(0.0, 0.0, 90.0), -1.0, 20)
+				# Bumpers with colour-coded rims, heaviest innermost, then iron change plates.
+				Assembly.place(_plates, GymIron.plate_mesh(radius, width, color), Vector3(side * (cursor + width * 0.5), 0.0, 0.0), Vector3(0.0, 0.0, 90.0))
 				cursor += width + 0.004
 		if cursor > SLEEVE_START:
-			Build.cyl(_plates, 0.04, 0.035, Vector3(side * (cursor + 0.0175), 0.0, 0.0), steel, false, Vector3(0.0, 0.0, 90.0), -1.0, 10)
+			Assembly.place(_plates, GymIron.collar_mesh(), Vector3(side * (cursor + 0.0175), 0.0, 0.0), Vector3(0.0, 0.0, -90.0 * side))

@@ -20,7 +20,12 @@ const STEP_RISE := 0.25
 const STEP_TREAD := 0.4
 const ACCENT := Color(1.0, 0.5, 0.1)
 const FACADE := Color(0.17, 0.18, 0.22)
-const LININGS: Array[Color] = [Color(0.86, 0.87, 0.9), Color(0.25, 0.25, 0.3), Color(0.17, 0.13, 0.28)]
+## Interior wall paint per storey: cool painted concrete, near-black fight hall, deep plum lounge.
+const LININGS: Array[Color] = [Color(0.46, 0.48, 0.52), Color(0.105, 0.105, 0.125), Color(0.13, 0.09, 0.18)]
+const STAIR_GLOW := Color(1.0, 0.6, 0.22)
+## What each storey is called on the stairwell signs and floor markers, and its sign colour.
+const LEVELS: Array[String] = ["WEIGHTS", "MMA ARENA", "BAR"]
+const LEVEL_COLORS: Array[Color] = [Color(1.0, 0.5, 0.1), Color(0.95, 0.18, 0.16), Color(0.85, 0.3, 1.0)]
 
 ## The interior is hidden beyond this camera distance so the street view stays cheap.
 @export var interior_draw_distance := 110.0
@@ -113,7 +118,8 @@ func _wall(origin: Vector3, yaw: float, x0: float, x1: float, storey: int, openi
 
 
 func _build_slabs() -> void:
-	var concrete := Build.mat(Color(0.8, 0.81, 0.84), 0.9)
+	# The undersides are the ceilings of the rooms below: blacked out, as exposed services are.
+	var concrete := Build.mat(Color(0.06, 0.062, 0.072), 0.9)
 	var inner := WIDTH * 0.5 - WALL
 	var north := -DEPTH + WALL
 	var stair_north := STAIR_SOUTH - STAIR_STEPS * STEP_TREAD
@@ -132,17 +138,104 @@ func _slab(x0: float, x1: float, z0: float, z1: float, top: float, material: Mat
 func _build_stairs() -> void:
 	var inner := WIDTH * 0.5 - WALL
 	var steps := Build.mat(Color(0.3, 0.31, 0.36), 0.8)
-	var rail := Build.mat(ACCENT, 0.4, 0.2)
+	var rail := Stylized.chrome(Color(0.6, 0.62, 0.66), 0.3)
 	var run := STAIR_STEPS * STEP_TREAD
+	var width := inner - STAIR_WEST - 0.04
+	var middle := (STAIR_WEST + inner) * 0.5
 	for flight in STOREYS - 1:
-		var origin := Vector3((STAIR_WEST + inner) * 0.5, flight * STOREY_HEIGHT, STAIR_SOUTH)
-		Build.stairs(self, origin, 0.0, STAIR_STEPS, STEP_RISE, STEP_TREAD, inner - STAIR_WEST - 0.04, steps, rail, [-1])
+		var origin := Vector3(middle, flight * STOREY_HEIGHT, STAIR_SOUTH)
+		# Build.stairs supplies what is walked on and bumped into (the ramp, the solid top tread
+		# and the rail blocker); its plain steps are swapped for the detailed flight.
+		var stairs := Build.stairs(self, origin, 0.0, STAIR_STEPS, STEP_RISE, STEP_TREAD, width, steps, rail, [-1])
+		_dress_flight(stairs, width)
 		# Guard rails around the opening in the slab above this flight.
 		var level := (flight + 1) * STOREY_HEIGHT
 		_guard_rail(Vector3(STAIR_WEST, level, STAIR_SOUTH), Vector3(STAIR_WEST, level, STAIR_SOUTH - run), rail)
 		if flight == STOREYS - 2:
 			_guard_rail(Vector3(STAIR_WEST, level, STAIR_SOUTH), Vector3(inner, level, STAIR_SOUTH), rail)
-	Build.text(self, "1F  WEIGHTS + CARDIO\n2F  FIGHT HALL\n3F  PROTEIN BAR", Vector3(inner - 0.02, 2.6, -4.2), 0.34, ACCENT, Vector3(0.0, -90.0, 0.0), 1.3)
+
+	# Wayfinding: a backlit directory by each flight and glowing markers set into the floors.
+	var directory: Array[String] = []
+	for storey in STOREYS:
+		directory.append("%dF   %s" % [storey + 1, LEVELS[storey]])
+	for storey in STOREYS:
+		var floor_y := storey * STOREY_HEIGHT + 0.022
+		var arrival := -5.9 if storey == 0 else STAIR_SOUTH - run - 1.6
+		GymKit.wall_sign(self, Vector3(inner - 0.003, storey * STOREY_HEIGHT + 2.75, arrival), -90.0, directory, LEVEL_COLORS, 2.7)
+		# "You are here" at the foot of the first flight and at the head of each climb.
+		var here := STAIR_SOUTH + 1.0 if storey == 0 else STAIR_SOUTH - run - 0.95
+		GymKit.floor_marker(self, Vector3(middle, floor_y, here), 0.0, "%dF" % (storey + 1), LEVELS[storey], LEVEL_COLORS[storey])
+		# Where the next flight starts on the middle storey: what is up there.
+		if storey > 0 and storey < STOREYS - 1:
+			GymKit.floor_marker(self, Vector3(middle, floor_y, STAIR_SOUTH + 1.0), 0.0, "%dF" % (storey + 2), LEVELS[storey + 1], LEVEL_COLORS[storey + 1])
+
+
+## Replaces the plain steps of a Build.stairs flight with industrial ones: steel stringers,
+## closed risers, concrete-filled pan treads with lit aluminium nosings, a post-and-rail
+## balustrade on the open side and a bracketed handrail on the wall. Colliders are untouched.
+func _dress_flight(stairs: Node3D, width: float) -> void:
+	for child in stairs.get_children():
+		var plain := child as MeshInstance3D
+		if plain == null:
+			continue
+		if plain.get_child_count() > 0:
+			plain.mesh = null  # the top tread carries a collider
+		else:
+			plain.free()
+	var flight := Assembly.spawn(stairs, "stair_flight/%.2f" % width, func(a: Assembly) -> void:
+		var steel := GymKit.frame()
+		var concrete := Stylized.standard(Color(0.34, 0.35, 0.38), 0.92, 0.0, Stylized.Surface.MASONRY)
+		var nosing := Stylized.chrome(Color(0.55, 0.57, 0.6), 0.36)
+		var glow := Build.glow(STAIR_GLOW, 1.5)
+		var bright := Stylized.chrome(Color(0.6, 0.62, 0.66), 0.3)
+		var height := STEP_RISE * STAIR_STEPS
+		var run := STEP_TREAD * STAIR_STEPS
+		var slope := atan2(STEP_RISE, STEP_TREAD)
+		var along := Vector3(0.0, sin(slope), -cos(slope))
+		var normal := Vector3(0.0, cos(slope), sin(slope))
+		var foot := Vector3(0.0, 0.0, STEP_TREAD)
+		var head := Vector3(0.0, height, STEP_TREAD - run)
+		var clear := width - 0.07
+		for i in STAIR_STEPS:
+			var top := STEP_RISE * (i + 1)
+			var front := -STEP_TREAD * i
+			a.box(Vector3(clear, 0.05, STEP_TREAD - 0.01), Vector3(0.0, top - 0.025, front - STEP_TREAD * 0.5 - 0.005), concrete)
+			a.box(Vector3(clear, STEP_RISE - 0.05, 0.012), Vector3(0.0, top - 0.05 - (STEP_RISE - 0.05) * 0.5, front - 0.012), steel)
+			a.box(Vector3(clear, 0.012, STEP_TREAD), Vector3(0.0, top - 0.056, front - STEP_TREAD * 0.5), steel)
+			a.box(Vector3(clear, 0.008, 0.05), Vector3(0.0, top + 0.002, front - 0.025), nosing)
+			a.box(Vector3(clear, 0.03, 0.006), Vector3(0.0, top - 0.015, front + 0.001), nosing)
+			a.box(Vector3(clear - 0.3, 0.008, 0.008), Vector3(0.0, top - 0.036, front + 0.002), glow)
+		for side: float in [-1.0, 1.0]:
+			# Stringer plate with a flange top and bottom.
+			var x := side * (width * 0.5 - 0.012)
+			var low := foot + Vector3(x, 0.0, 0.0) - normal * 0.2 + along * 0.2
+			var high := head + Vector3(x, 0.0, 0.0) - normal * 0.2 - along * 0.1
+			a.beam(low, high, 0.014, 0.4, steel)
+			a.beam(low + normal * 0.2, high + normal * 0.2, 0.06, 0.012, steel)
+			a.beam(low - normal * 0.2, high - normal * 0.2, 0.06, 0.012, steel)
+		# Balustrade on the open (west) side, where the blocker already stands.
+		var open_x := -(width * 0.5 - 0.06)
+		var rail_foot := foot + Vector3(open_x, 0.0, 0.0)
+		var rail_head := head + Vector3(open_x, 0.0, 0.0)
+		var posts := 6
+		for i in posts + 1:
+			var base := rail_foot.lerp(rail_head, i / float(posts))
+			a.box(Vector3(0.045, 1.0, 0.045), base + Vector3(0.0, 0.5, 0.0), steel)
+			a.box(Vector3(0.11, 0.01, 0.11), base + Vector3(0.0, 0.005, 0.0), steel)
+		a.path([rail_foot + Vector3(0.0, 0.92, 0.3), rail_foot + Vector3(0.0, 1.03, 0.0), rail_head + Vector3(0.0, 1.03, 0.0), rail_head + Vector3(0.0, 1.03, -0.3)] as Array[Vector3], 0.024, bright, 10)
+		for bar: float in [0.28, 0.53, 0.78]:
+			a.tube(rail_foot + Vector3(0.0, bar, 0.0), rail_head + Vector3(0.0, bar, 0.0), 0.011, bright, 6)
+		# Wall rail on brackets.
+		var wall_x := width * 0.5 - 0.075
+		var wall_foot := foot + Vector3(wall_x, 0.95, 0.0)
+		var wall_head := head + Vector3(wall_x, 0.95, 0.0)
+		a.path([wall_foot + Vector3(0.055, 0.0, 0.26), wall_foot + Vector3(0.0, 0.0, 0.2), wall_head + Vector3(0.0, 0.0, -0.2), wall_head + Vector3(0.055, 0.0, -0.26)] as Array[Vector3], 0.021, bright, 10)
+		for i in 5:
+			var grip := wall_foot.lerp(wall_head, (i + 0.5) / 5.0)
+			a.path([grip + Vector3(0.0, -0.02, 0.0), grip + Vector3(0.0, -0.07, 0.0), grip + Vector3(0.07, -0.07, 0.0)] as Array[Vector3], 0.008, steel, 6)
+			a.cyl(0.03, 0.006, grip + Vector3(0.072, -0.07, 0.0), steel, Vector3(0.0, 0.0, 90.0), -1.0, 10)
+	)
+	flight.name = "Flight"
 
 
 func _guard_rail(from: Vector3, to: Vector3, rail: Material) -> void:
@@ -150,12 +243,23 @@ func _guard_rail(from: Vector3, to: Vector3, rail: Material) -> void:
 	var holder := Build.group(self, "GuardRail", from, rad_to_deg(atan2(-span.z, span.x)))
 	var length := span.length()
 	Build.blocker(holder, Vector3(length, 1.15, 0.1), Vector3(length * 0.5, 0.575, 0.0))
-	Build.box(holder, Vector3(length, 0.9, 0.03), Vector3(length * 0.5, 0.5, 0.0), Build.glass(Color(0.7, 0.9, 1.0, 0.25)))
-	Build.tube(holder, Vector3(0.0, 1.05, 0.0), Vector3(length, 1.05, 0.0), 0.045, rail)
-	var posts := maxi(roundi(length / 2.0), 1)
+	Build.box(holder, Vector3(length, 0.8, 0.02), Vector3(length * 0.5, 0.52, 0.0), Build.glass(Color(0.7, 0.9, 1.0, 0.22)))
+	var frame := Assembly.new()
+	var steel := GymKit.frame()
+	frame.tube(Vector3(-0.04, 1.06, 0.0), Vector3(length + 0.04, 1.06, 0.0), 0.026, rail, 10)
+	frame.box(Vector3(length, 0.035, 0.05), Vector3(length * 0.5, 0.075, 0.0), steel)
+	var posts := maxi(roundi(length / 1.6), 1)
 	for i in posts + 1:
 		var x := length * i / posts
-		Build.tube(holder, Vector3(x, 0.0, 0.0), Vector3(x, 1.05, 0.0), 0.03, rail)
+		frame.box(Vector3(0.05, 1.04, 0.05), Vector3(x, 0.52, 0.0), steel)
+		frame.box(Vector3(0.12, 0.012, 0.12), Vector3(x, 0.006, 0.0), steel)
+		# Clamps holding the glass to the post.
+		for clamp_y: float in [0.25, 0.8]:
+			for clamp_side: float in [-1.0, 1.0]:
+				if (i == 0 and clamp_side < 0.0) or (i == posts and clamp_side > 0.0):
+					continue
+				frame.box(Vector3(0.05, 0.05, 0.04), Vector3(x + clamp_side * 0.045, clamp_y, 0.0), rail)
+	frame.commit(holder, "Frame")
 
 
 func _build_exterior() -> void:

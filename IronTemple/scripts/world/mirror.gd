@@ -22,7 +22,10 @@ void fragment() {
 @export var pixels_per_meter := 128.0
 ## The reflection only renders while the viewer is in front of the glass and this close.
 @export var active_distance := 30.0
-@export var frame_color := Color(0.13, 0.14, 0.17)
+@export var frame_color := Color(0.06, 0.065, 0.08)
+## Colour and strength of the strip light over the glass.
+@export var light_color := Color(0.92, 0.96, 1.0)
+@export var light_energy := 0.9
 ## Shows the player's level, rank and tenure above their reflection.
 @export var show_name_tag := true
 ## Height above the player's feet the tag appears to float at, and its letter height there.
@@ -128,13 +131,30 @@ func _is_seen(view: Camera3D, eye: Vector3) -> bool:
 	return false
 
 
+## Slim steel frame with a brushed inner bead, the seams between the glass panels, and a strip
+## light along the head of the wall that washes whoever stands in front of it.
 func _build_frame() -> void:
-	var frame := Build.mat(frame_color, 0.5, 0.3)
-	var border := 0.12
+	var frame := Assembly.new()
+	var metal := Stylized.steel(frame_color, 0.4)
+	var bead := Stylized.chrome(Color(0.62, 0.64, 0.68), 0.3)
+	var border := 0.08
 	for side: float in [-1.0, 1.0]:
-		Build.box(self, Vector3(size.x + border * 2.0, border, 0.08), Vector3(0.0, side * (size.y + border) * 0.5, 0.0), frame)
-		Build.box(self, Vector3(border, size.y, 0.08), Vector3(side * (size.x + border) * 0.5, 0.0, 0.0), frame)
+		frame.box(Vector3(size.x + border * 2.0, border, 0.07), Vector3(0.0, side * (size.y + border) * 0.5, 0.0), metal)
+		frame.box(Vector3(border, size.y, 0.07), Vector3(side * (size.x + border) * 0.5, 0.0, 0.0), metal)
+		frame.box(Vector3(size.x, 0.012, 0.012), Vector3(0.0, side * (size.y * 0.5 - 0.006), 0.012), bead)
+		frame.box(Vector3(0.012, size.y, 0.012), Vector3(side * (size.x * 0.5 - 0.006), 0.0, 0.012), bead)
 	# Seams between the glass panels of a mirror wall.
 	var panels := maxi(roundi(size.x / 2.0), 1)
 	for i in range(1, panels):
-		Build.box(self, Vector3(0.016, size.y, 0.006), Vector3(-size.x * 0.5 + size.x * i / panels, 0.0, 0.002), frame)
+		frame.box(Vector3(0.01, size.y, 0.006), Vector3(-size.x * 0.5 + size.x * i / panels, 0.0, 0.002), metal)
+	# Strip light: a hooded channel above the top rail with a diffuser leaning into the room.
+	var head := size.y * 0.5 + border
+	frame.box(Vector3(size.x + border * 2.0, 0.05, 0.2), Vector3(0.0, head + 0.085, 0.09), metal)
+	frame.box(Vector3(size.x + border * 2.0, 0.09, 0.02), Vector3(0.0, head + 0.04, 0.0), metal)
+	frame.box(Vector3(size.x, 0.014, 0.1), Vector3(0.0, head + 0.052, 0.11), Build.glow(light_color, 3.2), Vector3(-12.0, 0.0, 0.0))
+	for i in panels + 1:
+		frame.box(Vector3(0.03, 0.06, 0.19), Vector3(-size.x * 0.5 + size.x * i / panels, head + 0.05, 0.09), metal)
+	frame.commit(self, "Frame").cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var lamps := maxi(roundi(size.x / 3.0), 1)
+	for i in lamps:
+		Build.omni(self, Vector3(-size.x * 0.5 + size.x * (i + 0.5) / lamps, head - 0.1, 0.7), light_color, light_energy, 5.5)

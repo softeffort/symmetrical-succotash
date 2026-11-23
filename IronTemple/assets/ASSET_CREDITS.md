@@ -75,6 +75,67 @@ embeds it so every model is a single self-contained file. `models/hands/fps_arms
 | Grid Foam Roller | `models/gym/foam_roller.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-foam-roller-3dcea971 |
 | Air Rowing Machine | `models/gym/rowing_machine.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-rowing-machine-3d9e95df |
 | Gym Reception Desk | `models/gym/reception_desk.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-reception-desk-924c4679 |
+| Rubber Hex Dumbbell, Light | `models/gym/dumbbell_light.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-dumbbell-single-light-18066779 |
+| Rubber Hex Dumbbell, Heavy | `models/gym/dumbbell_heavy.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-dumbbell-single-heavy-aea129fc |
+| Adjustable Bench, Inclined | `models/gym/bench_incline.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-adjustable-bench-incline-af9360f6 |
+| Suspension Trainer Frame | `models/gym/suspension_trainer.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-suspension-trainer-frame-1e63378f |
+| Interlocking Rubber Floor Tile | `models/gym/floor_tile_rubber.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-rubber-floor-tile-08784819 |
+| Interlocking Rubber Floor Tile, Accent | `models/gym/floor_tile_accent.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-rubber-floor-tile-accent-c7d346c3 |
+| Six-Door Locker Bank, One Door Open | `models/gym/locker_bank_open.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-locker-bank-open-door-bd2cea7d |
+| Slatted Changing Bench | `models/gym/bench_changing.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-changing-bench-b451f89f |
+| Towel Shelf, Loaded | `models/gym/towel_shelf.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-towel-shelf-19b657a9 |
+| Free-Standing Gym Signage Board | `models/gym/signage_board.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/gym-and-fitness-studio-gym-signage-board-b8d3bcba |
+| Heavy Bag | `models/gym/heavy_bag.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-heavy-bag-ff4eb348 |
+| Speed Bag | `models/gym/speed_bag.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-speed-bag-f774d211 |
+| Double-End Bag | `models/gym/double_end_bag.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-double-end-bag-ec3ab5bc |
+| Octagonal Cage Panel | `models/gym/cage_panel.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-cage-panel-31570654 |
+| Corner Stool | `models/gym/corner_stool.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-corner-stool-2d5245cb |
+| Gloves On Shelf | `models/gym/gloves_shelf.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-gloves-on-shelf-4b08abbc |
+| Focus Mitts | `models/gym/focus_mitts.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-focus-mitts-daf20f24 |
+| Kick Shield | `models/gym/kick_shield.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-kick-shield-70cc04ef |
+| Headgear | `models/gym/headgear.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-headgear-bb27b1a0 |
+| Ring Bell | `models/gym/ring_bell.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-ring-bell-9455ac52 |
+| Scoreboard | `models/gym/scoreboard.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-scoreboard-d128eeef |
+| Timer Clock | `models/gym/timer_clock.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-timer-clock-bf09ed53 |
+| Spotlight Rig | `models/gym/spotlight_rig.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-spotlight-rig-458850f7 |
+| Arena Stand Block | `models/gym/arena_stand.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-arena-stand-block-ea369648 |
+| Event Banner | `models/gym/event_banner.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-event-banner-bfe03511 |
+| Trophy Belt On Stand | `models/gym/trophy_belt.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-trophy-belt-stand-0a460808 |
+| Banner Frame | `models/gym/banner_frame.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-banner-frame-6567ddb4 |
+| Spit Bucket | `models/gym/spit_bucket.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-spit-bucket-d303f4d6 |
+| Water Bottle Rack | `models/gym/bottle_rack.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-water-bottle-rack-79d10b56 |
+| Medicine Ball | `models/gym/medicine_ball.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-medicine-ball-c1cbe95d |
+| Jump Rope | `models/gym/jump_rope.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-jump-rope-dcb838ae |
+| Pull-Up Rig | `models/gym/pull_up_rig.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/martial-arts-dojo-and-fight-stages-pull-up-rig-cafea1b6 |
+| Bar stool with back | `models/gym/stool_bar_back.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/bar-pub-and-brewery-taproom-bar-stool-with-back-809cad98 |
+| Backless bar stool | `models/gym/stool_bar_backless.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/bar-pub-and-brewery-taproom-bar-stool-backless-9deb2174 |
+| Glass door drinks fridge | `models/gym/fridge_glass.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/home-appliances-and-utility-drinks-fridge-glass-door-4f757bd0 |
+| Neon Wall Sign | `models/gym/neon_wall_sign.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/bowling-alley-and-pool-hall-neon-wall-sign-c0d20cba |
+| Lighting Truss, Straight Bay | `models/gym/truss_straight.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/nightclub-and-dj-booth-lighting-truss-straight-8d2acafa |
+| Lighting Truss, Corner Block | `models/gym/truss_corner.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/nightclub-and-dj-booth-lighting-truss-corner-443b4416 |
+| Ceiling Truss Bay with Light Bars | `models/gym/ceiling_truss_bay.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/trampoline-park-and-soft-play-ceiling-truss-with-light-632c5994 |
+| Ceiling Light Bar | `models/gym/light_bar.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/public-aquarium-and-marine-centre-ceiling-light-bar-e8a9cf32 |
+| Suspended Ceiling Light Panel | `models/gym/light_panel.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/university-lecture-hall-and-campus-ceiling-light-panel-2e80fbb8 |
+| Air Duct Straight | `models/gym/duct_straight.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/bank-vault-heist-kit-air-duct-straight-f676875f |
+| Air Duct Corner | `models/gym/duct_corner.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/bank-vault-heist-kit-air-duct-corner-75890da2 |
+| Air Duct Tee | `models/gym/duct_tee.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/bunker-shelter-construction-air-duct-tee-ea6a7f6c |
+| Ventilation duct run 4 m | `models/gym/duct_run.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/underground-mine-and-shaft-works-vent-duct-run-ccce3687 |
+| Wall poster frame | `models/gym/poster_frame.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/clinic-and-veterinary-practice-wall-poster-frame-e8ff4910 |
+| Wall Mounted Poster Light Box | `models/gym/poster_lightbox.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/cinema-multiplex-and-foyer-poster-light-box-wall-997574ca |
+| Lounge sofa | `models/gym/sofa_modern.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/cruise-ship-deck-and-lounge-cruise-ship-deck-and-loung-4f5e8aa0 |
+| Lounge armchair | `models/gym/armchair_lounge.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/cruise-ship-deck-and-lounge-cruise-ship-deck-and-loung-e03187c8 |
+| Hall Scoreboard on Wall Frame | `models/gym/scoreboard_wall.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/community-sports-hall-and-changing-rooms-hall-scoreboa-1aac26ec |
+| Three-tier spectator bleacher | `models/gym/bleacher_three_tier.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/party-obstacle-course-party-obstacle-course-spectator--f78ae874 |
+| Bleacher Section | `models/gym/bleacher_section.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/basketball-club-and-street-courts-bleacher-section-2fb2893c |
+| Hall Wall Padding Module | `models/gym/wall_pad.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/community-sports-hall-and-changing-rooms-wall-padding--dc31ba68 |
+| Hall Wall Padding Module, Red | `models/gym/wall_pad_red.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/community-sports-hall-and-changing-rooms-wall-padding--22dd60a4 |
+| Drinks Can | `models/gym/drinks_can.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/fresh-produce-and-groceries-soda-can-32b1042b |
+| Lobby coffee table | `models/gym/coffee_table_lobby.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/office-lobby-and-facilities-lobby-coffee-table-ffa0acc3 |
+| Fire Exit Sign | `models/gym/exit_sign.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/nightclub-and-dj-booth-fire-exit-sign-b7435ec3 |
+| Pendant Lamp Dome | `models/gym/pendant_dome.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/bedroom-and-living-room-furniture-pendant-lamp-dome-af25ab66 |
+| Back bar glass shelf run | `models/gym/back_bar_glass.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/bar-pub-and-brewery-taproom-back-bar-glass-shelf-run-e3f9b54c |
+| Cocktail Station | `models/gym/cocktail_station.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/nightclub-and-dj-booth-cocktail-station-d186e438 |
+| Floor number sign | `models/gym/floor_number_sign.glb` | 3dassets.dev | CC0 1.0 | https://3dassets.dev/assets/office-lobby-and-facilities-floor-number-sign-79afcd1a |
 | Lounge sofa | `models/gym/sofa_lounge.glb` | Kenney (kenney.nl) | CC0 1.0 | https://kenney.nl/assets/furniture-kit |
 | Lounge chair | `models/gym/chair_lounge.glb` | Kenney (kenney.nl) | CC0 1.0 | https://kenney.nl/assets/furniture-kit |
 | Coffee table | `models/gym/table_coffee.glb` | Kenney (kenney.nl) | CC0 1.0 | https://kenney.nl/assets/furniture-kit |

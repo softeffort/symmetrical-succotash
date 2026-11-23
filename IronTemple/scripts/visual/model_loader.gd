@@ -20,6 +20,7 @@ enum Fit { HEIGHT, LONGEST, WIDTH }
 
 static var _scenes: Dictionary = {}
 static var _bad: Dictionary = {}
+static var _flat: Dictionary = {}
 
 
 ## Full resource path of a model id such as "characters/superhero_male".
@@ -58,8 +59,10 @@ static func raw(id: String) -> Node3D:
 ## Instance of `id` standing on its pivot, `size` metres tall (0 keeps the file's own scale).
 ## Options: "fit" (Fit, what `size` measures), "yaw" (extra degrees), "faces_plus_z" (true for
 ## glTF's own convention, the default), "stylize" (false keeps the file's materials), "tint",
-## "surface" (Stylized.Surface for the detail noise), "layers", "shadows" (false to switch
-## casting off) and "fallback" (Callable returning a Node3D built at the same size).
+## "surface" (Stylized.Surface for the detail noise), "palette" (material name to a Color, a
+## finish Dictionary for Stylized.repaint or a Material, to recolour a model part by part),
+## "layers", "shadows" (false to switch casting off) and "fallback" (Callable returning a
+## Node3D built at the same size).
 static func instantiate(id: String, size: float = 0.0, options: Dictionary = {}) -> Node3D:
 	var pivot := Node3D.new()
 	pivot.name = id.get_file().get_basename().to_pascal_case()
@@ -94,12 +97,28 @@ static func instantiate(id: String, size: float = 0.0, options: Dictionary = {})
 	pivot.set_meta("model_scale", factor)
 	pivot.set_meta("model_size", bounds.size * factor)
 	if options.get("stylize", true):
-		stylize(model, options.get("tint", Color.WHITE), options.get("surface", Stylized.Surface.PLAIN))
+		stylize(model, options.get("tint", Color.WHITE), options.get("surface", Stylized.Surface.PLAIN), options.get("palette", {}))
 	_finish(pivot, options)
 	return pivot
 
 
-static func is_fallback(model: Node) -> bool:
+## The whole of model `id`, fitted and stylized as `instantiate` would, baked into one mesh
+## with a surface per material. Repeated props (stools, cans, lockers, light fittings) then
+## cost a single node each and are drawn instanced.
+static func flat(id: String, size: float = 0.0, options: Dictionary = {}) -> ArrayMesh:
+	var key := "%s/%.4f/%s" % [id, size, options]
+	if not _flat.has(key):
+		var pivot := instantiate(id, size, options)
+		var assembly := Assembly.new()
+		assembly.model(pivot)
+		var mesh := assembly.bake()
+		mesh.set_meta("model_source", pivot.get_meta("model_source", "fallback"))
+		_flat[key] = mesh
+		pivot.free()
+	return _flat[key]
+
+
+static func is_fallback(model: Object) -> bool:
 	return model.get_meta("model_source", "fallback") == "fallback"
 
 
@@ -124,16 +143,58 @@ static func measure(root: Node3D) -> AABB:
 	return bounds
 
 
-## Replaces every surface material below `root` with its stylized PBR version.
-static func stylize(root: Node, tint: Color = Color.WHITE, surface: Stylized.Surface = Stylized.Surface.PLAIN) -> void:
+## Replaces every surface material below `root` with its stylized PBR version. `palette` maps
+## the names of the file's materials to a replacement: a Material, or a Color or finish
+## Dictionary that keeps the stylized shader (see Stylized.repaint).
+static func stylize(root: Node, tint: Color = Color.WHITE, surface: Stylized.Surface = Stylized.Surface.PLAIN, palette: Dictionary = {}) -> void:
 	for node in root.find_children("*", "MeshInstance3D", true, false):
 		var instance := node as MeshInstance3D
 		if instance.mesh == null:
 			continue
 		for index in instance.mesh.get_surface_count():
 			var source := instance.get_active_material(index)
-			if source != null:
+			if source == null:
+				continue
+			var paint: Variant = palette.get(source.resource_name)
+			if paint is Material:
+				instance.set_surface_override_material(index, paint)
+			elif paint != null:
+				instance.set_surface_override_material(index, Stylized.repaint(source, paint, surface))
+			else:
 				instance.set_surface_override_material(index, Stylized.convert(source, tint, surface))
+
+
+## Bounding box, in `root`'s space, of the parts of a model drawn with the file's material
+## `material_name` (a treadmill's "screen", a bench's "pad"). Empty when there is none.
+static func part_bounds(root: Node3D, material_name: String) -> AABB:
+	var bounds := AABB()
+	var first := true
+	for instance in parts(root, material_name):
+		var to_root := Transform3D.IDENTITY
+		var walker: Node = instance
+		while walker != root and walker != null:
+			if walker is Node3D:
+				to_root = (walker as Node3D).transform * to_root
+			walker = walker.get_parent()
+		var box := to_root * instance.mesh.get_aabb()
+		bounds = box if first else bounds.merge(box)
+		first = false
+	return bounds
+
+
+## The mesh nodes of a model that use the file's material `material_name`.
+static func parts(root: Node, material_name: String) -> Array[MeshInstance3D]:
+	var found: Array[MeshInstance3D] = []
+	for node in root.find_children("*", "MeshInstance3D", true, false):
+		var instance := node as MeshInstance3D
+		if instance.mesh == null:
+			continue
+		for index in instance.mesh.get_surface_count():
+			var source := instance.mesh.surface_get_material(index)
+			if source != null and source.resource_name == material_name:
+				found.append(instance)
+				break
+	return found
 
 
 ## Checks the 12-byte binary glTF header, so a saved web page is never parsed as a model.

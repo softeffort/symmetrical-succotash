@@ -4,7 +4,7 @@ extends RefCounted
 ## masonry, the StandardMaterial3D factories built on them and the conversion of imported
 ## materials to the stylized PBR shader. Everything is cached, so repeated surfaces batch.
 
-enum Surface { PLAIN, SKIN, FABRIC, LEATHER, METAL, RUBBER, MASONRY }
+enum Surface { PLAIN, SKIN, FABRIC, LEATHER, METAL, RUBBER, MASONRY, STEEL, KNURL, CANVAS, FOAM, WOOD }
 
 const SHADER_PATH := "res://shaders/stylized_pbr.gdshader"
 ## Scanned CC0 tiling maps fetched by tools/fetch_assets.py. Each is optional: concrete and
@@ -18,7 +18,7 @@ const _DETAIL_SCANS := {Surface.LEATHER: "leather_normal", Surface.FABRIC: "fabr
 ## surface, so there it is kept for glossy finishes only (see `standard`).
 const RIM := 0.45
 const RIM_TINT := 0.4
-const _RIM_SHARE := {Surface.PLAIN: 1.0, Surface.SKIN: 1.15, Surface.FABRIC: 0.7, Surface.LEATHER: 1.0, Surface.METAL: 0.5, Surface.RUBBER: 0.7, Surface.MASONRY: 0.2}
+const _RIM_SHARE := {Surface.PLAIN: 1.0, Surface.SKIN: 1.15, Surface.FABRIC: 0.7, Surface.LEATHER: 1.0, Surface.METAL: 0.5, Surface.RUBBER: 0.7, Surface.MASONRY: 0.2, Surface.STEEL: 0.8, Surface.KNURL: 0.5, Surface.CANVAS: 0.6, Surface.FOAM: 0.6, Surface.WOOD: 0.8}
 
 # Noise recipe per surface: type, frequency, octaves, bump strength, texture size, tiling per
 # metre, normal depth, and the roughness band the noise is remapped into.
@@ -31,6 +31,15 @@ const _RECIPES := {
 	Surface.METAL: {"type": FastNoiseLite.TYPE_VALUE, "freq": 0.2, "octaves": 2, "bump": 3.0, "size": Vector2i(512, 48), "tiling": 2.0, "depth": 0.3, "band": Vector2(0.6, 1.0)},
 	Surface.RUBBER: {"type": FastNoiseLite.TYPE_VALUE, "freq": 0.3, "octaves": 3, "bump": 4.0, "size": Vector2i(256, 256), "tiling": 4.0, "depth": 0.6, "band": Vector2(0.85, 1.0)},
 	Surface.MASONRY: {"type": FastNoiseLite.TYPE_SIMPLEX_SMOOTH, "freq": 0.03, "octaves": 5, "bump": 3.0, "size": Vector2i(512, 512), "tiling": 0.6, "depth": 0.14, "band": Vector2(0.93, 1.0)},
+	# Powder-coated steel: a fine orange peel that only shows in the highlights.
+	Surface.STEEL: {"type": FastNoiseLite.TYPE_VALUE, "freq": 0.55, "octaves": 2, "bump": 2.0, "size": Vector2i(256, 256), "tiling": 9.0, "depth": 0.22, "band": Vector2(0.84, 1.0)},
+	# Knurled grip: cellular noise without jitter is a regular grid of little pyramids.
+	Surface.KNURL: {"type": FastNoiseLite.TYPE_CELLULAR, "freq": 0.125, "octaves": 1, "bump": 8.0, "size": Vector2i(256, 256), "tiling": 9.0, "depth": 1.0, "band": Vector2(0.5, 1.0), "jitter": 0.0},
+	Surface.CANVAS: {"type": FastNoiseLite.TYPE_VALUE, "freq": 0.5, "octaves": 1, "bump": 6.0, "size": Vector2i(256, 256), "tiling": 14.0, "depth": 0.5, "band": Vector2(0.9, 1.0)},
+	# Closed-cell foam matting.
+	Surface.FOAM: {"type": FastNoiseLite.TYPE_CELLULAR, "freq": 0.09, "octaves": 2, "bump": 3.0, "size": Vector2i(256, 256), "tiling": 10.0, "depth": 0.45, "band": Vector2(0.9, 1.0)},
+	# Long, shallow grain.
+	Surface.WOOD: {"type": FastNoiseLite.TYPE_SIMPLEX_SMOOTH, "freq": 0.02, "octaves": 4, "bump": 4.0, "size": Vector2i(512, 64), "tiling": 1.6, "depth": 0.35, "band": Vector2(0.72, 1.0)},
 }
 
 static var _normals: Dictionary = {}
@@ -147,6 +156,32 @@ static func rubber(color: Color) -> StandardMaterial3D:
 	return standard(color, 0.8, 0.0, Surface.RUBBER)
 
 
+## Matte powder-coated steel for frames and racks.
+static func steel(color: Color, roughness: float = 0.52) -> StandardMaterial3D:
+	return standard(color, roughness, 0.35, Surface.STEEL)
+
+
+static func chrome(color: Color = Color(0.86, 0.88, 0.92), roughness: float = 0.16) -> StandardMaterial3D:
+	return standard(color, roughness, 1.0, Surface.METAL)
+
+
+## Knurled bare metal: barbell shafts and dumbbell grips.
+static func knurled(color: Color = Color(0.78, 0.8, 0.84), roughness: float = 0.34) -> StandardMaterial3D:
+	return standard(color, roughness, 1.0, Surface.KNURL)
+
+
+static func canvas(color: Color) -> StandardMaterial3D:
+	return standard(color, 0.93, 0.0, Surface.CANVAS)
+
+
+static func foam(color: Color) -> StandardMaterial3D:
+	return standard(color, 0.9, 0.0, Surface.FOAM)
+
+
+static func wood(color: Color, roughness: float = 0.58) -> StandardMaterial3D:
+	return standard(color, roughness, 0.0, Surface.WOOD)
+
+
 ## The stylized PBR shader, optionally without back-face culling.
 static func shader(double_sided: bool = false) -> Shader:
 	if not _shaders.has(double_sided):
@@ -211,12 +246,51 @@ static func convert(source: Material, tint: Color = Color.WHITE, surface: Surfac
 	return material
 
 
+## The stylized pass of an imported material with its finish replaced, so models from any
+## pack take the gym's own palette. `spec` is a Color or a Dictionary with any of "color",
+## "roughness", "metallic", "surface" (detail noise), "bump" (depth of that noise, 0 to 1),
+## "emission" and "energy".
+static func repaint(source: Material, spec: Variant, surface: Surface = Surface.PLAIN) -> Material:
+	var finish: Dictionary = spec if spec is Dictionary else {"color": spec}
+	var key := "paint/%d/%s/%d" % [source.get_instance_id(), finish, surface]
+	if _converted.has(key):
+		return _converted[key]
+	var base := Stylized.convert(source, Color.WHITE, finish.get("surface", surface)) as ShaderMaterial
+	if base == null:
+		return source
+	var material := base.duplicate() as ShaderMaterial
+	if finish.has("color"):
+		material.set_shader_parameter("albedo", finish["color"])
+		material.set_shader_parameter("albedo_tex", null)
+		material.set_shader_parameter("use_vertex_color", false)
+	if finish.has("roughness"):
+		material.set_shader_parameter("roughness", finish["roughness"])
+		material.set_shader_parameter("use_orm", false)
+	if finish.has("metallic"):
+		material.set_shader_parameter("metallic", finish["metallic"])
+		material.set_shader_parameter("use_orm", false)
+		material.set_shader_parameter("rim_strength", RIM * (0.6 if (finish["metallic"] as float) > 0.5 else 1.0))
+	if finish.has("bump"):
+		material.set_shader_parameter("detail_bump", finish["bump"])
+		material.set_shader_parameter("detail_roughness", 0.12 * minf((finish["bump"] as float) * 2.0, 1.0))
+	if finish.has("emission"):
+		material.set_shader_parameter("emission", finish["emission"])
+		material.set_shader_parameter("emission_energy", finish.get("energy", 1.0))
+		material.set_shader_parameter("emission_tex", _white())
+	_converted[key] = material
+	return material
+
+
 static func _noise_texture(surface: Surface) -> NoiseTexture2D:
 	var recipe: Dictionary = _RECIPES[surface]
 	var noise := FastNoiseLite.new()
 	noise.noise_type = recipe["type"]
 	noise.frequency = recipe["freq"]
 	noise.fractal_octaves = recipe["octaves"]
+	if recipe.has("jitter"):
+		noise.fractal_type = FastNoiseLite.FRACTAL_NONE
+		noise.cellular_jitter = recipe["jitter"]
+		noise.cellular_return_type = FastNoiseLite.RETURN_DISTANCE
 	noise.seed = 1337 + int(surface) * 17
 	var texture := NoiseTexture2D.new()
 	var size: Vector2i = recipe["size"]
